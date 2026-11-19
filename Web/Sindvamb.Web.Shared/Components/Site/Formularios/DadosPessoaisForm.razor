@@ -1,0 +1,314 @@
+﻿@using Console = System.Console
+@inject SwalService SwalService
+@using BootstrapBlazor.Components
+
+<Card>
+	<HeaderTemplate>
+		<h5 class="pt-2">Dados Pessoais</h5>
+	</HeaderTemplate>
+
+	<BodyTemplate>
+		<ValidateForm @ref="Form" Model="@Model" OnValidSubmit="@OnValidSubmit" OnInvalidSubmit="@OnInvalidSubmit">
+			<DataAnnotationsValidator />
+
+			<div class="d-flex row flex-wrap">
+
+
+				<div class="form-group mt-2 col-md-6 px-2">
+
+					<BootstrapInput TValue="string" @bind-Value="Model.User.CpfCnpj"
+									OnValueChanged="CheckCpfCnpj"
+									RequiredErrorMessage="Por favor insira o CPF"
+									Color="Color.Secondary"
+									DisplayText="CPF"
+									ShowRequired="true"
+									Formatter="Formaters.FormatCpfCnpj" />
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<BootstrapInput TValue="string" @bind-Value="Model.User.Name"
+									RequiredErrorMessage="Por favor insira seu Nome Completo"
+									Color="Color.Secondary" DisplayText="Nome completo" ShowRequired="true" />
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<BootstrapInput TValue="string" @bind-Value="Model.User.SocialName"
+									Color="Color.Secondary" DisplayText="Nome Social" />
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<BootstrapInput TValue="string" @bind-Value="Model.User.Surname"
+									Color="Color.Secondary" DisplayText="Apelido" />
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<BootstrapInput TValue="string" @bind-Value="Model.User.RG"
+									RequiredErrorMessage="Por favor insira seu RG"
+									Color="Color.Secondary" DisplayText="RG" ShowRequired="true" />
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<Select ShowSearch="true" Items="UfToselectedItem" @bind-Value="Model.User.UFIssuingBody"
+							DisplayText="Órgão Emissor UF"
+							RequiredErrorMessage="Por favor selecione a UF do Órgão Emissor do seu RG"
+							ShowRequired="true"></Select>
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<BootstrapInput TValue="string" @bind-Value="Model.User.Birthplace"
+									RequiredErrorMessage="Por favor insira sua Naturalidade"
+									Color="Color.Secondary" DisplayText="Naturalidade" ShowRequired="true" />
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<BootstrapInput TValue="string" @bind-Value="Model.User.Nationality"
+									RequiredErrorMessage="Por favor insira sua Nacionalidade"
+									Color="Color.Secondary" DisplayText="Nacionalidade" ShowRequired="true" />
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<BootstrapInput TValue="string" @bind-Value="Model.User.FatherName"
+									Color="Color.Secondary" DisplayText="Nome do pai" />
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<BootstrapInput TValue="string" @bind-Value="Model.User.MotherName"
+									RequiredErrorMessage="Por favor insira o Nome de sua mãe"
+									Color="Color.Secondary" DisplayText="Nome da mãe" ShowRequired="true" />
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<Select ShowSearch="true" Items="GenderToselectedItem" @bind-Value="Model.User.Gender"
+							DisplayText="Gênero" RequiredErrorMessage="Por favor insira seu Gênero"
+							ShowRequired="true"></Select>
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<Select ShowSearch="true" Items="RaceToselectedItem" @bind-Value="Model.User.Race" DisplayText="Raça"></Select>
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<DateTimePicker @bind-Value="Model.User.Birthdate" DisplayText="Data de Nascimento"
+									DisplayMinValueAsEmpty="true" DateFormat="dd/MM/yyyy"
+									RequiredErrorMessage="Por favor insira sua Data de nascimento" ShowRequired="true" />
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<Select ShowSearch="true" Items="CivilStatusToselectedItem" @bind-Value="Model.User.CivilStatus"
+							DisplayText="Estado civil"></Select>
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<BootstrapInput TValue="string" @bind-Value="Model.User.CellPhone"
+									RequiredErrorMessage="Por favor insira seu Telefone celular"
+									Color="Color.Secondary" DisplayText="Telefone celular" ShowRequired="true"
+									Formatter="Formaters.FormatCellPhone" />
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<BootstrapInput TValue="string" @bind-Value="Model.User.HomePhone"
+									Color="Color.Secondary" DisplayText="Telefone residencial" ShowRequired="false"
+									Formatter="Formaters.FormatHomePhone" />
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<BootstrapInput TValue="string" @bind-Value="Model.User.BusinessPhone"
+									Color="Color.Secondary" DisplayText="Telefone comercial" ShowRequired="false"
+									Formatter="Formaters.FormatHomePhone" />
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<BootstrapInput type="email" TValue="string" @bind-Value="Model.User.Email"
+									RequiredErrorMessage="Por favor insira seu Email"
+									Color="Color.Secondary" DisplayText="Email" ShowRequired="true" />
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<Select ShowSearch="true" TValue="bool" Items="YesOrNoToselectedItem" @bind-Value="Model.User.HasSpecialNeeds"
+							OnSelectedItemChanged="OnHasSpecialNeedsChanged"
+							DisplayText="É portador de necessidades especiais?"
+							RequiredErrorMessage="Selecione uma opção!" ShowRequired="true"></Select>
+				</div>
+
+				@if (!SpecialNeedsToselectedItem.IsNullOrEmpty() && Model.User.HasSpecialNeeds)
+				{
+					<div class="form-group mt-2 col-md-6 px-2">
+
+						<CheckboxList TValue="ICollection<string>" @bind-Value="SpecialNeedsSelecteds"
+									  Items="@SpecialNeedsToselectedItem"
+									  RequiredErrorMessage="Selecione uma opção!"
+									  ShowRequired="Model.User.HasSpecialNeeds"
+									  OnSelectedChanged="OnSpecialNeedsSelectedChanged"
+									  ShowLabel="true" DisplayText="Se sim, quais?"
+									  ShowLabelTooltip="true"></CheckboxList>
+
+					</div>
+
+
+					@if (ShowSpecialNeedsOther)
+					{
+						<div class="form-group mt-2 col-md-6 px-2">
+							<BootstrapInput TValue="string" @bind-Value="Model.User.SpecialNeedsOther"
+											RequiredErrorMessage="Descreva sua necessidade!"
+											Color="Color.Secondary" DisplayText="Descreva sua necessidade"
+											ShowRequired="ShowSpecialNeedsOther" />
+						</div>
+					}
+				}
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<Select ShowSearch="true" TValue="Guid?" Items="EducationDegreeToselectedItem"
+							@bind-Value="Model.User.EducationDegreeId"
+							DisplayText="Grau de Escolaridade"
+							RequiredErrorMessage="Por favor insira seu Grau de Escolaridade!"
+							ShowRequired="true"></Select>
+				</div>
+
+				<div class="form-group mt-2 col-md-6 px-2">
+					<BootstrapInput TValue="string" @bind-Value="Model.User.Profession" Color="Color.Secondary" DisplayText="Qual a sua profissão?" />
+				</div>
+
+			</div>
+
+		</ValidateForm>
+	</BodyTemplate>
+</Card>
+
+@code {
+
+
+	[Parameter] public EventCallback<OnChangeValidateFormModel> OnChangeNextStepState { get; set; }
+
+	[NotNull] public ValidateForm Form { get; set; }
+
+	[Inject] public ISpecialNeedsService SpecialNeedsService { get; set; }
+
+	[Inject] public IEducationDegreeService EducationDegreeService { get; set; }
+
+	[Inject][NotNull] private DialogService? DialogService { get; set; }
+
+	[Parameter] public CustomerModel Model { get; set; }
+
+	[Inject] public IUserService UserService { get; set; }
+
+	private string selectedUF;
+	public bool SpecialNeedsRequired { get; set; }
+	public bool ModelHasChanged { get; set; }
+
+
+	public ICollection<SpecialNeedsDTO> SpecialNeeds { get; set; } = new List<SpecialNeedsDTO>();
+	public ICollection<EducationDegreeDTO> EducationDegrees { get; set; } = new List<EducationDegreeDTO>();
+	public ICollection<string> SpecialNeedsSelecteds { get; set; } = new List<string>();
+
+	private List<SelectedItem> UfToselectedItem => SiteConstants.UFs.Select(item => new SelectedItem(item, item)).ToList();
+	private List<SelectedItem> GenderToselectedItem => SiteConstants.Gender.Select(item => new SelectedItem(item, item)).ToList();
+	private List<SelectedItem> RaceToselectedItem => SiteConstants.Race.Select(item => new SelectedItem(item, item)).ToList();
+	private List<SelectedItem> CivilStatusToselectedItem => SiteConstants.CivilStatus.Select(item => new SelectedItem(item, item)).ToList();
+	private List<SelectedItem> YesOrNoToselectedItem => SiteConstants.YesOrNo.Select(item => new SelectedItem(item.Value.ToString(), item.Key)).ToList();
+	private List<SelectedItem> SpecialNeedsToselectedItem { get; set; } = SiteConstants.SpecialNeeds.Select(item => new SelectedItem(item, item)).ToList();
+	private List<SelectedItem> EducationDegreeToselectedItem { get; set; } = new();
+	public bool ShowSpecialNeedsOther { get; set; }
+
+	public BootstrapInput<string> CpfInput { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+
+		EducationDegrees = await EducationDegreeService.GetAll<EducationDegreeDTO>();
+
+		if (!EducationDegrees.IsNullOrEmpty())
+		{
+			EducationDegreeToselectedItem = EducationDegrees.Select(item => new SelectedItem(item.Id.ToString(), item.Description)).ToList();
+		}
+	}
+
+	public async Task OnSpecialNeedsSelectedChanged(IEnumerable<SelectedItem> itens, ICollection<string> specialNeeds)
+	{
+		ShowSpecialNeedsOther = specialNeeds.Any(s => s.Equals("Outros"));
+
+		Model.User.SpecialNeeds.Clear();
+
+		foreach (var specialNeed in specialNeeds)
+		{
+			if (!specialNeed.Equals("Outros"))
+			{
+				Model.User.SpecialNeeds!.Add(new()
+					{
+						Id = Guid.NewGuid(),
+						UserId = Model.User.Id,
+						Description = specialNeed,
+					});
+			}
+		}
+	}
+
+	public async Task EnableNextStep()
+	{
+		var validation = new OnChangeValidateFormModel()
+			{
+				Form = Form,
+				HasValidation = true,
+				ModelHasChanged = ModelHasChanged,
+				Model = Model
+			};
+
+		await OnChangeNextStepState.InvokeAsync(validation);
+	}
+
+	public async Task OnValidSubmit(EditContext ctx)
+	{
+	}
+
+	public async Task OnInvalidSubmit(EditContext ctx)
+	{
+	}
+
+	public async Task OnHasSpecialNeedsChanged(SelectedItem item)
+	{
+	}
+
+	private async Task CheckCpfCnpj(string? cpf)
+	{
+		try
+		{
+			UserService.ShowErrorMessage = false;
+			var customer = await UserService.GetByCpfCnpj(Model.User!.CpfCnpj!);
+
+			if (customer.IsNotNull())
+			{
+				ModelHasChanged = true;
+				Model = customer;
+
+				Model.User.FileControl = new List<FileControlDTO>();
+
+				if (Model.Dependents.Any())
+				{
+					foreach (var dependent in Model.Dependents)
+					{
+						dependent.FileControl = new List<FileControlDTO>();
+					}
+				}
+
+				StateHasChanged();
+
+				await SwalService.Show(new SwalOption()
+					{
+						Category = SwalCategory.Warning,
+						Title = "Atenção!",
+						Content = "Já existe um usuário cadastrado com esse CPF. Por favor atualize seus dados!",
+						ConfirmButtonText = "Ok",
+						ShowClose = true
+					});
+			}
+
+		}
+		catch
+		{
+			// ignore
+		}
+
+	}
+
+}
+
+

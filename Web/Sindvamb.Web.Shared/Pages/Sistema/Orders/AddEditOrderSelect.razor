@@ -1,0 +1,96 @@
+﻿@page "/add-order-select/{ProductCategoryId:guid}"
+@namespace Sindvamb.Web.Shared.Pages.Sistema.Orders
+@attribute [Authorize]
+@inherits ListComponentBase<OrderDTO, IOrderService>
+@using BootstrapBlazor.Components
+<AppAuthorizeView Roles="@AuthRole.ADMIN_MASTER_SUPPORT">
+
+    <div class="app-container">
+        <AuthorizeView Context="context">
+            <Authorized>
+                @if (@GetUserName(context) == "SOL" || @GetUserName(context) == "CUSTOMER")
+                {
+                    @*                 <RadzenCard  Class="rz-mx-auto" *@
+                    @*                             Style=" *@
+                    @*                                     width: 300px; *@
+                    @*                                     height: 90px; *@
+                    @*                                     background-color: rgb(107 202 226 / 30%); *@
+                    @*                                     margin: 25px; *@
+                    @*                                     cursor: pointer; *@
+                    @*                                     padding: 0;" *@
+                    @*                             @onclick=@(ev => AddButtonClick(ev, $"add-order-other"))> *@
+                    @*                     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4"> *@
+                    @*                         <RadzenStack Gap="0"> *@
+                    @*                             <RadzenText TextStyle="TextStyle.Body1"> *@
+                    @*                                 <b>SOLICITAR ABERTURA DE VAGAS</b> *@
+                    @*                             </RadzenText> *@
+                    @*                         </RadzenStack> *@
+                    @*                     </RadzenStack> *@
+                    @*                 </RadzenCard> *@
+                }
+                else
+                {
+                    @*                 <RadzenCard  Class="rz-mx-auto" *@
+                    @*                             Style=" *@
+                    @*                                     width: 300px; *@
+                    @*                                     height: 90px; *@
+                    @*                                     background-color: rgb(107 202 226 / 30%); *@
+                    @*                                     margin: 25px; *@
+                    @*                                     cursor: pointer; *@
+                    @*                                     padding: 0;" *@
+                    @*                             @onclick=@(ev => AddButtonClick(ev, $"add-order-other"))> *@
+                    @*                     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4"> *@
+                    @*                         <RadzenStack Gap="0"> *@
+                    @*                             <RadzenText TextStyle="TextStyle.Body1"> *@
+                    @*                                 <b>SOLICITAR ABERTURA DE VAGAS</b> *@
+                    @*                             </RadzenText> *@
+                    @*                         </RadzenStack> *@
+                    @*                     </RadzenStack> *@
+                    @*                 </RadzenCard> *@
+
+                    <RadzenCard Class="rz-mx-auto"
+                                Style="
+                                    width: 300px;
+                                    height: 90px;
+                                    background-color: rgb(107 202 226 / 30%);
+                                    margin: 25px;
+                                    cursor: pointer;
+                                    padding: 0;"
+                                @onclick=@(() => AddButtonClick($"add-order/{ProductCategoryId}"))>
+                        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
+                            <RadzenStack Gap="0">
+                                <RadzenText TextStyle="TextStyle.Body1">
+                                    <b>OUTRAS DEMANDAS</b>
+                                </RadzenText>
+                            </RadzenStack>
+                        </RadzenStack>
+                    </RadzenCard>
+                }
+            </Authorized>
+        </AuthorizeView>
+    </div>
+
+</AppAuthorizeView>
+
+@code {
+    [Parameter] public int ProductCategoryId { get; set; }
+
+
+    public Guid OperRequestCategoryId { get; set; }
+
+    [Inject] public IProductCategoryService ProductCategoryService { get; set; }
+
+    public List<ProductCategoryDTO> ProductCategoryList { get; set; } = new();
+
+    public string GetUserName(AuthenticationState context)
+    {
+        return context.User?.Claims?.FirstOrDefault(p => p.Type.Contains("CustomerType"))?.Value ?? context.User?.Claims?.FirstOrDefault(p => p.Type.Contains("role"))?.Value;
+    }
+
+    public async Task GetAllProductCategory()
+    {
+        ProductCategoryList = await ProductCategoryService.GetAllProductCategory();
+
+        OperRequestCategoryId = ProductCategoryList.FirstOrDefault(c => c.Code.Equals("SAV")).Id;
+    }
+}

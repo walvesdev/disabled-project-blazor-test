@@ -1,0 +1,95 @@
+@page "/edit-customer"
+@page "/edit-customer/{Id:guid}"
+@attribute [Authorize]
+@namespace Sindvamb.Web.Shared.Pages.Sistema.Customers
+@using BootstrapBlazor.Components
+
+@inherits EditComponentBase<CustomerModel, ICustomerService, Guid>
+
+<AppAuthorizeView Roles="@AuthRole.ADMIN_MASTER_SUPPORT">
+
+    <ValidateForm Model="@Item" OnValidSubmit="@(ev => ResetSubmit(ev))">
+        <Row>
+            <Row ItemsPerRow="ItemsPerRow.Two">
+
+                <BootstrapInput DisplayText="Nome" @bind-Value="@Item.User.Name" ShowRequired="true"
+                                placeholder="Insira seu nome" class="mb-3" />
+
+                <BootstrapInput DisplayText="CPF" @bind-Value="@Item.User.CpfCnpj" id="CpfCnpj" ShowRequired="true"
+                                placeholder="Insira seu CPF ou CNPJ" Formatter="Formaters.FormatCpfCnpj" class="mb-3" />
+
+                <BootstrapInput DisplayText="Email" @bind-Value="@Item.User.Email"
+                                placeholder="Insira seu Email" class="mb-3" />
+
+                <DateTimePicker @bind-Value="Item.User.Birthdate" DisplayText="Data de Nascimento" DateFormat="dd/MM/yyy"
+                                DisplayMinValueAsEmpty="true" RequiredErrorMessage="Por favor insira sua Data de nascimento"
+                                ShowRequired="true" class="mb-3" />
+
+                <BootstrapInput DisplayText="Celular" @bind-Value="@Item.User.CellPhone" ShowRequired="true"
+                                placeholder="Insira seu Celular" class="mb-3" Formatter="Formaters.FormatCellPhone" />
+
+                <BootstrapInput DisplayText="CEP" @bind-Value="@Item.User.Address.ZipCode" ShowRequired="true" Formatter="Formaters.FormatCEP"
+                                placeholder="Insira o CEP" class="mb-3" />
+
+                <BootstrapInput DisplayText="Cidade" @bind-Value="@Item.User.Address.City" ShowRequired="true"
+                                placeholder="Insira a Cidade" class="mb-3" />
+
+                <BootstrapInput DisplayText="Estado" @bind-Value="@Item.User.Address.District" ShowRequired="true"
+                                placeholder="Insira o Estado" class="mb-3" />
+
+                <BootstrapInput DisplayText="UF" @bind-Value="@Item.User.UFIssuingBody" ShowRequired="true"
+                                placeholder="Insira a UF" class="mb-3" />
+
+                <BootstrapInput DisplayText="Endereço" @bind-Value="@Item.User.Address.AddressLine1" ShowRequired="true"
+                                placeholder="Insira o Endereço" class="mb-3" />
+
+                <BootstrapInput DisplayText="Bairro" @bind-Value="@Item.User.Address.Neighborhood" ShowRequired="true"
+                                placeholder="Insira o Bairro" class="mb-3" />
+
+                <BootstrapInput DisplayText="Número" @bind-Value="@Item.User.Address.Number"
+                                placeholder="Insira o numero" class="mb-3" />
+
+                <Select ShowSearch="true" TValue="Guid?" @bind-Value="@Item.CustomerTypeId" DisplayText="Unidade" class="mb-3" OnSelectedItemChanged="OnCustomerTypeChanged"
+                        Items="CustomerTypes.Select(item => new SelectedItem(item.Id.ToString(), item.Description))" />
+
+                <Select ShowSearch="true" TValue="string" @bind-Value="@Item.User.Address.Housing" DisplayText="Tipo de Habitação" class="mb-3"
+                        Items="SiteConstants.Housing.Select(item => new SelectedItem(item, item))"
+                        ShowRequired="true" RequiredErrorMessage="selecione o Tipo de Habitação" />
+
+                <Select ShowSearch="true" TValue="Guid?" @bind-Value="@Item.User.EducationDegreeId" DisplayText="Grau de Escolaridade" class="mb-3"
+                        Items="EducationDegreeList.Select(item => new SelectedItem(item.Id.ToString(), item.Description))"
+                        ShowRequired="true" RequiredErrorMessage="Selecione o Grau de Escolaridade" />
+
+                <Select ShowSearch="true" TValue="Guid?" @bind-Value="@Item.User.PartnerUnitId" DisplayText="Unidade" class="mb-3" OnSelectedItemChanged="OnPartnerUnitChanged"
+                        Items="PartnerUnitList.Select(item => new SelectedItem(item.Id.ToString()!, item.Name!))"
+                        ShowRequired="true" RequiredErrorMessage="Selecione a Unidade" />
+
+                <Select ShowSearch="true" TValue="Guid?" @bind-Value="@Item.User.UserStatusId" DisplayText="Status" class="mb-3"
+                        Items="UserStatusList.Select(item => new SelectedItem(item.Id.ToString(), item.Description))"
+                        ShowRequired="true" RequiredErrorMessage="Selecione o status" />
+
+                <Select ShowSearch="true" TValue="Guid?" @bind-Value="@Item.User.RoleId" DisplayText="Permissão" class="mb-3"
+                        Items="RolesList.Select(item => new SelectedItem(item.Id.ToString(), item.Description))"
+                        ShowRequired="true" RequiredErrorMessage="Selecione a permissão" />
+
+                @if (Item.User.SpecialNeeds.Any())
+                {
+                    <GroupBox Title="Necessidades Especiais">
+
+                        @foreach (var item in Item.User.SpecialNeeds)
+                        {
+                            <Checkbox TValue="string" State="CheckboxState.Checked" ShowAfterLabel="true" DisplayText="@item.Description" ShowLabelTooltip="true" />
+                        }
+                    </GroupBox>
+                }
+
+            </Row>
+
+            <Stack IsRow="true" Justify="StackJustifyContent.End" class="gap-3">
+                <Button Color="Color.Secondary" ButtonStyle="ButtonStyle.None" Text="Cancelar" OnClick="CloseDialg" />
+                <Button Color="Color.Primary" ButtonStyle="ButtonStyle.None" ButtonType="ButtonType.Submit" Icon="save" Text="Confirmar" />
+            </Stack>
+        </Row>
+    </ValidateForm>
+
+</AppAuthorizeView>

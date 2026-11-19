@@ -1,0 +1,48 @@
+@page "/order-status"
+@namespace Sindvamb.Web.Shared.Pages.Sistema.OrdersStatus
+@inherits ListComponentBase<OrderStatusDTO, IOrderStatusService>
+@inject IOrderStatusService OrderStatusService
+@attribute [Authorize]
+@using BootstrapBlazor.Components
+<AppAuthorizeView Roles="@AuthRole.ADMIN_MASTER_SUPPORT">
+
+    <DisplayTable TItem="OrderStatusDTO" ShowTable="ShowTable" IsLoading="IsLoading" OnAdd="() => AddRowType(OrderStatusService.Create)">
+        <Table ShowLoading="false" TItem="OrderStatusDTO"
+               RenderMode="TableRenderMode.Table"
+               TableSize="TableSize.Normal"
+               OnQueryAsync="@OnQueryAsync"
+               PageItemsSource="PageItemsSource"
+               IsPagination="true"
+               IsStriped="true"
+               IsBordered="true">
+            <TableColumns>
+                <TableColumn Text="Código" @bind-Field="@context.Code" Width="100" Align="Alignment.Left"  Sortable="true" Filterable="true"
+                               DefaultSortOrder="SortOrder.Asc" />
+                <TableColumn Text="Descrição" @bind-Field="@context.Description" Width="180" Align="Alignment.Left"  Sortable="true" Filterable="true"
+                              />
+                <TableColumn @bind-Field="@context.Id" Align="Alignment.Center" Text="Ações" Width="150">
+                    <Template Context="value">
+
+                        <div class="w-100">
+                            <a class="btn btn-action" title="Aprovar"
+                               @onclick=@(() => EditRowType(value.Row, OrderStatusService.Update)) @onclick:stopPropagation="true">
+                                <i class="fa-regular fa-pen-to-square text-warning"></i>
+                            </a>
+                            <button class="btn btn-action" title="Bloquear"
+                                    @onclick=@(() => GridDeleteButtonClick(value.Row))
+                                    @onclick:stopPropagation="true">
+                                <i class="fa-duotone fa-solid fa-trash-can text-danger"></i>
+                            </button>
+                        </div>
+
+                    </Template>
+                </TableColumn>
+            </TableColumns>
+        </Table>
+    </DisplayTable>
+
+</AppAuthorizeView>
+
+@code {
+
+}

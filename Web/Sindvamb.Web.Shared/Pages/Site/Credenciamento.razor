@@ -1,0 +1,361 @@
+﻿@page "/credenciamento"
+@layout SiteLayout
+@inject SwalService SwalService
+@inject NavigationManager NavigationManager
+@inherits AppComponentBase
+@using BootstrapBlazor.Components
+
+
+
+<div class="col justify-content-center w-100 py-5 container" style="@_displayForm">
+
+	<h4 class="mb-5">Credenciamento de Usuário</h4>
+
+	<p>
+		O Sindicato do Comércio de Vendedores Ambulantes do Distrito Federal (SINDVAMB/DF) faz parte do Sistema
+		Confederativo da Representação Sindical do Comércio (SICOMÉRCIO), vinculado à CNC (CONFEDERAÇÃO NACIONAL DO
+		COMÉRCIO) e filiado à FECOMÉRCIO/DF.
+	</p>
+
+	<p>
+		Representamos interesses da categoria, arrecadamos contribuições, celebramos convenções coletivas, entre
+		outros.
+	</p>
+
+	<p>
+		Os sócios, ao pagar anualmente, têm direitos e deveres, e o sindicato pode manter empregados para suas
+		atividades. O ingresso e exclusão de associados seguem critérios estabelecidos no estatuto, incluindo deveres e
+		penalidades.
+	</p>
+
+	<p>
+		Transformamos cadastros e pesquisas em projetos, levamos a voz dos vendedores às negociações coletivas, buscando
+		melhores condições de trabalho, empreendedorismo e ordem para os negócios.
+	</p>
+
+	<Step @ref="@Step" IsVertical="false" StepIndex="0">
+		<StepItem Title="Dados Pessoais" Text="1">
+			<div class="mt-5">
+				<DadosPessoaisForm @ref="DadosPessoaisForm" Model="Model" OnChangeNextStepState="ChangeNextStepState" />
+			</div>
+		</StepItem>
+		<StepItem Title="Dados Residenciais" Text="2">
+			<div class="mt-5">
+				@if (_index == 1)
+				{
+					<DadosResidenciaisForm @ref="DadosResidenciaisForm" Model="Model" OnChangeNextStepState="ChangeNextStepState" />
+				}
+			</div>
+		</StepItem>
+		<StepItem Title="Documentação" Text="3">
+			<div class="mt-5">
+				@if (_index == 2)
+				{
+					<DocumentosForm @ref="DocumentosForm" Model="Model" OnChangeNextStepState="ChangeNextStepState" />
+				}
+			</div>
+		</StepItem>
+		<StepItem Title="Dependentes" Text="4">
+			<div class="mt-5">
+				@if (_index == 3)
+				{
+					<DependentesForm @ref="DependentesForm" Model="Model" OnChangeNextStepState="ChangeNextStepState" />
+				}
+			</div>
+		</StepItem>
+		<StepItem Title="Pagamento" Text="5">
+			<div class="mt-5">
+				@if (_index == 4)
+				{
+					<PagamentoForm @ref="PagamentoForm" Model="Model" OnChangeNextStepState="ChangeNextStepState" />
+				}
+			</div>
+		</StepItem>
+		<StepItem Title="Conclusão" Text="6">
+			<div class="mt-5">
+				<ConclusaoForm @ref="ConclusaoForm" Model="Model" OnChangeNextStepState="ChangeNextStepState" />
+			</div>
+		</StepItem>
+	</Step>
+
+	@if (_index < 5)
+	{
+		<div class="d-flex justify-content-@_justfy py-5">
+
+			<Button Color="Color.Secondary" ButtonStyle="ButtonStyle.None" OnClick="() => PrevStep()" style="@_display">Voltar</Button>
+			<Button Color="Color.Primary" IsAsync="true" ButtonStyle="ButtonStyle.None" OnClick="() => NextStep()">
+				@_nextStep
+			</Button>
+
+		</div>
+	}
+
+
+
+
+
+</div>
+
+
+
+@code {
+
+	private int _index = 0;
+
+	private string _displayForm = "display:block";
+
+	private string _display = "display:none";
+
+	private string _nextStep => _index == 5 ? "Finalizar" : "Próximo";
+
+	private string _justfy => _index > 0 ? "between" : "end";
+
+	public Step? Step { get; set; }
+
+	private bool NextStepDisabled { get; set; }
+
+	[Inject][NotNull] private ToastService? ToastService { get; set; }
+
+	[NotNull] public DadosPessoaisForm DadosPessoaisForm { get; set; }
+
+	[NotNull] public DadosResidenciaisForm DadosResidenciaisForm { get; set; }
+
+	[NotNull] public DependentesForm DependentesForm { get; set; }
+
+	[NotNull] public DocumentosForm DocumentosForm { get; set; }
+
+	[NotNull] public PagamentoForm PagamentoForm { get; set; }
+
+	[NotNull] public ConclusaoForm ConclusaoForm { get; set; }
+
+	[Inject][NotNull] public ICustomerService CustomerService { get; set; }
+
+	[Inject][NotNull] private DialogService? DialogService { get; set; }
+
+	[NotNull] private ToastContainer? ToastContainer { get; set; }
+
+	[CascadingParameter][NotNull] private BootstrapBlazorRoot? Root { get; set; }
+
+	[CascadingParameter] public CustomerModel Model { get; set; } = new() { IsRegistrationRequest = true };
+
+	[CascadingParameter] public bool AceiteTermoLgpd { get; set; }
+
+
+
+	/// <summary>
+	/// OnInitialized
+	/// </summary>
+	protected override async void OnInitialized()
+	{
+		try
+		{
+			ToastContainer = Root.ToastContainer;
+			ToastContainer.SetPlacement(Placement.MiddleEnd);
+			await OpenLGPD();
+			await base.OnInitializedAsync();
+		}
+		catch
+		{
+		}
+	}
+
+	private void PrevStep()
+	{
+		Step?.Prev();
+		_index--;
+		ChangeDisplay();
+
+	}
+
+	private async Task NextStep()
+	{
+		switch (_index)
+		{
+			case 0:
+				await DadosPessoaisForm.EnableNextStep();
+				break;
+
+			case 1:
+				await DadosResidenciaisForm.EnableNextStep();
+				break;
+
+			case 2:
+				await DocumentosForm.EnableNextStep();
+				break;
+
+			case 3:
+				await DependentesForm.EnableNextStep();
+				break;
+
+			case 4:
+				await ProcessRequest();
+				break;
+
+			case 5:
+				await ConclusaoForm.EnableNextStep();
+				break;
+
+			default: return;
+		}
+
+		ChangeDisplay();
+	}
+
+	private async Task ProcessRequest()
+	{
+
+		ToggShowSteps();
+
+		Model.User.PartnerUnitId = AppSettings.SindvamPartnerUnitId;
+		Model.User.IsCustomer = true;
+
+		var result = await CustomerService.Update(Model);
+
+		if (result.IsNotNull())
+		{
+			await PagamentoForm.EnableNextStep();
+		}
+		else
+		{
+
+			await SwalService.Show(new SwalOption()
+				{
+					Category = SwalCategory.Error,
+					Title = "Erro ao processar requisição",
+					Content = "Por favor verifique os dados e tente novamente, caso o erro persista contate o suporte!",
+				});
+		}
+
+		//ToggShowSteps();
+	}
+
+	private void ChangeDisplay()
+	{
+		if (_index > 0)
+		{
+			_display = "display:block";
+		}
+		else
+		{
+			_display = "display:none";
+		}
+
+		if (_index == 6)
+		{
+		}
+
+
+	}
+
+	public async Task ChangeNextStepState(OnChangeValidateFormModel formValidation)
+	{
+		if (formValidation.ModelHasChanged)
+		{
+			Model = formValidation.Model;
+			StateHasChanged();
+		}
+
+		if (formValidation.HasValidation)
+		{
+			var isValid = formValidation.Form.Validate();
+			if (isValid)
+			{
+				if (_index == 5)
+				{
+					NavigationManager.NavigateTo("/");
+				}
+
+				Step?.Next();
+				_index++;
+
+			}
+			else
+			{
+				ToggShowSteps();
+				formValidation.Form.ShowAllInvalidResult = true;
+			}
+		}
+		else
+		{
+			if (_index == 5)
+			{
+				NavigationManager.NavigateTo("/");
+
+				return;
+			}
+
+			ToggShowSteps();
+			Step?.Next();
+			_index++;
+
+		}
+
+		await InvokeAsync(StateHasChanged);
+	}
+
+	public async Task OpenLGPD()
+	{
+		try
+		{
+
+			await DialogService.Show(new DialogOption()
+				{
+					Title = "Política de Privacidade",
+					Component = BootstrapDynamicComponent.CreateComponent<TermoLgpdModal>(new Dictionary<string, object?>
+					{
+						[nameof(TermoLgpdModal.OnChangeTermoLgpdState)] = EventCallback.Factory.Create<bool>(this, v => AceiteTermoLgpd = v)
+					}),
+					OnSaveAsync = OnLGPDSave,
+					OnCloseAsync = OnLGPDClose,
+					ShowFooter = true,
+					ShowCloseButton = true,
+					IsAutoCloseAfterSave = true,
+					ShowSaveButton = true,
+					CloseButtonText = "Cancelar",
+					SaveButtonText = "Concordo"
+				});
+		}
+		catch
+		{
+		}
+	}
+
+	public async Task<bool> OnLGPDSave()
+	{
+		await TermoLgpdChanged();
+		return await Task.FromResult(AceiteTermoLgpd);
+	}
+
+	public async Task OnLGPDClose()
+	{
+		if (!AceiteTermoLgpd)
+		{
+			await RedirectToHome();
+		}
+	}
+
+	public async Task TermoLgpdChanged()
+	{
+		if (!AceiteTermoLgpd)
+		{
+			await SwalService.Show(new SwalOption()
+				{
+					Category = SwalCategory.Warning,
+					Content = "Você precisa aceitar os termos de privacidade para continuar!",
+				});
+		}
+
+		await InvokeAsync(StateHasChanged);
+	}
+
+	public async Task RedirectToHome()
+	{
+		NavigationManager.NavigateTo("/");
+	}
+
+	public void ToggShowSteps()
+	{
+		AppServices.ShowSteps = !AppServices.ShowSteps;
+
+	}
+}

@@ -1,0 +1,223 @@
+﻿@using BootstrapBlazor.Components
+
+<Card>
+    <HeaderTemplate>
+        <h5 class="pt-2">Pagamento</h5>
+    </HeaderTemplate>
+
+    <BodyTemplate>
+
+        <b style="font-weight:normal">
+
+            <ul style="margin-top:0; margin-bottom:0">
+                <li dir="ltr" style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:400">
+                    <p dir="ltr"
+                    style="text-align:justify; margin-top:0pt; margin-bottom:0pt">
+                        <span>O valor da contribuição associativa do SINDVAMB é de R$ 300,00.</span>
+                    </p>
+                </li>
+                <li dir="ltr" style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:400">
+                    <p dir="ltr"
+                    style="text-align:justify; margin-top:0pt; margin-bottom:0pt">
+                        <span>Deverá ser paga preferencialmente da conta do interessado em caso de pagamento com conta de terceiros informar os dados</span>
+                    </p>
+                </li>
+                <li dir="ltr" style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:400">
+                    <p dir="ltr"
+                    style="text-align:justify; margin-top:0pt; margin-bottom:0pt">
+                        <span>O pagamento é apenas realizado por PIX, em valor integral e em uma única vez.</span>
+                    </p>
+                </li>
+                <li dir="ltr" style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:400">
+                    <p dir="ltr"
+                    style="text-align:justify; margin-top:0pt; margin-bottom:0pt">
+                        <span>O valor é ANUAL e tem validade de 01 de janeiro a 31 de dezembro de cada ano.</span>
+                    </p>
+                </li>
+                <li dir="ltr" style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:400">
+                    <p dir="ltr"
+                    style="text-align:justify; margin-top:0pt; margin-bottom:0pt">
+                        <span>O prazo limite de pagamento, sem juros, é até 31 de dezembro do ano em que foi feito o pagamento.</span>
+                    </p>
+                </li>
+                <li dir="ltr" style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:400">
+                    <p dir="ltr"
+                    style="text-align:justify; margin-top:0pt; margin-bottom:0pt">
+                        <span>A CREDENCIAL SINDVAMB ASSOCIADO terá validade da data de pagamento do ano corrente até 31 de dezembro do mesmo ano.</span>
+                    </p>
+                </li>
+                <li dir="ltr" style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:400">
+                    <p dir="ltr"
+                    style="text-align:justify; margin-top:0pt; margin-bottom:0pt">
+                        <span>Você acompanha seus dados pessoais na sua conta, sobre produtos, serviços ofertados e a validade dos mesmos.&nbsp;</span>
+                    </p>
+                </li>
+            </ul>
+            <br>
+
+            <p dir="ltr" style="margin-top:0pt; margin-bottom:0pt">
+                <span style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:700">DADOS BANCÁRIOS PARA CONFIRMAÇÃO:&nbsp;</span>
+            </p>
+            <p dir="ltr" style="margin-top:0pt; margin-bottom:0pt">
+                <span style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:400">Sindicato do Comércio de Vendedores Ambulantes do DF</span>
+            </p>
+            <p dir="ltr" style="margin-top:0pt; margin-bottom:0pt">
+                <span style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:400">Banco: 290 - PagSeguro Internet Instituição de Pagamento S/A</span>
+            </p>
+            <p dir="ltr" style="margin-top:0pt; margin-bottom:0pt">
+                <span style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:400">Agência: 0001</span>
+            </p>
+            <p dir="ltr" style="margin-top:0pt; margin-bottom:0pt">
+                <span style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:400">Conta: 22693005-5</span>
+            </p>
+            <p dir="ltr" style="margin-top:0pt; margin-bottom:0pt">
+                <span style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:400">CNPJ: 03.656.287.0001/09</span>
+            </p><br>
+            <p dir="ltr" style="margin-top:0pt; margin-bottom:0pt">
+                <span style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:700">CHAVES PIX:</span>
+            </p>
+            <p dir="ltr" style="margin-top:0pt; margin-bottom:0pt">
+                <span style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:400">Pix Celular: 61999432019&nbsp;</span>
+            </p>
+            <p dir="ltr" style="margin-top:0pt; margin-bottom:0pt">
+                <span style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:400">Pix Chave Aleatória: bb1990b3-0bb8-4918-91be-d2387656d9e4</span>
+            </p>
+            <p dir="ltr" style="margin-top:0pt; margin-bottom:0pt">
+                <span style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:400">
+                    Pix E-mail: contato@sindvamb.com.br
+                </span>
+            </p><br><br>
+        </b>
+
+        <ValidateForm class="d-flex row flex-wrap" @ref="Form" Model="@Model" OnValidSubmit="@OnValidSubmitTitular" OnInvalidSubmit="@OnInvalidSubmitTitular">
+            <DataAnnotationsValidator />
+
+            <div class="d-flex row flex-wrap">
+
+                <div class="form-group mt-2 col-md-6 px-2">
+
+                    <InputUpload TValue="IBrowserFile" @bind-Value="HolderDocumentModel.ComprovantePagamento"
+                    DisplayText="Comprovante de Pagamento"
+                    ShowDeleteButton="true" BrowserButtonText="Selecione"
+                    ShowRequired="true"
+                    RequiredErrorMessage="Comprovante de Pagamento"
+                    OnChange=@(file => OnFileChange(file, "Comprovante de Pagamento"))
+                    OnDelete=@(file => OnFileDelete(file, "Comprovante de Pagamento"))>
+
+                    </InputUpload>
+
+                </div>
+
+            </div>
+        </ValidateForm>
+    </BodyTemplate>
+</Card>
+
+@code {
+
+    [Parameter][NotNull] public HolderDocumentModel HolderDocumentModel { get; set; } = new();
+
+    [Parameter] public EventCallback<OnChangeValidateFormModel> OnChangeNextStepState { get; set; }
+
+    [NotNull] public ValidateForm Form { get; set; }
+
+    [Parameter] public CustomerModel Model { get; set; }
+
+    [Inject] public SwalService SwalService { get; set; }
+
+    [Inject] public IFileControlService FileControlService { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+    }
+
+
+    public async Task EnableNextStep()
+    {
+
+        var validation = new OnChangeValidateFormModel()
+            {
+                Form = Form,
+                HasValidation = true
+            };
+
+        await OnChangeNextStepState.InvokeAsync(validation);
+
+
+    }
+
+    public async Task OnInvalidSubmitTitular(EditContext ctx)
+    {
+
+    }
+
+    public async Task OnValidSubmitTitular(EditContext ctx)
+    {
+
+
+    }
+
+    private async Task OnFileChange(UploadFile arg, string description)
+    {
+        long maxFileSize = 2L * 1024L * 1024L * 1024L;
+        await using var fs = arg.File.OpenReadStream(maxAllowedSize: maxFileSize); await using var ms = new MemoryStream();
+        await fs.CopyToAsync(ms);
+
+        var extension = arg.File.Name.Split(".");
+        var filename = $"{description}-{Model.User.Id.ToString().GetDigits()}.{extension.Last()}";
+
+        var result = await FileControlService.Update(new FileControlDTO
+            {
+                UserId = Model.User.Id,
+                Description = description,
+                FileName = filename,
+                FileSize = arg.File.Size,
+                FileArray = ms.ToArray(),
+                ContentType = arg.File.ContentType,
+                TargetPath = $"/User/{Model.User.Id}/{filename}",
+            });
+
+        if (!result)
+        {
+            await SwalService.Show(new SwalOption()
+                {
+                    Category = SwalCategory.Error,
+                    Title = "Falha ao adicionar arquivo",
+                    Content = "Caso o erro persista contate o suporte!",
+                });
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task<bool> OnFileDelete(UploadFile arg, string description)
+    {
+
+        var extension = arg.File.Name.Split(".");
+        var filename = $"{description}-{Model.User.Id.ToString().GetDigits()}.{extension.Last()}";
+
+        var file = Model.User.FileControl.FirstOrDefault(file => file.FileName.Equals(filename));
+
+        if (file.Id != Guid.Empty)
+        {
+            var result = await FileControlService.Delete(file.Id);
+
+            if (!result)
+            {
+                await SwalService.Show(new SwalOption()
+                    {
+                        Category = SwalCategory.Error,
+                        Title = "Falha ao remover arquivo",
+                        Content = "Caso o erro persista contate o suporte!",
+                    });
+            }
+        }
+
+        Model.User.FileControl.Remove(file);
+
+        await InvokeAsync(StateHasChanged);
+
+        return await Task.FromResult(true);
+    }
+}

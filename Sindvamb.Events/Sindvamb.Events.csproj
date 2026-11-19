@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Configurations>Debug;Release;Production</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <NuGetAudit>false</NuGetAudit>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="EventStore.Client.Embedded.PreRelease" />
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="Hangfire" Version="1.8.18" />
+    <PackageReference Include="MediatR" Version="12.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sindvamb.Domain\Sindvamb.Domain.csproj" />
+    <!--	  <ProjectReference Include="..\Sindvamb.Security\Sindvamb.Security.csproj" />-->
+    <ProjectReference Include="..\Sindvamb.Utils\Sindvamb.Utils.csproj" />
+  </ItemGroup>
+</Project>

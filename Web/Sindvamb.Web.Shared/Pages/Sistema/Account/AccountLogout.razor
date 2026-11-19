@@ -1,0 +1,12 @@
+﻿@page "/Account/Logout"
+
+@code {
+
+    [Inject] public NavigationManagerService NavigationManager { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await NavigationManager.LocalStorageService.RemoveAsync("token_was");
+        await NavigationManager.NavigateTo("/Account/Login", true, true);
+    }
+}

@@ -1,0 +1,499 @@
+﻿@page "/dashboard"
+@inject GenericTokentService TokentService
+@inject IStringLocalizer<DashboardAdmin> Localizer
+@* @attribute [Authorize] *@
+@implements IDisposable
+@using BootstrapBlazor.Components
+@attribute [TabItemOption(Text = "Dashboard")]
+
+<AppAuthorizeView Roles="@AuthRole.ADMIN_MASTER_SUPPORT">
+
+    @if (ShowPage)
+    {
+        <div class="card-dashboard-wrapper">
+            <div style="width: 330px;">
+                <div class="card-registro">
+                    <div class="card-registro-title">
+                        <p>@AccessControList.Count()</p>
+                    </div>
+                    <div class="card-registro-body">
+                        <p>Acessos ao Site</p>
+                    </div>
+                </div>
+            </div>
+          @*   <div style="width: 330px;">
+                <div class="card-tratamento">
+                    <div class="card-tratamento-title">
+                        <p>@ConnectionService.Connections.Count</p>
+                    </div>
+                    <div class="card-tratamento-body">
+                        <p>Usuários Online</p>
+                    </div>
+                </div>
+            </div *@>@*
+                <div style="width: 330px;">
+                    <div class="card-resposta">
+                        <div class="card-resposta-title">
+                            <p>@DemandasResposta.Count</p>
+                        </div>
+                        <div class="card-resposta-body">
+                            <p>Resposta da Demanda</p>
+                        </div>
+                    </div>
+                </div> *@
+        </div>
+
+       @*  <GroupBox Title="Usuários Online" class="containercol-6 my-5">
+            <Row ItemsPerRow="ItemsPerRow.One" class="gap-3 py-5">
+                <Table ShowLoading="false" TItem="DynamicObject" DynamicContext="DataTableDynamicContext"
+                       IsBordered="true"
+                       IsStriped="true"
+                       SetRowClassFormatter="SetRowClassFormatter"></Table>
+            </Row>
+        </GroupBox> *@
+
+        <GroupBox Title="Acessos ao Site" class="containercol-6 my-5">
+            <Row ItemsPerRow="ItemsPerRow.One" class="gap-3 py-5">
+                <Table ShowLoading="false" TItem="DynamicObject" DynamicContext="AllDataTableDynamicContext"
+                       IsBordered="true"
+                       IsStriped="true"
+                       SetRowClassFormatter="SetRowClassFormatter"></Table>
+            </Row>
+        </GroupBox>
+    }
+    else
+    {
+        <AppSpinner />
+    }
+</AppAuthorizeView>
+
+
+@code {
+
+    public DateTime DataNascimento { get; set; }
+
+    public bool ShowPage { get; set; } = false;
+
+    [Inject] public DialogService DialogService { get; set; }
+
+    [Parameter] public Guid ErrorId { get; set; }
+
+    [Inject][NotNull] private IConnectionService? ConnectionService { get; set; }
+
+    [Inject][NotNull] private IAccessControlService? AccessControlService { get; set; }
+
+    [CascadingParameter] private Task<AuthenticationState>? authenticationState { get; set; }
+
+    [Inject][NotNull] private WebClientService? WebClientService { get; set; }
+
+    private DynamicObjectContext? DataTableDynamicContext { get; set; }
+
+    private DynamicObjectContext? AllDataTableDynamicContext { get; set; }
+
+    public AccessControlDTO AccessControlDTO { get; set; } = new();
+
+    public List<AccessControlDTO> AccessControList { get; set; } = new();
+
+    private readonly DataTable _table = new();
+
+    private readonly DataTable _tableByDatabase = new();
+
+    private CancellationTokenSource? _cancellationTokenSource;
+
+    private string? _clientId;
+
+    public string UserName { get; set; } = "Visitante";
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (firstRender)
+        {
+            // Task.Run(async () =>
+            // {
+            //     var client = await WebClientService.GetClientInfo();
+            //     _clientId = client.Id;
+            //     _cancellationTokenSource ??= new CancellationTokenSource();
+            //     while (_cancellationTokenSource is { IsCancellationRequested: false })
+            //     {
+            //         try
+            //         {
+            //             await BuildContext();
+
+            //             AccessControList = await AccessControlService.GetAll<AccessControlDTO>();
+
+            //             await BuildContextByDatabase();
+            //             await InvokeAsync(StateHasChanged);
+            //             await Task.Delay(TimeSpan.FromSeconds(30), _cancellationTokenSource?.Token ?? CancellationToken.None);
+            //         }
+            //         catch
+            //         {
+            //             // ignored
+            //         }
+            //     }
+            // });
+        }
+    }
+
+    protected override async void OnParametersSet()
+    {
+        if (ErrorId != default)
+        {
+            await ShowError();
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        CreateTable();
+        CreateTableByDatabase();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        AccessControList = await AccessControlService.GetAll<AccessControlDTO>();
+
+        await BuildContextByDatabase();
+
+        if (authenticationState is not null)
+        {
+            var newName = TokentService.Username;
+
+            var authState = await authenticationState;
+            var authStateUser = authState?.User;
+            var id = authStateUser?.FindFirst("Sub")?.Value;
+
+            var name = authStateUser?.Identity?.Name?.Split(' ');
+
+            if (!name.IsNullOrEmpty())
+            {
+                UserName = $"{name[0]} {name[1]}" ?? "Visitante";
+                AccessControlDTO.UserName = UserName;
+                AccessControlDTO.UserId = Guid.Parse(id);
+
+                await BuildContext();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+
+        ShowPage = true;
+        
+    }
+
+    private void CreateTable()
+
+    {
+        _table.Columns.Add("Id", typeof(Guid));
+        _table.Columns.Add("Usuário", typeof(string));
+        _table.Columns.Add("Hora da conexão", typeof(DateTime));
+        _table.Columns.Add("Último Acesso", typeof(DateTime));
+        _table.Columns.Add("Tempo Conectado", typeof(TimeSpan));
+        _table.Columns.Add("Ip", typeof(string));
+        _table.Columns.Add("Cidae", typeof(string));
+        _table.Columns.Add("Sistema", typeof(string));
+        _table.Columns.Add("Equipamento", typeof(string));
+        _table.Columns.Add("Navegador", typeof(string));
+        _table.Columns.Add("Idioma", typeof(string));
+        _table.Columns.Add("Engine", typeof(string));
+        _table.Columns.Add("Url", typeof(string));
+    }
+
+    private void CreateTableByDatabase()
+
+    {
+        _tableByDatabase.Columns.Add("Id", typeof(Guid));
+        _tableByDatabase.Columns.Add("Usuário", typeof(string));
+        _tableByDatabase.Columns.Add("Hora da conexão", typeof(DateTime));
+        _tableByDatabase.Columns.Add("Último Acesso", typeof(DateTime));
+        _tableByDatabase.Columns.Add("Tempo Conectado", typeof(TimeSpan));
+        _tableByDatabase.Columns.Add("Ip", typeof(string));
+        _tableByDatabase.Columns.Add("Cidae", typeof(string));
+        _tableByDatabase.Columns.Add("Sistema", typeof(string));
+        _tableByDatabase.Columns.Add("Equipamento", typeof(string));
+        _tableByDatabase.Columns.Add("Navegador", typeof(string));
+        _tableByDatabase.Columns.Add("Idioma", typeof(string));
+        _tableByDatabase.Columns.Add("Engine", typeof(string));
+        _tableByDatabase.Columns.Add("Url", typeof(string));
+    }
+
+    private async Task BuildContext()
+    {
+        _table.Rows.Clear();
+
+        var rows = ConnectionService.Connections.Sort(["ConnectionTime"]);
+
+        AccessControlDTO.Connections = rows.MapTo<List<ConnectionItemModel>>();
+
+        foreach (var item in rows)
+        {
+            try
+            {
+                _table.Rows.Add(
+                    item.Id,
+                    UserName ?? "",
+                    item.ConnectionTime.LocalDateTime,
+                    item.LastBeatTime.LocalDateTime,
+                    item.LastBeatTime - item.ConnectionTime,
+                    item.ClientInfo?.Ip ?? "",
+                    item.ClientInfo?.City ?? "",
+                    item.ClientInfo?.OS ?? "",
+                    item.ClientInfo?.Device.ToString() ?? "",
+                    item.ClientInfo?.Browser ?? "",
+                    item.ClientInfo?.Language ?? "",
+                    item.ClientInfo?.Engine ?? "",
+                    item.ClientInfo?.RequestUrl ?? ""
+                );
+            }
+            catch
+            {
+                //
+            }
+        }
+
+        _table.AcceptChanges();
+
+        //table
+        DataTableDynamicContext = new DataTableDynamicContext(_table, (context, col) =>
+        {
+            col.Text = Localizer[col.GetFieldName()];
+            if (col.GetFieldName() == "Id")
+            {
+                col.Ignore = true;
+            }
+            else if (col.GetFieldName() == "Hora da conexão")
+            {
+                col.FormatString = "dd/MM/yyyy HH:mm";
+                col.Width = 118;
+            }
+            else if (col.GetFieldName() == "Último Acesso")
+            {
+                col.FormatString = "dd/MM/yyyy HH:mm";
+                col.Width = 118;
+            }
+            else if (col.GetFieldName() == "Tempo Conectado")
+            {
+                col.FormatString = @"hh\:mm\:ss";
+                col.Width = 118;
+            }
+            else if (col.GetFieldName() == "Equipamento")
+            {
+                col.Width = 80;
+            }
+            else if (col.GetFieldName() == "Navegador")
+            {
+                col.Width = 118;
+            }
+            else if (col.GetFieldName() == "Ip")
+            {
+                col.Template = v => builder => builder.AddContent(0, FormatIp(v));
+            }
+            else if (col.GetFieldName() == "Idioma")
+            {
+                col.Template = v => builder =>
+                {
+                    if (v is IDynamicObject val)
+                    {
+                        var value = val.GetValue("Idioma")?.ToString();
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            string newValue = string.Empty;
+
+                            switch (value)
+                            {
+                                case "pt_BR":
+                                    newValue = "Português";
+                                    break;
+                                case "en_US":
+                                    newValue = "Inglês";
+                                    break;
+                            }
+
+                            builder.AddContent(0, new MarkupString($"<p> {newValue} </p>"));
+                        }
+                    }
+                };
+            }
+            else if (col.GetFieldName() == "Url")
+            {
+                col.Template = v => builder =>
+                {
+                    if (v is IDynamicObject val)
+                    {
+                        var url = val.GetValue("Url")?.ToString();
+                        if (!string.IsNullOrEmpty(url))
+                        {
+                            builder.AddContent(0, new MarkupString($"<a href=\"{url}\" target=\"_blank\">{url}</a>"));
+                        }
+                    }
+                };
+            }
+        });
+
+        await AccessControlService.Create(AccessControlDTO);
+        AccessControlDTO = new();
+        UserName = "";
+    }
+
+    private async Task BuildContextByDatabase()
+    {
+        _tableByDatabase.Rows.Clear();
+
+        foreach (var item in AccessControList)
+        {
+            _tableByDatabase.Rows.Add(
+                item.Id,
+                item.UserName ?? "",
+                item.ConnectionTime,
+                item.LastBeatTime,
+                item.Dur,
+                item.Ip ?? "",
+                item.City ?? "",
+                item.OS ?? "",
+                item.Device ?? "",
+                item.Browser ?? "",
+                item.Language ?? "",
+                item.Engine ?? "",
+                item.RequestUrl ?? ""
+            );
+        }
+
+        _tableByDatabase.AcceptChanges();
+
+        //table
+        AllDataTableDynamicContext = new DataTableDynamicContext(_tableByDatabase, (context, col) =>
+        {
+            col.Text = Localizer[col.GetFieldName()];
+            if (col.GetFieldName() == "Id")
+            {
+                col.Ignore = true;
+            }
+            else if (col.GetFieldName() == "Hora da conexão")
+            {
+                col.FormatString = "dd/MM/yyyy HH:mm";
+                col.Width = 118;
+            }
+            else if (col.GetFieldName() == "Último Acesso")
+            {
+                col.FormatString = "dd/MM/yyyy HH:mm";
+                col.Width = 118;
+            }
+            else if (col.GetFieldName() == "Tempo Conectado")
+            {
+                col.FormatString = @"hh\:mm\:ss";
+                col.Width = 118;
+            }
+            else if (col.GetFieldName() == "Equipamento")
+            {
+                col.Width = 80;
+            }
+            else if (col.GetFieldName() == "Navegador")
+            {
+                col.Width = 118;
+            }
+            else if (col.GetFieldName() == "Ip")
+            {
+                col.Template = v => builder => builder.AddContent(0, FormatIp(v));
+            }
+            else if (col.GetFieldName() == "Idioma")
+            {
+                col.Template = v => builder =>
+                {
+                    if (v is IDynamicObject val)
+                    {
+                        var value = val.GetValue("Idioma")?.ToString();
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            string newValue = string.Empty;
+
+                            switch (value)
+                            {
+                                case "pt_BR":
+                                    newValue = "Português";
+                                    break;
+                                case "en_US":
+                                    newValue = "Inglês";
+                                    break;
+                            }
+
+                            builder.AddContent(0, new MarkupString($"<p> {newValue} </p>"));
+                        }
+                    }
+                };
+            }
+            else if (col.GetFieldName() == "Url")
+            {
+                col.Template = v => builder =>
+                {
+                    if (v is IDynamicObject val)
+                    {
+                        var url = val.GetValue("Url")?.ToString();
+                        if (!string.IsNullOrEmpty(url))
+                        {
+                            builder.AddContent(0, new MarkupString($"<a href=\"{url}\" target=\"_blank\">{url}</a>"));
+                        }
+                    }
+                };
+            }
+        });
+
+        await InvokeAsync(StateHasChanged);
+
+    }
+
+    private static string FormatIp(object v)
+    {
+        var ret = "";
+        if (v is IDynamicObject val)
+        {
+            var ip = val.GetValue("Ip")?.ToString();
+            if (!string.IsNullOrEmpty(ip))
+            {
+                ret = ip.MaskIpString();
+            }
+        }
+
+        return ret;
+    }
+
+    private string? SetRowClassFormatter(DynamicObject context)
+    {
+        var id = context.GetValue("id")?.ToString();
+        return _clientId == id ? "active" : null;
+    }
+
+    private void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            if (_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Cancel();
+                _cancellationTokenSource.Dispose();
+                _cancellationTokenSource = null;
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    private async Task ShowError()
+    {
+        var ex = AppServices.GetErrorMessage(ErrorId);
+
+        // await DialogService.OpenAsync<DialogCardPage>($"Exception",
+        //   new Dictionary<string, object>() {
+        //           { "Message", ex.Key } ,
+        //           { "StackTrack", ex.Value }
+        //               },
+        //   new DialogOptions() { Width = "950px", Height = "600px", Resizable = true, Draggable = true });
+    }
+
+}

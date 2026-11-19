@@ -1,0 +1,76 @@
+﻿@using System.Security.Cryptography
+@using System.Text
+@using Sindvamb.Templates
+@using Sindvamb.Templates.Pages.Shared
+@inherits RazorLight.TemplatePage<Sindvamb.Templates.Pages.Usuarios.Wellcome>
+
+@{
+    HashAlgorithm algorithm = SHA256.Create();
+    var hash = algorithm.ComputeHash(Encoding.UTF8.GetBytes($"{Model.Email}"));
+
+    StringBuilder sb = new StringBuilder();
+
+    foreach (byte b in hash)
+    {
+        sb.Append(b.ToString("X2"));
+    }
+
+    var hashString = sb.ToString().ToUpper();
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div style="color: #fff; line-height: 1.5; font-size: 0.9rem; padding: 1.5%; width: 40%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI, Roboto', 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; @StyleHelper.GetBackgroundForTheme(Model.CssClassName)">
+        <div style="width: 100%;">
+            @{
+                await IncludeAsync("Sindvamb.Templates.Pages.Shared.Header", new Header { StaticFileServerUrl = Model.StaticFileServerUrl, CssClassName = Model.CssClassName });
+            }
+            <hr style="@StyleHelper.Hr" />
+            <div style="@StyleHelper.Row">
+                <span style="text-align: center; width: 100%; font-size: 1.1rem;">
+                    <text>
+                        Seja bem vindo a Sindvamb!
+                    </text>
+                </span>
+            </div>
+            <br />
+            <h4>Dados do cliente</h4>
+            <div style="@StyleHelper.Row">
+                <div style="@StyleHelper.Col_Sm_4">
+                    <b>Usuário</b>
+                    <br />
+                    <span>@Model.Email.ToUpper()</span>
+                </div>
+                <div style="@StyleHelper.Col_Sm_4">
+                </div>
+            </div>
+            <div style="@StyleHelper.Row">
+                <div style="@StyleHelper.Col_Sm_12">
+                    <br />
+                    <br />
+                    <p style="text-align:center;">Clique no link a baixo em seu navegador para acessar o nosso sistema.</p>
+                    <p style="text-align:center;">https://admin.Sindvamb.com.br</p>
+                </div>
+            </div>
+            <br />
+            <br />
+            <br />
+            <p style="width: 100%; text-align: center;">
+                <small>
+                    Não responda, e-mail automático.
+                </small>
+            </p>
+            <span style="width: 100%; text-align: center; display: block;">
+                <small>
+                    @hashString
+                </small>
+            </span>
+        </div>
+    </div>
+</body>
+</html>

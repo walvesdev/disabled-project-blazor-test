@@ -1,0 +1,24 @@
+﻿@inherits ComponentBase
+@namespace Sindvamb.Web.Shared.Components.Core
+@using BootstrapBlazor.Components
+
+<CascadingValue Value="this" IsFixed="false">
+    <BlazorErrorBoundary ShowErrorDetails="true" ShowToast="ShowToast" ToastTitle="@ToastTitle" OnErrorHandleAsync="OnErrorHandleAsync!">
+        @ChildContent
+
+        <Dialog></Dialog>
+        <DrawerContainer></DrawerContainer>
+        <SweetAlert></SweetAlert>
+        <Message @ref="MessageContainer"></Message>
+        <ToastContainer @ref="ToastContainer"></ToastContainer>
+
+        <Download></Download>
+        <Mask></Mask>
+        <ConnectionHub></ConnectionHub>
+
+        @foreach (var com in Generators)
+        {
+            @com.Generator()
+        }
+    </BlazorErrorBoundary>
+</CascadingValue>

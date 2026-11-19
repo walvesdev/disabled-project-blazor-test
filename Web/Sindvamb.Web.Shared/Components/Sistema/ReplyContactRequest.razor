@@ -1,0 +1,211 @@
+﻿@inject SwalService SwalService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
+@inherits AppComponentBase
+@using BootstrapBlazor.Components
+
+@if (IsLoading)
+{
+    <div class="d-flex justify-content-center align-items-center">
+        <Spinner Color="Color.Primary" Size="Size.Large" />
+    </div>
+}
+else
+{
+    <div class="d-flex align-items-center justify-content-center w-100 my-5 h-100">
+        <ValidateForm Model="@Model" OnValidSubmit="@OnValidSubmit" style="width: 100%">
+            <DataAnnotationsValidator />
+
+            <div class="d-flex row flex-wrap">
+
+                <div class="form-group mt-2 col-md-6 w-100">
+
+                    @if (!IsLoading)
+                    {
+                        <div>
+                            <div class="w-100 d-flex">
+                                <div style="width: 150px;">Nome:</div>
+                                <div>
+                                    <b>@Request?.Contact.Name</b>
+                                </div>
+                            </div>
+                            <div class="w-100 d-flex">
+                                <div style="width: 150px;">Email:</div>
+                                <div>
+                                    <b>@Request?.Contact?.Email</b>
+                                </div>
+                            </div>
+                            <div class="w-100 d-flex">
+                                <div style="width: 150px;">Celular:</div>
+                                <div>
+                                    <b>@Formaters.FormatCellPhone(Request?.Contact.CellPhone)</b>
+                                </div>
+                            </div>
+                            <div class="w-100 d-flex">
+                                <div style="width: 150px;">Telefone:</div>
+                                <div>
+                                    <b>@Formaters.FormatHomePhone(Request?.Contact.Phone)</b>
+                                </div>
+                            </div>
+                            <div class="w-100 d-flex">
+                                <div style="width: 150px;">Perfil:</div>
+                                <div>
+                                    <b>@Request?.Profile</b>
+                                </div>
+                            </div>
+                            <div class="w-100 d-flex">
+                                <div style="width: 150px;">Data da Solicitação:</div>
+                                <div>
+                                    <b>@Request?.CreatedAt.ToShortDateString()</b>
+                                </div>
+                            </div>
+                            <div class="w-100 d-flex">
+                                <div style="width: 150px;">Respondido:</div>
+                                <div>
+                                    <b>@(Request?.HasAnswered == true ? "Sim" : "Não")</b>
+                                </div>
+                            </div>
+                            <div class="w-100 d-flex">
+                                <div style="width: 150px;">Pendências:</div>
+                                <div>
+                                    <b>@(Request?.HasPendding == true ? "Sim" : "Não")</b>
+                                </div>
+                            </div>
+                            <div class="w-100 d-flex">
+                                <div style="width: 150px;">Visualizado:</div>
+                                <div>
+                                    <b>@(Request?.HasViewd == true ? "Sim" : "Não")</b>
+                                </div>
+                            </div>
+                            <div class="w-100 d-flex">
+                                <div style="width: 150px;">Assunto:</div>
+                                <div>
+                                    <b>@Request?.Subject</b>
+                                </div>
+                            </div> <br />
+                            <div class="w-100 d-flex">
+                                <div style="width: 150px;">Mensagem:</div>
+                                <div>
+                                    <b>@Request?.Message</b>
+                                </div>
+                            </div><br />
+                            @if (Request?.HasAnswered == true)
+                            {
+                                <div class="w-100 d-flex">
+                                    <div style="width: 150px;">Resposta:</div>
+                                    <div>
+                                        <b>@((MarkupString)Request!.Response!)</b>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <br />
+
+                        <div class="w-100 d-flex">
+                            <div style="width: 150px;">Existe Pendências?</div>
+                            <div>
+                                <InputCheckbox @bind-value="@Request!.HasPendding" />
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="mt-3">
+
+                            <Editor IsEditor="true" @bind-Value="Request!.Response" Height="300" ShowSubmit="false" />
+
+                        </div>
+
+                        <div class="d-flex  w-100 justify-content-between px-5 mt-3">
+
+                            <Button Color="Color.Secondary" OnClick="CloseDialg">Cancelar</Button>
+
+                            <ButtonLoading OnClick="Update"
+                                           IsLoading="IsLoading"
+                                           IsDisabled="@(IsLoading || Request.Response!.IsNullOrWhiteSpace())"
+                                           Text="Confirmar"></ButtonLoading>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+        </ValidateForm>
+
+
+    </div>
+}
+
+@code {
+    [Parameter] public ContactRequestDTO Request { get; set; }
+    [Parameter] public Action OnCloseAsync { get; set; }
+    [Inject] public IContactRequestService ContactRequestService { get; set; }
+
+    public ContactRequestDTO Model { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ToggleLoading();
+    }
+
+    protected override void OnParametersSet()
+    {
+        ToggleLoading();
+        base.OnParametersSet();
+    }
+
+    private async Task OnValidSubmit(EditContext arg)
+    {
+    }
+
+    private async Task Update()
+    {
+
+        var approveOperation = await SwalService.ShowModal(new SwalOption()
+            {
+                Category = SwalCategory.Warning,
+                Title = "Atenção!",
+                Content = $"Confirma o envio da resposta ao cliente?",
+            });
+
+        if (approveOperation)
+        {
+            ToggleLoading();
+
+            var sucesso = await ContactRequestService.Update(Request); ;
+
+            if (sucesso)
+            {
+                await SwalService.Show(new SwalOption()
+                    {
+                        Category = SwalCategory.Success,
+                        Title = "Feito!",
+                        Content = "Resposta enviada com sucesso!",
+                        OnCloseAsync = CloseDialg,
+                        OnConfirmAsync = CloseDialg
+                    });
+
+                CloseDialg();
+            }
+            else
+            {
+                await SwalService.Show(new SwalOption()
+                    {
+                        Category = SwalCategory.Error,
+                        Title = "Atenção!",
+                        Content = $"Erro ao responder solicitação de contato, por favor contate o suporte!",
+                    });
+            }
+
+            ToggleLoading();
+        }
+    }
+
+    public async Task CloseDialg()
+    {
+        OnCloseAsync.Invoke();
+    }
+}
+

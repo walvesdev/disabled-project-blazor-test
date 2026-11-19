@@ -1,0 +1,37 @@
+@page "/edit-product-category"
+@page "/edit-product-category/{Id:guid}"
+@namespace Sindvamb.Web.Shared.Pages.Sistema.ProductCategories
+@inherits EditComponentBase<ProductCategoryDTO, IProductCategoryService, int>
+@attribute [Authorize]
+@using BootstrapBlazor.Components
+<AppAuthorizeView Roles="@AuthRole.ADMIN_MASTER_SUPPORT">
+
+    <div class="app-container">
+        <div class="col col-md-6">
+            <RadzenCard>
+                <EditForm Model="@Item" OnValidSubmit=@(ev => FormSubmit(ev, "product-category"))>
+                    <DataAnnotationsValidator />
+                    <div class="row">
+                        <div class="mb-3">
+                            <RadzenText TextStyle="TextStyle.Caption" TagName="TagName.H3">Codigo</RadzenText>
+                        @* <RadzenTextBox @bind-Value="@Item.Code" id="Code" placeholder="Insira o Codigo"  /> *@
+                            <ValidationMessage For="@(() => Item.Code)" />
+                        </div>
+                        <div class="mb-3">
+                            <RadzenText TextStyle="TextStyle.Caption" TagName="TagName.H3">Descrição</RadzenText>
+                        @* <RadzenTextBox @bind-Value="@Item.Description" id="Description" placeholder="Insira a Descirção"  /> *@
+                            <ValidationMessage For="@(() => Item.Description)" />
+                        </div>
+
+                    </div>
+                    <div class="d-flex gap-3 col w-100 justify-content-end align-items-end" style="margin-top:1rem;">
+                    @* <RadzenButton ButtonStyle="ButtonStyle.Secondary" Text="Cancelar"  Click=@(ev => CancelButtonClick(ev, "product-category")) /> *@
+                        <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Confirmar" />
+                    </div>
+                </EditForm>
+            </RadzenCard>
+        </div>
+
+    </div>
+
+</AppAuthorizeView>

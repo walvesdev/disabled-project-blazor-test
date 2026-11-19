@@ -1,0 +1,48 @@
+﻿@using BootstrapBlazor.Components
+
+@if (Images.Count > 0)
+{
+    <Carousel ShowIndicators="true" PlayMode="CarouselPlayMode.AutoPlayOnload">
+
+        <CarouselItem>
+            <a href="/credenciamento">
+                <img style="max-height: 820px" src="./img/carousel-2.png" alt="demo-image" />
+            </a>
+        </CarouselItem>
+
+        <CarouselItem>
+            <a href="/credenciamento">
+                <img style="max-height: 820px" src="./img/carousel-3.png" alt="demo-image" />
+            </a>
+        </CarouselItem>
+
+        <CarouselItem>
+            <a href="/qualidade-de-vida">
+                <img style="max-height: 820px" src="./img/carousel-4.png" alt="demo-image" />
+            </a>
+        </CarouselItem>
+
+        <CarouselItem>
+            <a href="#feature">
+                <img style="max-height: 820px" src="./img/carousel-5.png" alt="demo-image" />
+            </a>
+        </CarouselItem>
+
+        <CarouselItem>
+            <a href="/qualidade-de-vida">
+                <img style="max-height: 820px" src="./img/espaco-gastronomico.jpeg" alt="demo-image" />
+            </a>
+        </CarouselItem>
+
+    </Carousel>
+}
+
+
+@code {
+
+    private static List<string> Images =>
+        [
+        "./img/carousel-2.png", "./img/carousel-3.png", "./img/carousel-4.png"
+    ];
+
+}

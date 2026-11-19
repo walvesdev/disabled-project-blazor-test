@@ -1,0 +1,40 @@
+@page "/edit-order-type"
+@page "/edit-order-type/{Id:guid}"
+@namespace Sindvamb.Web.Shared.Pages.Sistema.OrderTypes
+@inherits EditComponentBase<OrderTypeDTO, IOrderTypeService, int>
+@attribute [Authorize]
+@using BootstrapBlazor.Components
+<AppAuthorizeView Roles="@AuthRole.ADMIN_MASTER_SUPPORT">
+
+    <div class="app-container">
+        <div class="col col-md-6">
+            <RadzenCard>
+                <EditForm Model="@Item" OnValidSubmit=@(ev => FormSubmit(ev, "order-type"))>
+                    <DataAnnotationsValidator />
+
+                    <div class="row">
+                        <div class="mb-3">
+                            <RadzenFormField Text="Codigo">
+                            @* <RadzenTextBox @bind-Value="@Item.Code" id="Code" placeholder="Insira o Codigo" /> *@
+                                <ValidationMessage For="@(() => Item.Code)" />
+                            </RadzenFormField>
+                        </div>
+                        <div class="mb-3">
+                            <RadzenFormField Text="Descrição">
+                            @* <RadzenTextBox @bind-Value="@Item.Description" id="Description" placeholder="Insira a Descirção" /> *@
+                                <ValidationMessage For="@(() => Item.Description)" />
+                            </RadzenFormField>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 col w-100 justify-content-end align-items-end" style="margin-top:1rem;">
+                    @* <RadzenButton ButtonStyle="ButtonStyle.Secondary" Text="Cancelar"  Click=@(ev => CancelButtonClick(ev, "order-type"))/> *@
+                        <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Confirmar" />
+                    </div>
+                </EditForm>
+            </RadzenCard>
+        </div>
+
+    </div>
+
+</AppAuthorizeView>

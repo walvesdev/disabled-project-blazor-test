@@ -1,0 +1,103 @@
+@page "/order"
+@namespace Sindvamb.Web.Shared.Pages.Sistema.Orders
+@inherits ListComponentBase<OrderDTO, IOrderService>
+@attribute [Authorize]
+@using BootstrapBlazor.Components
+<AppAuthorizeView Roles="@AuthRole.ADMIN_MASTER_SUPPORT">
+
+    <Tab IsCard="true">
+        <TabItem Text="Demandas">
+            <DisplayTable TItem="OrderDTO" ShowTable="ShowTable" IsLoading="IsLoading" ShowButtomAdd="false">
+                <Table ShowLoading="false" TItem="OrderDTO"
+                       RenderMode="TableRenderMode.Table"
+                       IsPagination="true"
+                       TableSize="TableSize.Normal"
+                       OnQueryAsync="@OnQueryAsync"
+                       PageItemsSource="PageItemsSource"
+                       IsStriped="true"
+                       IsBordered="true">
+                    <TableColumns>
+                        <TableColumn Text="Protocolo" @bind-Field="@context.Protocol" Width="100" Align="Alignment.Left"  Sortable="true" Filterable="true"
+                                       DefaultSortOrder="SortOrder.Asc" />
+                        <TableColumn Text="Àrea" @bind-Field="@context.ProductArea.Description" Width="180" Align="Alignment.Left"
+                                      Sortable="true" Filterable="true"  />
+                        <TableColumn @bind-Field="@context.CreatedAt" Align="Alignment.Center" Text="Data de Criação">
+                            <Template Context="value">
+                                @value.Value.ToString("dd/MM/yyyy hh:mm ")
+                            </Template>
+                        </TableColumn>
+                        <TableColumn Text="Status" @bind-Field="@context.OrderStatus.Description" Width="180" Align="Alignment.Left"
+                                      Sortable="true" Filterable="true"  />
+                        <TableColumn @bind-Field="@context.Id" Align="Alignment.Center" Text="Ações" Width="150">
+                            <Template Context="value">
+
+                                <div class="w-100">
+                                    <a class="btn btn-action" title="Aprovar"
+                                       @onclick=@(() => EditRow(value.Row, "edit-order"))
+                                       @onclick:stopPropagation="true">
+                                        <i class="fa-regular fa-pen-to-square text-warning"></i>
+                                    </a>
+                                    <button class="btn btn-action" title="Bloquear"
+                                            @onclick=@(() => GridDeleteButtonClick(value.Row))
+                                            @onclick:stopPropagation="true">
+                                        <i class="fa-duotone fa-solid fa-trash-can text-danger"></i>
+                                    </button>
+                                </div>
+
+                            </Template>
+                        </TableColumn>
+                    </TableColumns>
+                </Table>
+            </DisplayTable>
+        </TabItem>
+        <TabItem Text="Situção da Demanda">
+            <ListOrderStatus></ListOrderStatus>
+        </TabItem>
+        <TabItem Text="Tipo de Demandas">
+            <ListOrderType></ListOrderType>
+        </TabItem>
+    </Tab>
+
+</AppAuthorizeView>
+
+
+@code {
+
+    private string protocolo;
+    private string name;
+    private string dataSolicitacao;
+    private string status;
+    public string role;
+
+
+    private void FormatarData(ChangeEventArgs e)
+    {
+        string valorInput = e.Value?.ToString();
+
+        valorInput = new string((valorInput ?? "").Where(char.IsDigit).ToArray());
+
+        if (valorInput.Length >= 2)
+            valorInput = $"{valorInput.Substring(0, 2)}/{valorInput.Substring(2)}";
+        if (valorInput.Length >= 5)
+            valorInput = $"{valorInput.Substring(0, 5)}/{valorInput.Substring(5)}";
+
+        dataSolicitacao = valorInput.Length > 10 ? valorInput.Substring(0, 10) : valorInput;
+    }
+
+    private async void LimparFiltros(MouseEventArgs args)
+    {
+        protocolo = string.Empty;
+        name = string.Empty;
+        dataSolicitacao = string.Empty;
+        status = string.Empty;
+
+        await GridLoadData();
+    }
+
+    // public string GetUserName(AuthenticationState context)
+    // {
+    //     role = context.User?.Claims?.FirstOrDefault(p => p.Type.Contains("CustomerType"))?.Value ?? context.User?.Claims?.FirstOrDefault(p => p.Type.Contains("role"))?.Value;
+    //     return role;
+    // }
+
+}

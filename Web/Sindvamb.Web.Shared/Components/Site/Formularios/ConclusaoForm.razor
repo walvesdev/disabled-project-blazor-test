@@ -1,0 +1,63 @@
+﻿@using BootstrapBlazor.Components
+
+<Card>
+    <HeaderTemplate>
+        <h5 class="pt-2">Conclusão</h5>
+    </HeaderTemplate>
+
+    <BodyTemplate>
+
+        <div style="vertical-align:top; padding:5pt 5pt 5pt 5pt; overflow:hidden">
+            <p dir="ltr" style="margin-left:36pt; text-align:justify; margin-top:0pt; margin-bottom:0pt">
+                <div class="d-flex justify-content-center">
+                    <span style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:700">
+                        <span style="border:none; display:inline-block; overflow:hidden; width:206px">
+                            <img src="./img/cindy.png"width="206" height="213" style="margin-top:0px">
+                        </span>
+                    </span>
+                </div>
+            </p><br>
+            <p dir="ltr" style="text-align:center; margin-top:0pt; margin-bottom:0pt">
+                <span style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:700">Cindy Cata informa:</span>
+            </p>
+            <br>
+            <p dir="ltr" style="text-align:center; margin-top:0pt; margin-bottom:0pt">
+                <span style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:700">Solicitação concluída com sucesso!</span>
+            </p><br>
+            <p dir="ltr" style="text-align:center; margin-top:0pt; margin-bottom:0pt">
+                <span style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:400">Seu pedido para obter a CREDENCIAL DE USUÁRIO foi emitido.</span><span style="font-size:11pt; font-family:Cabin,sans-serif; color:#000000; font-weight:700"> Fique atento(a) ao email para acompanhar o status de análise.</span>
+            </p><br>
+            <p dir="ltr" style="text-align:center; margin-top:0pt; margin-bottom:0pt">
+                <a href="/acompanhar-solicitacao/@Model.User.CpfCnpj" class="btn btn-success">Acompanhar solicitação</a>
+            </p>
+        </div>
+
+    </BodyTemplate>
+</Card>
+
+@code {
+    [Parameter]
+    public EventCallback<OnChangeValidateFormModel> OnChangeNextStepState { get; set; }
+
+    [NotNull]
+    public ValidateForm Form { get; set; }
+
+    [Parameter]
+    public CustomerModel Model { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+    public async Task EnableNextStep()
+    {
+        var validation = new OnChangeValidateFormModel()
+            {
+                Form = Form,
+                HasValidation = true
+            };
+
+        await OnChangeNextStepState.InvokeAsync(validation);
+    }
+}

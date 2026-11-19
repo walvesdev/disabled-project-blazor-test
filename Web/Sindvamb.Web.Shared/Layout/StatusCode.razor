@@ -1,0 +1,12 @@
+﻿@page "/StatusCode/{Status:int}"
+
+@attribute [ExcludeFromInteractiveRouting]
+
+<PageTitle>@Status</PageTitle>
+
+<h1>Erro de navegação @Status</h1>
+
+@code {
+    [Parameter]
+    public int Status { get; set; }
+}

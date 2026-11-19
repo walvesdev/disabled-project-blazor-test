@@ -1,0 +1,9 @@
+﻿services:
+  sindvamb.web.wasm:
+    image: sindvamb.web.wasm:latest
+    build:
+      context: .
+      dockerfile: Web/Sindvamb.Web/Dockerfile
+    ports:
+      - 8080:80
+    

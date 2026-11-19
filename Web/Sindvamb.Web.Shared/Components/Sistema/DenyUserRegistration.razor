@@ -1,0 +1,96 @@
+﻿@using BootstrapBlazor.Components
+
+@if (!IsLoading)
+{
+    <div style="width:100%; height:100%">
+
+        <Editor IsEditor="true" @bind-Value="RegistrationRequest.Reason" Height="400" ShowSubmit="false" />
+
+    </div>
+
+
+    <div class="d-flex  w-100 justify-content-between px-3 mt-3">
+
+        <Button Color="Color.Secondary" OnClick="CloseDialg"> Cancelar</Button>
+
+        <Button IsAsync="true" OnClick="Save" Text="Confirmar"></Button>
+
+    </div>
+}
+else
+{
+    <AppSpinner></AppSpinner>
+}
+
+
+@code {
+
+    [Parameter] public RegistrationRequestDTO RegistrationRequest { get; set; }
+
+    [Parameter] public Action OnCloseAsync { get; set; }
+
+    [Parameter] public bool IsLoading { get; set; }
+
+    [Inject] public IUserRegistrationService UserRegistrationService { get; set; }
+
+    [Inject] public SwalService SwalService { get; set; }
+
+
+    public async Task Save()
+    {
+
+        try
+        {
+            IsLoading = true;
+
+            var success = await UserRegistrationService.DenyUser(RegistrationRequest);
+
+            if (success)
+            {
+                RegistrationRequest.Approved = false;
+                
+
+                await SwalService.Show(new SwalOption()
+                    {
+                        Category = SwalCategory.Success,
+                        Title = "Feito!",
+                        Content = "Usuário bloqueado com sucesso!",
+                        OnCloseAsync = CloseDialg,
+                        CloseButtonText = "Fechar",
+                    });
+
+            }
+            else
+            {
+                await SwalService.Show(new SwalOption()
+                    {
+                        Category = SwalCategory.Error,
+                        Title = "Atenção!",
+                        Content = "Erro ao bloquear usuário, caso o erro persista contate o suporte!",
+                        OnCloseAsync = CloseDialg,
+                        CloseButtonText = "Fechar",
+                    });
+            }
+        }
+        catch (Exception e)
+        {
+            await SwalService.Show(new SwalOption()
+                {
+                    Category = SwalCategory.Error,
+                    Title = "Erro!",
+                    Content = "Falha ao processar requisição, caso o erro persista contate o suporte!",
+                    OnCloseAsync = CloseDialg,
+                    CloseButtonText = "Fechar",
+                });
+        }
+
+
+    }
+
+    private async Task CloseDialg()
+    {
+        IsLoading = false;
+        OnCloseAsync.Invoke();
+    }
+
+}

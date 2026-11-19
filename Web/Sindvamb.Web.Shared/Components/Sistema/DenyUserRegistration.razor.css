@@ -1,0 +1,4 @@
+﻿::deep .btn.btn-light {
+    color: var(--bs-dark) !important;
+    border: none;
+}

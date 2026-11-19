@@ -1,0 +1,21 @@
+﻿@using BootstrapBlazor.Components
+
+@if (IsLoading)
+{
+    <Button Color="Color.Primary" IsDisabled="@true" Icon="fa-solid fa-spinner fa-spin fa-fw" Text="Aguarde"></Button>
+}
+else
+{
+    <Button OnClick="@OnClick" ButtonType="ButtonType" IsDisabled="@IsDisabled" Color="Color.Primary" Text="@Text" IsAsync="true"></Button>
+}
+
+
+@code {
+
+    [Parameter] public Func<Task> OnClick { get; set; }
+    [Parameter] public bool IsDisabled { get; set; }
+    [Parameter] public bool IsLoading { get; set; }
+    [Parameter] public string Text { get; set; }
+    [Parameter] public ButtonType ButtonType { get; set; }
+
+}

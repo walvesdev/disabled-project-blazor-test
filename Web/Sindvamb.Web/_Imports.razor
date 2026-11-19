@@ -1,0 +1,74 @@
+﻿@using BootstrapBlazor.Components
+
+@using Sindvamb.Web
+
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.JSInterop
+
+@using System.ComponentModel
+@using System.ComponentModel.DataAnnotations
+@using System.Diagnostics.CodeAnalysis
+@using System.Net.Http
+@using System.Net.Http.Json
+
+@using Sindvamb.Web.Shared
+@using Sindvamb.Web.Shared.Constants
+@using Sindvamb.Web.Shared.Components
+@using Sindvamb.Web.Shared.Components.Sistema
+@using Sindvamb.Web.Shared.Components.Site
+@using Sindvamb.Web.Shared.Components.Site.Formularios
+@using Sindvamb.Web.Shared.Components.Site.Modals
+@using Sindvamb.Web.Shared.Utils.Attributes
+@using Sindvamb.Web.Shared.Helpers
+@using Sindvamb.Web.Shared.Pages
+@using Sindvamb.Web.Shared.Pages.Site
+@using Sindvamb.Web.Shared.Pages.Sistema
+@using Sindvamb.Web.Shared.Pages.Sistema.Account
+@using Sindvamb.Web.Shared.Pages.Sistema.Customers;
+@using Sindvamb.Web.Shared.Pages.Sistema.CustomerTypes;
+@using Sindvamb.Web.Shared.Pages.Sistema.Orders;
+@using Sindvamb.Web.Shared.Pages.Sistema.OrdersStatus;
+@using Sindvamb.Web.Shared.Pages.Sistema.OrderTypes;
+@using Sindvamb.Web.Shared.Pages.Sistema.Partners;
+@using Sindvamb.Web.Shared.Pages.Sistema.PartnersUnits;
+@using Sindvamb.Web.Shared.Pages.Sistema.Users;
+@using Sindvamb.Web.Shared.Layout
+@using Sindvamb.Web.Shared.Layout.Site
+
+@using Sindvamb.Domain;
+@using Sindvamb.Domain.DTO;
+@using Sindvamb.Domain.Models;
+@using Sindvamb.Domain.Entities;
+@using Sindvamb.Domain.Enums;
+@using Sindvamb.Domain.Validations
+
+@using Sindvamb.Web.Shared.Services.Http;
+@using Sindvamb.Web.Shared.Services.Http.Models;
+@using Sindvamb.Web.Shared.Utils;
+@using Sindvamb.Web.Shared.Extensions;
+
+@using Sindvamb.Web.Shared.Services.AccessControls;
+@using Sindvamb.Web.Shared.Services.Customers;
+@using Sindvamb.Web.Shared.Services.CustomerTypes;
+@using Sindvamb.Web.Shared.Services.Orders;
+@using Sindvamb.Web.Shared.Services.OrderCategories;
+@using Sindvamb.Web.Shared.Services.OrdersStatus;
+@using Sindvamb.Web.Shared.Services.OrderTypes;
+@using Sindvamb.Web.Shared.Services.Auth;
+@using Sindvamb.Web.Shared.Services.Partners;
+@using Sindvamb.Web.Shared.Services.PartnerUnit;
+@using Sindvamb.Web.Shared.Services.Users;
+@using Sindvamb.Web.Shared.Services;
+@using Sindvamb.Web.Shared.Services.SpecialNeed;
+@using Sindvamb.Web.Shared.Services.OrderAreas;
+@using Sindvamb.Web.Shared.Services.EducationDegrees;
+@using Sindvamb.Web.Shared.Models;
+
+@using Sindvamb.Web.Shared.Components.Core
+@using Sindvamb.Web.Shared.Utils.CustomExceptions
+

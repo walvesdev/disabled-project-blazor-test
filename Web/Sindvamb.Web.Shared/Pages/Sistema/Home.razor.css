@@ -1,0 +1,5 @@
+﻿img {
+    max-height: 600px;
+    width: -webkit-fill-available;
+    max-width: 600px;
+}

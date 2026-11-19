@@ -1,0 +1,30 @@
+﻿# Executar na pasta root do projeto:
+
+# docker build -t sindvamb.web.wasm:latest .
+# docker run -p 8080:80 sindvamb.web.wasm:latest
+
+# ou
+
+# docker-compose -f .\compose-wasm.yaml up -d
+
+# continuação 
+
+# docker login registry.sindvamb.com.br -u sindvamb -p 1q2w3E*@
+# docker tag sindvamb.web.wasm:latest registry.sindvamb.com.br/sindvamb.web.wasm:latest
+# docker push registry.sindvamb.com.br/sindvamb.web.wasm:latest
+
+# docker-compose -f .\compose-wasm.yaml down
+
+# docker exec registry /bin/registry garbage-collect   /etc/docker/registry/config.yml --delete-untagged
+# curl -u sindvamb:1q2w3E*@ -sS -X DELETE https://registry.sindvamb.com.br/v2/sindvamb.application.api/manifests/sha256:a8e2f78ab30dbe82aba926798b38ebbad7cb0afb1480b5aa0dc2427e5b7258ba
+# docker exec registry bin/registry garbage-collect --dry-run /etc/docker/registry/config.yml
+# curl -u sindvamb:1q2w3E*@ -sS https://registry.sindvamb.com.br/v2/sindvamb.application.api/tags/list
+# curl -u sindvamb:1q2w3E*@ -sS -X DELETE https://registry.sindvamb.com.br/v2/sindvamb.application.api/manifests/952d4cd4416ddbab5ed4bfaca7111a2ad2f40659738d12c6f37ff1a920c9094a
+
+FROM nginx:alpine 
+WORKDIR /usr/share/nginx/html
+COPY /bin/publish/wwwroot .
+COPY /bin/publish/Locales .
+COPY /bin/publish/Locales Locales/
+COPY nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80

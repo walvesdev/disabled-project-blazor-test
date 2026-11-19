@@ -1,0 +1,152 @@
+﻿@using System.Security.Cryptography
+@using System.Text
+@using Sindvamb.Templates
+@using Sindvamb.Templates.Pages.Shared
+@using Sindvamb.Utils
+@inherits RazorLight.TemplatePage<Sindvamb.Templates.Pages.Usuarios.ReplyRequestContact>
+
+@{
+    HashAlgorithm algorithm = SHA256.Create();
+    var hash = algorithm.ComputeHash(Encoding.UTF8.GetBytes($"{Model.ContactRequest.Contact.Email}"));
+
+    StringBuilder sb = new StringBuilder();
+
+    foreach (byte b in hash)
+    {
+        sb.Append(b.ToString("X2"));
+    }
+
+    var hashString = sb.ToString().ToUpper();
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+          rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .logo {
+            width: 200px;
+            float: left;
+            margin-top: 8px;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #dddddd;
+        }
+
+        .header {
+            background-color: #0056b3;
+            color: #ffffff !important;
+            padding: 10px;
+            text-align: center;
+            height: 80px;
+            border-radius: 15px;
+            margin-bottom: 50px;
+        }
+
+        .content {
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .content-user {
+            margin: 30px 35px;
+            text-align: left;
+            color: #000;
+        }
+
+        .button {
+            display: block;
+            width: 200px;
+            margin: 50px auto;
+            padding: 10px;
+            background-color: #007bff;
+            color: #ffffff !important;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #888888;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+
+        .text-justfy {
+            text-align: justify;
+        }
+
+        .text-justfy-margin {
+            text-align: justify;
+            margin: 0 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="email-container">
+        <div class="content">
+
+            @{
+                await IncludeAsync("Sindvamb.Templates.Pages.Shared.Header", new Header { StaticFileServerUrl = Model.StaticFileServerUrl, CssClassName = Model.CssClassName });
+            }
+
+
+            <h3>Olá, @Model.ContactRequest.Contact.Name</h3>
+
+            <p class="text-justfy-margin">Sua solicitação de contato foi respondida, se ainda hover dúvidas entre em contato com nossa equipe para obter maiores detalhes.</p>
+
+            <div class="content-user">
+
+                <p class="text-justfy">
+                    <strong>Nome:</strong> @Model.ContactRequest.Contact.Name<br>
+                    <strong>Email:</strong>  @Model.ContactRequest.Contact.Email<br>
+                    <strong>Assunto:</strong> @Model.ContactRequest.Subject<br><br>
+
+                    <strong>Solicitação:</strong><br><br>
+                    @{
+                        WriteLiteral(Model.ContactRequest.Message);
+                    }
+                    <br><br>
+
+                    <strong>Resposta:</strong><br><br>
+                    @{
+                        WriteLiteral(Model.ContactRequest.Response);
+                    }
+                    <br>
+                </p>
+
+            </div>
+
+            <p>Clique no link abaixo em seu navegador para acessar o nosso sistema.</p>
+
+            <p><a href="https://www.sindvamb.com.br">https://www.sindvamb.com.br</a></p>
+
+        </div>
+
+        <div class="footer">
+            <p>Não responda, e-mail automático.</p>
+            <p>@hashString</p>
+        </div>
+    </div>
+</body>
+</html>

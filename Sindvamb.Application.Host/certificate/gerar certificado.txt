@@ -1,0 +1,9 @@
+# Gerar CRT
+
+openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 \
+  -nodes -keyout sindvamb.com.br.key -out sindvamb.com.br.crt -subj "/CN=sindvamb.com.br" \
+  -addext "subjectAltName=DNS:sindvamb.com.br,DNS:*.sindvamb.com.br,IP:212.85.2.23"
+
+# Converter para PFX
+
+  openssl pkcs12 -export -out sindvamb.com.br.pfx -inkey sindvamb.com.br.key -in sindvamb.com.br.crt -certfile sindvamb.com.br.crt

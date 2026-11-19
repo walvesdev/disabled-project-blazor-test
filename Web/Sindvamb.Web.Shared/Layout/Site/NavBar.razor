@@ -1,0 +1,52 @@
+﻿<!-- Navbar & Hero Start -->
+<div class="container-fluid nav-bar px-0 px-lg-4 py-lg-0 bg-secondary">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a  class="navbar-brand p-0">
+                <img class="text-white mb-0" src="img/logo.png" />
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="fa fa-bars"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="navbarCollapse">
+                <div class="navbar-nav mx-0 mx-lg-auto px-2">
+                    <NavLink ActiveClass="active" class="nav-item nav-link" href="#"  Match="NavLinkMatch.All">
+                        Início
+                    </NavLink>
+                    <NavLink ActiveClass="active" class="nav-item nav-link" href="/services">
+                        Serviços
+                    </NavLink>
+                    <div class="nav-item dropdown">
+                        <a  class="nav-link" data-bs-toggle="dropdown">
+                            <span class="dropdown-toggle">Páginas</span>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/feature" class="dropdown-item">Sobre Nós</a>
+                            <a href="/team" class="dropdown-item">Nosso Time</a>
+                            <a href="/testimonial" class="dropdown-item">Depoimentos</a>
+                            <a href="/faq" class="dropdown-item">Perguntas Frequentes</a>
+                        </div>
+                    </div>
+                    <NavLink ActiveClass="active" class="nav-item nav-link" href="/contato">
+                        Contato
+                    </NavLink>
+                    
+                    <NavLink ActiveClass="active" class="nav-item nav-link" href="/acompanhar-solicitacao">
+                        Acompanhar Solicitação
+                    </NavLink>
+                    
+                    <NavLink href="/credenciamento" class="btn cad-btn-primary-nav py-2 mx-3 rounded-5 fs-5 mt-3">Credenciar</NavLink>
+                    <NavLink href="/Account/Login" class="btn cad-btn-primary-nav py-2 mx-3 mt-3 rounded-5 fs-5">Entrar</NavLink>
+                  
+                </div>
+            </div>
+            <div class="d-none d-xl-flex ps-4 flex-shrink-0">               
+                <NavLink href="/credenciamento" class="btn cad-btn-primary py-2 px-5 rounded-5 fs-5">Credenciar</NavLink>
+            </div>
+        </nav>
+    </div>
+</div>
+<!-- Navbar & Hero End -->
+@code {
+
+}

@@ -1,0 +1,9 @@
+﻿using Sindvamb.Domain.DTO;
+using Sindvamb.Web.Shared.Services;
+
+namespace Sindvamb.Web.Shared.Services.Partners;
+
+public interface IPartnerService : IServiceBase<PartnerDTO>
+{
+   
+}

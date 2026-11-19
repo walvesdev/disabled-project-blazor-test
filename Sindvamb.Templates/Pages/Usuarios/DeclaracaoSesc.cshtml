@@ -1,0 +1,167 @@
+﻿@using System.Security.Cryptography
+@using System.Text
+@using Sindvamb.Templates
+@using Sindvamb.Templates.Pages.Shared
+@inherits RazorLight.TemplatePage<Sindvamb.Templates.Pages.Usuarios.DeclaracaoSesc>
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Documento Timbrado</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', Times, serif;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .a4-container {
+            /* width: 265mm;
+                            height: 374mm; */
+            width: 275mm;
+            height: 385mm;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            background-color: white;
+            overflow: hidden;
+        }
+
+        .a4-paper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            padding: 20mm;
+            box-sizing: border-box;
+            background-image: url("~/timbrado.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            margin-top: 100px;
+        }
+
+        .logo {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .company-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .document-header {
+            text-align: right;
+            margin: 150px 0 150px 0;
+            font-size: 10px;
+        }
+
+        .document-date {
+            text-align: right;
+            margin-bottom: 30px;
+            font-size: 10px;
+        }
+
+        .document-title {
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .recipient {
+            margin: 15px 0;
+        }
+
+        .main-content {
+            margin: 40px 0;
+            text-align: justify;
+        }
+
+        .signature {
+            margin-top: 290px;
+            text-align: center;
+        }
+
+        .footer-note {
+            font-size: 16px;
+            margin-top: 160px;
+            text-align: justify;
+            font-style: italic;
+        }
+
+        .highlight {
+            font-weight: bold;
+        }
+
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="a4-container">
+        <div class="a4-paper" style="background-image: url(@Model.BG);">
+            <div class="content">
+
+                <div class="document-header">
+                    <h1>
+                        Brasília, @DateTime.Now.ToString("dd") de @DateTime.Now.ToString("MMMM") de @DateTime.Now.ToString("yyyy").
+                    </h1>
+                </div>
+
+                <div class="recipient">
+                    <p>Ao <span class="highlight">Sesc Serviço Social do Comércio Sesc-DF</span></p>
+                    <p><span class="highlight">Convênios e Parcerias Comerciais</span></p>
+                    <p><span class="highlight">Coordenação de Relacionamento-COREI.</span></p>
+                    <p><span class="highlight">CNPJ do SINDVAMB-DF - 03.656.287.0001-09</span></p>
+                </div>
+
+                <div class="main-content">
+                    <p>
+                        Nesta, conforme convênio com SESC DF, encaminhamos o(a) associado(a) relacionado(a) abaixo e
+                        cópia dos documentos pessoais, para inclusão no convênio e emissão da carteirinha SESC-DF.
+                    </p>
+                    <p class="center">@Model.Name e Seus Dependentes</p>
+                </div>
+
+                <div class="signature">
+                    @* <p class="center"><span class="highlight">Atenciosamente,</span></p> *@
+                    <b>
+                        <p><span class="highlight">Bartolomeu Gonçalves Martins</span></p>
+                        <p>Presidente</p>
+                    </b>
+                </div>
+
+                <div class="footer-note">
+                    <p>
+                        <em>
+                            Esta declaração tem validade até 31/12/@DateTime.Now.ToString("yyyy") de acordo com o convênio
+                            do Sesc e o estatuto
+                            social do Supivamo-Dr.Capítulo I. Parágrafo único. O exercício social do Sindicato
+                            coincide com o ano civil, tendo início em 01 de janeiro a término em 31 de dezembro de
+                            cada ano.
+                        </em>
+                    </p>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

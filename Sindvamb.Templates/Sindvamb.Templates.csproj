@@ -1,0 +1,65 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Configurations>Debug;Release;Staging;HML;Production</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <NuGetAudit>false</NuGetAudit>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.4" />
+    <PackageReference Include="RazorLight" Version="2.3.1" />
+    <PackageReference Include="System.Text.Json" Version="9.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Customer\ActivationCode.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\User\ResetPasswordLink.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\User\Wellcome.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Pages\QrCodePages\QrCodePDFPage.cshtml" />
+    <Content Remove="Pages\Usuarios\DeclaracaoAssociacao.cshtml" />
+    <Content Remove="Pages\Usuarios\DeclaracaoSesc.cshtml" />
+    <Content Remove="Pages\Usuarios\RecoveryPassword.cshtml" />
+    <Content Remove="Pages\Usuarios\RecoveryPasswordRequest.cshtml" />
+    <Content Remove="Pages\Usuarios\RegistrationRequestEmail.cshtml" />
+    <Content Remove="Pages\Usuarios\RegistrationRequestEmailDeny.cshtml" />
+    <Content Remove="Pages\Usuarios\ReplyRequestContact.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\Demandas\OrderCreate.cshtml" />
+    <EmbeddedResource Include="Pages\QrCodePDFPages\QrCodePDFPage.cshtml" />
+    <Content Remove="Pages\Shared\Header.cshtml" />
+    <EmbeddedResource Include="Pages\Shared\Header.cshtml" />
+    <Content Remove="Pages\Usuarios\Wellcome.cshtml" />
+    <EmbeddedResource Include="Pages\Usuarios\DeclaracaoAssociacao.cshtml" />
+    <EmbeddedResource Include="Pages\Usuarios\RecoveryPassword.cshtml" />
+    <EmbeddedResource Include="Pages\Usuarios\RecoveryPasswordRequest.cshtml" />
+    <EmbeddedResource Include="Pages\Usuarios\ReplyRequestContact.cshtml" />
+    <EmbeddedResource Include="Pages\Usuarios\RequestContact.cshtml" />
+    <EmbeddedResource Include="Pages\Usuarios\RequestContactNotify.cshtml" />
+    <EmbeddedResource Include="Pages\Usuarios\RegistrationRequestEmail.cshtml" />
+    <EmbeddedResource Include="Pages\Usuarios\RegistrationRequestEmailApproved.cshtml" />
+    <EmbeddedResource Include="Pages\Usuarios\RegistrationRequestEmailDeny.cshtml" />
+    <EmbeddedResource Include="Pages\Usuarios\RegistrationRequestEmailNotify.cshtml" />
+    <EmbeddedResource Include="Pages\Usuarios\DeclaracaoSesc.cshtml" />
+    <EmbeddedResource Include="Pages\Usuarios\Wellcome.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sindvamb.Domain\Sindvamb.Domain.csproj" />
+    <ProjectReference Include="..\Sindvamb.Utils\Sindvamb.Utils.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="wwwroot\timbrado.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>

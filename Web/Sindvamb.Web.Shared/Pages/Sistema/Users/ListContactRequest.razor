@@ -1,0 +1,112 @@
+﻿@page "/contact-request"
+@inherits ListComponentBase<ContactRequestDTO, IContactRequestService>
+@attribute [TabItemOption(Text = "Contato")]
+@attribute [Authorize]
+@using BootstrapBlazor.Components
+<AppAuthorizeView Roles="@AuthRole.ADMIN_MASTER_SUPPORT">
+
+    <DisplayTable TItem="ContactRequestDTO" ShowTable="ShowTable" IsLoading="IsLoading" ShowButtomAdd="false">
+        <Table ShowLoading="false" TItem="ContactRequestDTO"
+               RenderMode="TableRenderMode.Table"
+               IsPagination="true"
+               TableSize="TableSize.Normal"
+               OnQueryAsync="@OnQueryAsync"
+               PageItemsSource="PageItemsSource"
+               IsStriped="true"
+               IsBordered="true">
+            <TableColumns>
+                <TableColumn @bind-Field="@context.Contact.Name" Text="Nome" Align="Alignment.Left"
+                              Sortable="true" Filterable="true"  DefaultSortOrder="SortOrder.Asc" />
+                <TableColumn @bind-Field="@context.Contact.Email" Text="Email" Width="250" Align="Alignment.Left"
+                              Sortable="true" Filterable="true"
+                               DefaultSortOrder="SortOrder.Asc" />
+                <TableColumn @bind-Field="@context.Subject" Text="Assunto" Align="Alignment.Left"
+                              Sortable="true" Filterable="true"  />
+                <TableColumn @bind-Field="@context.HasAnswered" Align="Alignment.Center" Text="Respondido">
+                    <Template Context="value">
+
+                        @(((ContactRequestDTO)value.Row).HasAnswered ? "Sim" : "Não")
+
+                    </Template>
+                </TableColumn>
+                <TableColumn @bind-Field="@context.HasPendding" Align="Alignment.Center" Text="Pendências">
+                    <Template Context="value">
+
+                        @(((ContactRequestDTO)value.Row).HasPendding ? "Sim" : "Não")
+
+                    </Template>
+                </TableColumn>
+                <TableColumn @bind-Field="@context.HasViewd" Align="Alignment.Center" Text="Visualizado">
+                    <Template Context="value">
+
+                        @(((ContactRequestDTO)value.Row).HasViewd ? "Sim" : "Não")
+
+                    </Template>
+                </TableColumn>
+                <TableColumn @bind-Field="@context.HasAnswered" Align="Alignment.Center" Text="Ações" Width="150">
+                    <Template Context="value">
+
+                        <div class="w-100">
+                        @* <a class="btn btn-action" title="Aprovar" *@
+                        @*    @onclick="@(e => Approve(value.Row))"> *@
+                        @*     <i class="i fi-rr-check-circle"></i> *@
+                        @* </a> *@
+                        @* <a class="btn btn-action" title="Bloquear" *@
+                        @*    @onclick="@(e => Deny(value.Row))"> *@
+                        @*     <i class="fi fi-rr-circle-x"></i> *@
+                        @* </a> *@
+                            <a class="btn btn-action" title="Visualisar" @onclick="@(() => ViewRequirement(value.Row))">
+                                <i class="far fa-eye text-secondary"></i>
+                            </a>
+                        </div>
+
+                    </Template>
+                </TableColumn>
+            </TableColumns>
+        </Table>
+    </DisplayTable>
+
+</AppAuthorizeView>
+
+@code {
+
+    [Inject] public DialogService DialogService { get; set; }
+    [Inject] public SwalService SwalService { get; set; }
+    [Inject] public IContactRequestService ContactRequestService { get; set; }
+
+    public bool ShowTable { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        if (Items.Any())
+        {
+            ShowTable = true;
+            
+        }
+    }
+
+    private async Task ViewRequirement(ContactRequestDTO request)
+    {
+        try
+        {
+
+            var op = new DialogOption()
+                {
+                    Title = $"Solicitação de Contato de {request.Contact?.Name}",
+                    ShowFooter = false,
+                };
+            op.Component = BootstrapDynamicComponent.CreateComponent<ReplyContactRequest>(new Dictionary<string, object?>
+                {
+                    [nameof(ReplyContactRequest.Request)] = request,
+                    [nameof(ReplyContactRequest.OnCloseAsync)] = new Action(() => op.CloseDialogAsync())
+                });
+            await DialogService.Show(op);
+        }
+        catch
+        {
+        }
+    }
+
+}

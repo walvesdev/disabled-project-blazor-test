@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Configurations>Debug;Release;Production</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <NuGetAudit>false</NuGetAudit>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.4" />
+    <PackageReference Include="System.DirectoryServices" Version="9.0.4" />
+    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="9.0.4" />
+    <PackageReference Include="System.DirectoryServices.Protocols" Version="9.0.4" />
+    <PackageReference Include="System.Text.Json" Version="9.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sindvamb.Events\Sindvamb.Events.csproj" />
+    <ProjectReference Include="..\Sindvamb.Repository\Sindvamb.Repository.csproj" />
+    <ProjectReference Include="..\Sindvamb.Templates\Sindvamb.Templates.csproj" />
+    <ProjectReference Include="..\Sindvamb.Utils\Sindvamb.Utils.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Sindvamb.Security">
+      <HintPath>..\Sindvamb.Application\bin\Staging\net8.0\win-x64\Sindvamb.Security.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
+</Project>

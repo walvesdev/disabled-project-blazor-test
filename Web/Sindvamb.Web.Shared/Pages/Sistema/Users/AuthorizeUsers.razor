@@ -1,0 +1,270 @@
+﻿@page "/requests"
+@inject IUserRegistrationService UserService
+@inject NavigationManager NavigationManager
+@inherits ListComponentBase<RegistrationRequestDTO, IUserRegistrationService>
+@attribute [Authorize]
+@using BootstrapBlazor.Components
+<AppAuthorizeView Roles="@AuthRole.ADMIN_MASTER_SUPPORT">
+
+    <Tab IsCard="true">
+        <TabItem Text="Cadastro">
+            <DisplayTable TItem="RegistrationRequestDTO" ShowTable="ShowTable" IsLoading="IsLoading" ShowButtomAdd="false">
+                <Table ShowLoading="false" TItem="RegistrationRequestDTO"
+                       RenderMode="TableRenderMode.Table"
+                       IsPagination="true"
+                       TableSize="TableSize.Normal"
+                       OnQueryAsync="@OnQueryAsync"
+                       PageItemsSource="PageItemsSource"
+                       IsStriped="true"
+                       IsBordered="true">
+                    <TableColumns>
+                        <TableColumn @bind-Field="@context.Protocol" Text="Protocolo" Align="Alignment.Left" Sortable="true" Filterable="true" />
+                        <TableColumn @bind-Field="@context.User.Name" Text="Nome" Align="Alignment.Left" Sortable="true" Filterable="true" />
+                        <TableColumn @bind-Field="@context.User.Email" Text="Email" Width="250" Align="Alignment.Left" Sortable="true" Filterable="true" />
+                        <TableColumn @bind-Field="@context.Date" Text="Data" FormatString="dd/MM/yyyy hh:mm" Width="250" Align="Alignment.Left" Sortable="true" Filterable="true" />
+                        <TableColumn @bind-Field="@context.Approved" Text="Status" Align="Alignment.Left" Sortable="true" Filterable="true">
+                            <Template Context="value">
+
+                                @if (value.Row.Approved == true)
+                                {
+                                    <p>Aprovado</p>
+                                }
+                                else if (value.Row.Approved == false)
+                                {
+                                    <p>Reprovado</p>
+                                }
+                                else
+                                {
+                                    <p>Aguardando Análise</p>
+                                }
+
+                            </Template>
+                        </TableColumn>
+                        <TableColumn @bind-Field="@context.Protocol" Align="Alignment.Center" Text="Ações" Width="150">
+                            <Template Context="value">
+
+                                <div class="w-100">
+                                    <a class="btn btn-action" title="Aprovar"
+                                    @onclick="@(() => Approve(value.Row))">
+                                        <i class="far fa-check-circle text-success"></i>
+                                    </a>
+                                    <a class="btn btn-action" title="Bloquear"
+                                    @onclick="@(() => Deny(value.Row))">
+                                        <i class="far fa-times-circle text-danger"></i>
+                                    </a>
+                                    <a class="btn btn-action" title="Visualisar"
+                                    @onclick="@(() => ViewRequirement(value.Row))">
+                                        <i class="far fa-eye text-secondary"></i>
+                                    </a>
+                                    <a class="btn btn-action" title="Deletar"
+                                    @onclick="@(() => DeleteRequirement(value.Row))">
+                                        <i class="fa-duotone fa-solid fa-trash-can text-danger"></i>
+                                    </a>
+                                </div>
+
+                            </Template>
+                        </TableColumn>
+                    </TableColumns>
+                </Table>
+            </DisplayTable>
+        </TabItem>
+        <TabItem Text="Contato">
+            <ListContactRequest></ListContactRequest>
+        </TabItem>
+    </Tab>
+
+</AppAuthorizeView>
+
+@code {
+
+    [Inject] public DialogService DialogService { get; set; }
+    [Inject] public SwalService SwalService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllUnauthorizedUsers();
+    }
+
+    protected async Task GetAllUnauthorizedUsers()
+    {
+        IsLoading = true;
+
+        try
+        {
+            Items = (await UserService.GetAllUnauthorizedUsers())?.OrderByDescending(p => p.Date);
+        }
+        catch
+        {
+            // ignore
+        }
+
+        Count = Items.Count();
+
+        if (Items.Any())
+        {
+            ShowTable = true;
+        }
+
+        IsLoading = false;
+        await InvokeAsync(StateHasChanged);
+
+    }
+
+    public async Task Approve(RegistrationRequestDTO dto)
+    {
+        // if (dto.Approved == true)
+        // {
+        //     await SwalService.Show(new SwalOption()
+        //         {
+        //             Category = SwalCategory.Warning,
+        //             Title = "Atenção!",
+        //             Content = "Esse usuário já está liberado para utilizar o sistema!",
+        //             CloseButtonText = "Fechar",
+        //         });
+
+        //     return;
+        // }
+
+        var approveOperation = await SwalService.ShowModal(new SwalOption()
+            {
+                Category = SwalCategory.Warning,
+                Title = "Atenção!",
+                Content = $"Deseja aprovar o cadastro de {dto.User.Name}?",
+                ConfirmButtonText = "Sim",
+                CancelButtonText = "Cancelar"
+            });
+
+        if (approveOperation)
+        {
+
+            ToggleLoading();
+            await InvokeAsync(StateHasChanged);            
+
+            var approved = await UserService.ApproveUser(dto.MapTo<RegistrationRequest>());
+
+            if (approved)
+            {
+                dto.Reason = null;
+
+                await SwalService.Show(new SwalOption()
+                    {
+                        Category = SwalCategory.Success,
+                        Title = "Feito!",
+                        Content = $"Operação efetuada com sucesso!",
+                        CloseButtonText = "Fechar",
+                        OnCloseAsync = GetAllUnauthorizedUsers,
+                    });
+            }
+
+            ToggleLoading();
+            dto.Approved = true;
+            StateHasChanged();
+            //await InvokeAsync(StateHasChanged);
+        }
+
+    }
+
+    private async Task ViewRequirement(RegistrationRequestDTO dto)
+    {
+        try
+        {
+            await DialogService.Show(new DialogOption()
+                {
+                    Component = BootstrapDynamicComponent.CreateComponent<AcompanharCadastro>(new Dictionary<string, object?>
+                    {
+                        [nameof(AcompanharCadastro.CpfCnpj)] = dto.User.CpfCnpj,
+                        [nameof(AcompanharCadastro.IsModal)] = true,
+                    }),
+                    ShowFooter = true,
+                    ShowCloseButton = true,
+                    CloseButtonText = "Fechar"
+                });
+        }
+        catch
+        {
+        }
+    }
+
+    private async Task DeleteRequirement(RegistrationRequestDTO dto)
+    {
+        try
+        {
+            var result = await SwalService.ShowModal(new SwalOption()
+                {
+                    Category = SwalCategory.Warning,
+                    Title = "Atenção!",
+                    Content = "Deseja excluir essa solicitação?",
+                });
+
+            if (result)
+            {
+                ToggleLoading();
+                await InvokeAsync(StateHasChanged);
+
+                await UserService.Delete(dto.UserId);
+
+                Items = Items.Where(i => i.UserId != dto.UserId);
+
+                ToggleLoading();
+                await InvokeAsync(StateHasChanged);
+
+                // await GetAllUnauthorizedUsers();
+
+            }
+        }
+        catch
+        {
+        }
+    }
+
+    private async Task Deny(RegistrationRequestDTO dto)
+    {
+        // if (!dto.Reason!.IsNullOrWhiteSpace())
+        // {
+        //     await SwalService.Show(new SwalOption()
+        //         {
+        //             Category = SwalCategory.Warning,
+        //             Title = "Atenção!",
+        //             Content = "Esse usuário já está bloqueado no sistema!",
+        //         });
+
+        //     return;
+        // }
+
+        try
+        {
+
+            var op = new DialogOption()
+                {
+                    Title = $"Descreva o motivo de reprovar a solicitação de {dto.User.Name}",
+                    ShowFooter = false,
+                    OnCloseAsync = GetAllUnauthorizedUsers
+                };
+
+            op.Component = BootstrapDynamicComponent.CreateComponent<DenyUserRegistration>(new Dictionary<string, object?>
+                {
+                    [nameof(DenyUserRegistration.RegistrationRequest)] = dto,
+                    [nameof(DenyUserRegistration.IsLoading)] = IsLoading,
+                    [nameof(DenyUserRegistration.OnCloseAsync)] = new Action(() =>
+                    {
+                        op.CloseDialogAsync();
+
+                        if (!dto.Reason.IsNullOrWhiteSpace())
+                        {
+                            dto.Approved = false;
+                        }
+
+                        StateHasChanged();
+                    })
+                });
+
+            await DialogService.Show(op);
+
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+}

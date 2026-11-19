@@ -1,0 +1,140 @@
+﻿@page "/account-manager"
+
+@using BootstrapBlazor.Components
+
+@inject ILocalStorageService LocalStorageService
+@inject IUserService UserService
+@inject IFileControlService FileControlService
+@inject ICustomerService CustomerService
+@inject DialogService DialogService
+@inject SwalService SwalService
+@inject NavigationManagerService NavigationManager
+
+@inherits AppComponentBase
+
+@if (ShowBody)
+{
+    <div class="container">
+
+
+        <GroupBox Title="Informações Pessoais" class="containercol-6">
+
+            <div class="d-flex justify-content-between align-items-end m-3 pe-3 w-100">
+
+                <div class="d-flex justify-content-start align-items-start w-100">
+                    <img src="@AvatarUrl" class="rounded obj-fit-fill" style="height: 150px;" />
+                </div>
+
+                <div class="d-flex justify-content-end align-items-end w-100">
+                    <Button Color="Color.Primary" ButtonStyle="ButtonStyle.None" Text="Alterar Senha"
+                            OnClickWithoutRender="@ShowDialog" />
+                </div>
+
+            </div>
+
+            <Row ItemsPerRow="ItemsPerRow.Three" class="gap-3 py-5">
+
+                <Display @bind-Value="@Model!.User.Name" ShowLabel="true" DisplayText="Nome Completo" />
+                <Display @bind-Value="@Model.User.SocialName" ShowLabel="true" DisplayText="Nome Afetivo" />
+                <Display @bind-Value="@Model.User.CpfCnpj" FormatterAsync="@Formaters.FormatCpfCnpjAsync" ShowLabel="true"
+                         DisplayText="CPF" />
+                <Display @bind-Value="@Model.User.RG" ShowLabel="true" DisplayText="RG" />
+                <Display @bind-Value="@Model.User.UFIssuingBody" ShowLabel="true" DisplayText="UF" />
+                <Display @bind-Value="@Model.User.Birthplace" ShowLabel="true" DisplayText="Naturalidade" />
+                <Display @bind-Value="@Model.User.Nationality" ShowLabel="true" DisplayText="Nacionaliade" />
+                <Display @bind-Value="@Model.User.Gender" ShowLabel="true" DisplayText="Sexo" />
+                <Display @bind-Value="@Model.User.Birthdate" FormatString="dd/MM/yyyy" ShowLabel="true"
+                         DisplayText="Data Nascimento" />
+                <Display @bind-Value="@Model.User.CivilStatus" ShowLabel="true" DisplayText="Estado Civil" />
+                <Display @bind-Value="@Model.User.CellPhone" FormatterAsync="@Formaters.FormatCellPhoneAsync"
+                         ShowLabel="true" DisplayText="Celular" />
+                <Display @bind-Value="@Model.User.HomePhone" FormatterAsync="@Formaters.FormatHomePhoneAsync"
+                         ShowLabel="true" DisplayText="Telefone Residencial" />
+                <Display @bind-Value="@Model.User.Email" ShowLabel="true" DisplayText="Email" />
+
+                @* <Stack IsRow="true" Justify="StackJustifyContent.End" class="gap-3 mt-3"> *@
+                @* <Button Color="Color.Secondary" ButtonStyle="ButtonStyle.None" Text="Sair" OnClick="RedirectToHome" style="width: 110px;" /> *@
+                @* <Button Color="Color.Primary" ButtonStyle="ButtonStyle.None" Text="Aletrar Senha" OnClickWithoutRender="@ShowDialog"/> *@
+                @* <Button Color="Color.Primary" ButtonStyle="ButtonStyle.None" Text="Salvar Alterações" OnClick="Save" /> *@
+                @* </Stack> *@
+
+            </Row>
+        </GroupBox>
+
+        <GroupBox Title="Endereço" class="containercol-6 my-5">
+            <Row ItemsPerRow="ItemsPerRow.Three" class="gap-3 py-5">
+
+                <Display @bind-Value="@Model!.User.Address.ZipCode" ShowLabel="true" DisplayText="CEP" />
+                <Display @bind-Value="@Model.User.Address.City" ShowLabel="true" DisplayText="Cidade" />
+                <Display @bind-Value="@Model.User.Address.District" ShowLabel="true" DisplayText="Estado" />
+                <Display @bind-Value="@Model.User.Address.AddressLine1" ShowLabel="true" DisplayText="Endereço" />
+                <Display @bind-Value="@Model.User.Address.Neighborhood" ShowLabel="true" DisplayText="Bairro" />
+                <Display @bind-Value="@Model.User.Address.Number" ShowLabel="true" DisplayText="Número" />
+                <Display @bind-Value="@Model.User.Address.Complement" ShowLabel="true" DisplayText="Complemento" />
+                <Display @bind-Value="@Model.User.Address.Housing" ShowLabel="true" DisplayText="Habitação" />
+
+            </Row>
+        </GroupBox>
+
+        <GroupBox Title="Necessidades Especiais" class="containercol-6 my-5">
+            <Row ItemsPerRow="ItemsPerRow.Four" class="gap-3 py-5">
+
+                @if (Model!.User.SpecialNeeds.IsNotNull() && Model.User.SpecialNeeds.Any())
+                {
+                    @foreach (var specialNeed in Model.User.SpecialNeeds)
+                    {
+                        <Display TValue="string" Value="@specialNeed.Description" ShowLabel="false" class="my-3" />
+                    }
+
+                    @if (Model.User.SpecialNeedsOther.IsNotNull() && !Model.User.SpecialNeedsOther.IsNullOrWhiteSpace())
+                    {
+                        <Display @bind-Value="@Model.User.SpecialNeedsOther" ShowLabel="false" class="my-3" />
+                    }
+                }
+
+            </Row>
+        </GroupBox>
+
+        <GroupBox Title="Demais Informações" class="containercol-6 my-5">
+            <Row ItemsPerRow="ItemsPerRow.Three" class="gap-3 py-5">
+
+                <Display @bind-Value="@Model!.User.Profession" ShowLabel="true" DisplayText="Profisão" />
+                <Display @bind-Value="@Model.User.EducationDegree.Description" ShowLabel="true"
+                         DisplayText="Grau de Instrução" />
+                <Display @bind-Value="@Model.User.MotherName" ShowLabel="true" DisplayText="Nome da Mãe" />
+
+            </Row>
+        </GroupBox>
+
+        <GroupBox Title=@($"Documentos de {@Model!.User.Name}") class="containercol-6 my-5 w-100">
+
+            <FileControlList UserId="Model!.User.Id" IsDependent="false" />
+
+        </GroupBox>
+
+        @if (Model.Dependents.Any())
+        {
+            @foreach (var dependente in @Model.Dependents)
+            {
+
+                <GroupBox Title="@($"Dependente: {dependente.Name}")" class="containercol-6 my-5 w-100">
+
+                    <FileControlList UserId="dependente.Id" IsDependent="true" />
+
+                </GroupBox>
+
+            }
+        }
+        @if (ShowCancelButton)
+        {
+            <Stack Justify="StackJustifyContent.End" class="gap-5 mt-3 pe-2" AlignItems="StackAlignItems.End" IsRow="true">
+                <Button Color="Color.Secondary" style="width: 130px" @onclick="CancelUpdate">Cancelar</Button>
+                <Button Color="Color.Primary" @onclick="Update">Salvar Alterações</Button>
+            </Stack>
+        }
+    </div>
+}
+else
+{
+    <AppSpinner />
+}

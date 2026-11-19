@@ -1,0 +1,212 @@
+﻿@using BootstrapBlazor.Components
+
+<Card>
+    <HeaderTemplate>
+        <h5 class="pt-2">Titular (Você)</h5>
+    </HeaderTemplate>
+
+    <BodyTemplate>
+
+        <ValidateForm class="d-flex row flex-wrap" @ref="Form" Model="@Model" OnValidSubmit="@OnValidSubmitTitular" OnInvalidSubmit="@OnInvalidSubmitTitular">
+            <DataAnnotationsValidator />
+            <div class="d-flex row flex-wrap">
+
+                <div class="form-group mt-2 col-md-6 px-2">
+
+                    <InputUpload TValue="IBrowserFile" @bind-Value="HolderDocumentModel.Foto" DisplayText="Foto de identificação 3X4 recente e colorida"
+                                 ShowDeleteButton="true" BrowserButtonText="Selecione"
+                                 ShowRequired="true"
+                                 RequiredErrorMessage="Selecione sua foto 3X4"
+                                 OnChange=@(file => OnFileChange(file, "Foto de identificação 3X4"))
+                                 OnDelete=@(file => OnFileDelete(file, "Foto de identificação 3X4"))>
+
+                    </InputUpload>
+
+                </div>
+                <div class="form-group mt-2 col-md-6 px-2">
+
+                    <InputUpload TValue="IBrowserFile" @bind-Value="HolderDocumentModel.CpfCnpj" DisplayText="CPF"
+                                 ShowDeleteButton="true" BrowserButtonText="Selecione"
+                                 ShowRequired="true"
+                                 RequiredErrorMessage="Selecione sua foto do CPF"
+                                 OnChange=@(file => OnFileChange(file, "CPF"))
+                                 OnDelete=@(file => OnFileDelete(file, "CPF"))>
+
+                    </InputUpload>
+
+                </div>
+                <div class="form-group mt-2 col-md-6 px-2">
+
+                    <InputUpload TValue="IBrowserFile" @bind-Value="HolderDocumentModel.Rg" DisplayText="RG"
+                                 ShowDeleteButton="true" BrowserButtonText="Selecione"
+                                 ShowRequired="true"
+                                 RequiredErrorMessage="Selecione sua foto do RG"
+                                 OnChange=@(file => OnFileChange(file, "RG"))
+                                 OnDelete=@(file => OnFileDelete(file, "RG"))>
+
+                    </InputUpload>
+
+                </div>
+                <div class="form-group mt-2 col-md-6 px-2">
+
+                    <InputUpload TValue="IBrowserFile" @bind-Value="HolderDocumentModel.Certidao" DisplayText="Certidão de casamento ou declaração de união estável"
+                                 ShowDeleteButton="true" BrowserButtonText="Selecione"
+                                 ShowRequired="true"
+                                 RequiredErrorMessage="Selecione o ducumento solicitado"
+                                 OnChange=@(file => OnFileChange(file, "Certidão de casamento ou declaração de união estável"))
+                                 OnDelete=@(file => OnFileDelete(file, "Certidão de casamento ou declaração de união estável"))>
+
+                    </InputUpload>
+
+                </div>
+                <div class="form-group mt-2 col-md-6 px-2">
+
+                    <InputUpload TValue="IBrowserFile" @bind-Value="HolderDocumentModel.Residencia" DisplayText="Comprovante de residência"
+                                 ShowDeleteButton="true" BrowserButtonText="Selecione"
+                                 ShowRequired="true"
+                                 RequiredErrorMessage="Selecione seu Comprovante de residência"
+                                 OnChange=@(file => OnFileChange(file, "Comprovante de residência"))
+                                 OnDelete=@(file => OnFileDelete(file, "Comprovante de residência"))>
+
+                    </InputUpload>
+
+                </div>
+
+            </div>
+        </ValidateForm>
+    </BodyTemplate>
+</Card>
+
+
+
+
+@code {
+
+    [Inject]
+    [NotNull]
+    private DialogService? DialogService { get; set; }
+
+    [Parameter]
+    [NotNull]
+    public HolderDocumentModel HolderDocumentModel { get; set; } = new();
+
+    [Parameter]
+    public CustomerModel Model { get; set; }
+
+    [Inject] public IFileControlService FileControlService { get; set; }
+
+    [Parameter]
+    public EventCallback<OnChangeValidateFormModel> OnChangeNextStepState { get; set; }
+
+    [NotNull]
+    public ValidateForm Form { get; set; }
+
+    [Inject] public SwalService SwalService { get; set; }
+
+    private List<SelectedItem> HousingToselectedItem => SiteConstants.Housing.Select(item => new SelectedItem(item, item)).ToList();
+
+    public async Task EnableNextStep()
+    {
+        var validation = new OnChangeValidateFormModel()
+            {
+                Form = Form,
+                HasValidation = true
+            };
+
+        await OnChangeNextStepState.InvokeAsync(validation);
+    }
+
+    private async Task FileLoad(IBrowserFile file, byte[] fileArray)
+    {
+        if (file.IsNotNull())
+        {
+            _ = await file.OpenReadStream(maxAllowedSize: 1024 * 30000).ReadAsync(fileArray);
+        }
+        
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+
+    }
+
+    public async Task OnInvalidSubmitTitular(EditContext ctx)
+    {
+
+    }
+
+    public async Task OnValidSubmitTitular(EditContext ctx)
+    {
+
+    }
+
+    private async Task OnFileChange(UploadFile arg, string description)
+    {
+
+        long maxFileSize = 2L * 1024L * 1024L * 1024L;
+        await using var fs = arg.File.OpenReadStream(maxAllowedSize: maxFileSize); await using var ms = new MemoryStream();
+        await fs.CopyToAsync(ms);
+
+        var extension = arg.File.Name.Split(".");
+        var filename = $"{description}-{Model.User.Id.ToString().GetDigits()}.{extension.Last()}";
+
+        var result = await FileControlService.Update(new FileControlDTO
+            {
+                UserId = Model.User.Id,
+                Description = description,
+                FileName = filename,
+                FileSize = arg.File.Size,
+                FileArray = ms.ToArray(),
+                ContentType = arg.File.ContentType,
+                TargetPath = $"/User/{Model.User.Id}/{filename}",
+            });
+
+        if (!result)
+        {
+            await SwalService.Show(new SwalOption()
+                {
+                    Category = SwalCategory.Error,
+                    Title = "Falha ao adicionar arquivo",
+                    Content = "Caso o erro persista contate o suporte!",
+                });
+        }
+
+    }
+
+    private async Task<bool> OnFileDelete(UploadFile arg, string description)
+    {
+        ToggShowSteps();
+
+        var extension = arg.File.Name.Split(".");
+        var filename = $"{description}-{Model.User.Id.ToString().GetDigits()}.{extension.Last()}";
+
+        var file = Model.User.FileControl.FirstOrDefault(file => file.FileName.Equals(filename));
+
+        if (file.Id != Guid.Empty)
+        {
+            var result = await FileControlService.Delete(file.Id);
+
+            if (!result)
+            {
+                await SwalService.Show(new SwalOption()
+                    {
+                        Category = SwalCategory.Error,
+                        Title = "Falha ao remover arquivo",
+                        Content = "Caso o erro persista contate o suporte!",
+                    });
+            }
+        }
+
+        Model.User.FileControl.Remove(file);
+
+        ToggShowSteps();
+
+        return await Task.FromResult(true);
+    }
+
+    public void ToggShowSteps()
+    {
+        AppServices.ShowSteps = !AppServices.ShowSteps;
+        
+    }
+}

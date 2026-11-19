@@ -1,0 +1,40 @@
+﻿@implements IDisposable
+@inject IJSRuntime JS
+@using BootstrapBlazor.Components
+
+<div style="max-height: 100vh !important; width: 100%; display: flex; justify-content: center; align-content: center;">
+
+    @if (FileContentType.Contains("pdf"))
+    {
+        <PdfReader FileName=@Filename />
+    }
+    else if (FileContentType.Contains("image"))
+    {
+        <ImageViewer FitMode="ObjectFitMode.Contain" Url=@Filename />
+    }
+    else
+    {
+        <h5>Arquivo sem suporte à visualização.</h5>
+    }
+
+</div>
+
+
+@code {
+    [Parameter] public string Filename { get; set; }
+    [Parameter] public string FileContentType { get; set; }
+
+    private async void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            await JS.InvokeVoidAsync("revokeObjectURL", Filename);
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+}

@@ -1,0 +1,13 @@
+﻿/*** FAQs Start ***/
+.faq-section .accordion .accordion-item .accordion-header .accordion-button {
+    color: var(--bs-white);
+    background: var(--bs-dark);
+    font-size: 18px;
+}
+
+    .faq-section .accordion .accordion-item .accordion-header .accordion-button.collapsed {
+        color: var(--bs-primary);
+        background: var(--bs-light);
+    }
+
+/*** FAQs End ***/

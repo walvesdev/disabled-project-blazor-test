@@ -1,0 +1,160 @@
+@page "/edit-order"
+@page "/edit-order/{Id:guid}"
+@namespace Sindvamb.Web.Shared.Pages.Sistema.Orders
+@inherits EditComponentBase<OrderDTO, IOrderService, Guid>
+@attribute [Authorize]
+@using BootstrapBlazor.Components
+<AppAuthorizeView Roles="@AuthRole.ADMIN_MASTER_SUPPORT">
+
+    <div class="app-container">
+        <div class="col col-md-6">
+            <h3 style="margin: 10px 0;">@(@IsEdit ? "ATUALIZAÇÃO" : "REGISTRO") DA DEMANDA</h3>
+            <h6 style="margin-bottom: 30px;">@ProductCategoryDescription</h6>
+            <EditForm Model="@Item" OnValidSubmit=@(ev => FormSubmit(ev, "order"))>
+                <DataAnnotationsValidator />
+                <div class="row">
+                    <div class="form-group mb-3">
+                        <label style="" for="PartnerUnitId">Unidade</label>
+                        <RadzenDropDown FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true" FilterMode="FilterMode.Simple" Change="PartnerUnitChanged"
+                                        @* Data=@PartnerUnitList TextProperty="Name" ValueProperty="Id" AllowClear="true" @bind-Value=@Item.PartnerUnitId *@
+                                        Style="width: 100%; min-width: 250px; height:58px; padding: 15px 0 0 15px" />
+                    </div>
+
+@*                     <div class="form-group mb-3" style="width: 50%;">
+                        <label for="WappsId">Parceiro de Negócio</label>
+                        <RadzenDropDown Disabled="@DisabledFileds"
+                                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true" FilterMode="FilterMode.Simple"
+                                        Data=@CustomerList TextProperty="User.Name" ValueProperty="Id" AllowClear="true" @bind-Value=@Item.WappsId
+                                        Style="width: 100%; min-width: 250px; height:58px; padding: 15px 0 0 15px"/>
+                    </div> *@
+
+                    <div class="form-group mb-3">
+                        <label for="CustomerTypes">Diretoria/Ger. Executiva</label>
+                        <RadzenDropDown Disabled="@DisabledFileds"
+                                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true" FilterMode="FilterMode.Simple"
+                                        @* Data=@CustomerList TextProperty="User.Name" ValueProperty="Id" AllowClear="true" @bind-Value=@Item.DirectorId *@
+                                        Style="width: 100%; min-width: 250px; height:58px; padding: 15px 0 0 15px" />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="CustomerTypes">Gerência</label>
+                        <RadzenDropDown Disabled="@DisabledFileds"
+                                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true" FilterMode="FilterMode.Simple"
+                                        @* Data=@CustomerList TextProperty="User.Name" ValueProperty="Id" AllowClear="true" @bind-Value=@Item.ManagerId *@
+                                        Style="width: 100%; min-width: 250px; height:58px; padding: 15px 0 0 15px" />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="Sigla">Sigla</label>
+                        <InputText style="height:58px;" @bind-Value="@Item.Sigla" id="Sigla" class="form-control " />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="CustomerTypes">Cliente</label>
+                        <RadzenDropDown Disabled="@DisabledFileds"
+                                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true" FilterMode="FilterMode.Simple" Change="ClientChanged"
+                                        @* Data=@CustomerList TextProperty="User.Name" ValueProperty="Id" AllowClear="true" @bind-Value=@Item.ClientId *@
+                                        Style="width: 100%; min-width: 250px; height:58px; padding: 15px 0 0 15px" />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="Email">Email do Solicitante</label>
+                        <InputText style="height:58px;" @bind-Value="@EmailClient" id="Email" class="form-control " />
+                    </div>
+
+                    <RadzenRow AlignItems="AlignItems.Center">
+                        <RadzenText Text="Solicitação" TextStyle="TextStyle.H5" TagName="TagName.H1" style="margin: 0 0 20px 0" />
+                    </RadzenRow>
+
+                    <div style="display: flex;gap: 20px;">
+                        <div class="form-group mb-3" style="width: 50%;">
+                            <label for="OrderTypeId">Tipo de Demanda</label>
+                            <RadzenDropDown FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                            FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true" FilterMode="FilterMode.Simple"
+                                            @* Data=@OrderTypeList TextProperty="Description" ValueProperty="Id" AllowClear="true" @bind-Value=@Item.OrderTypeId *@
+                                            Style="width: 100%; min-width: 250px; height:58px; padding: 15px 0 0 15px" />
+                        </div>
+
+                        <div class="form-group mb-3" style="width: 50%;">
+                            <label for="ProductAreaId">Área da Demanda</label>
+                            <RadzenDropDown FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                            FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true" FilterMode="FilterMode.Simple"
+                                            @* Data=@ProductAreaList TextProperty="Description" ValueProperty="Id" AllowClear="true" @bind-Value=@Item.ProductAreaId *@
+                                            Style="width: 100%; min-width: 250px; height:58px; padding: 15px 0 0 15px" />
+                        </div>
+
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="Description">Descrição da Demanda</label>
+                    @* <RadzenTextArea Style="height: 200px;" Rows="30" @bind-Value="@Item.Description" id="Description"    class="form-control "/> *@
+                        <ValidationMessage For="@(() => Item.Description)" />
+                    </div>
+
+                    <div class="form-group mb-3" style="width: 100%;">
+                        <label for="ProductAreaId">Situação da Demanda</label>
+                        <RadzenDropDown FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true" FilterMode="FilterMode.Simple"
+                                        @* Data=@OrderStatusList TextProperty="Description" ValueProperty="Id" AllowClear="true" @bind-Value=@Item.OrderStatusId *@
+                                        Style="width: 100%; min-width: 250px; height:58px; padding: 15px 0 0 15px" />
+                    </div>
+
+                    <div style="display: flex;gap: 20px;">
+
+                        <div class="form-group mb-3" style="width: 50%;">
+                        @* <RadzenCheckBox @bind-Value="@Item.SendEmailWapps" id="SendEmailWapps" placeholder="Descrição" class="form-control "/> *@
+                            <label for="SendEmailWapps">Email ao RHBP Responsável Pela Demanda</label>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="EmailWithCopy">Com Cópia Para:</label>
+                        <InputText style="height:58px;" @bind-Value="@Item.EmailWithCopy" id="EmailWithCopy" class="form-control " />
+                    </div>
+
+                </div>
+                <div class="d-flex gap-3 col w-100 justify-content-end align-items-end" style="margin-top:1rem;">
+                @* <RadzenButton ButtonStyle="ButtonStyle.Secondary" Text="Cancelar"  Click=@(ev => CancelButtonClick(ev, "order"))/> *@
+
+                    <button type="submit" disabled="@IsLoading" ButtonStyle="ButtonStyle.Primary">
+                        @if (IsLoading)
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status"></span>
+                        }
+                        Confirmar
+                        <i style="position: relative; top: 2px; margin: 2px;" class="fi fi-br-sign-in-alt"></i>
+                    </button>
+                </div>
+            </EditForm>
+        </div>
+
+        @if (IsEdit)
+        {
+            <h5 class="mb-5">HISTÓRICO DE ALTERAÇÕES</h5>
+
+            @* <RadzenTimeline Orientation="@Orientation.Vertical" LinePosition="@LinePosition.Left" Class="rz-m-4"> *@
+            @*     <Items> *@
+            @* *@
+            @*         @foreach (var track in Item.OrderTracking) *@
+            @*         { *@
+            @*             <RadzenTimelineItem Style="position: relative; left: 0" PointStyle="PointStyle.Primary"> *@
+            @*                 <ChildContent> *@
+            @*                     <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@track.TrackDate.ToString("dd/MM/yyyy hh:mm")</RadzenText> *@
+            @*                     @track.History *@
+            @*                 </ChildContent> *@
+            @*             </RadzenTimelineItem> *@
+            @*         } *@
+            @* *@
+            @*     </Items> *@
+            @* </RadzenTimeline> *@
+        }
+
+    </div>
+
+</AppAuthorizeView>

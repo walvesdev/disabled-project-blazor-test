@@ -1,0 +1,53 @@
+@page "/customer"
+@inject ICustomerService CustomerService
+@attribute [Authorize]
+@namespace Sindvamb.Web.Shared.Pages.Sistema.Customers
+@using BootstrapBlazor.Components
+
+@inherits ListComponentBase<CustomerModel, ICustomerService>
+
+<AppAuthorizeView Roles="@AuthRole.ADMIN_MASTER_SUPPORT">
+
+    <Tab IsCard="true">
+        <TabItem Text="Clientes">
+            <DisplayTable TItem="CustomerModel" ShowTable="ShowTable" IsLoading="IsLoading" OnAdd=@(() => AddRowTemplate<AddEditCustomer>("Adicionar Cliente"))>
+                <Table ShowLoading="false" TItem="CustomerModel"
+                       IsPagination="true" OnQueryAsync="@OnQueryAsync"
+                       PageItemsSource="PageItemsSource"
+                       IsStriped="true" IsBordered="true"
+                       ShowSkeleton="true" IsKeepSelectedRows="true">
+                    <TableColumns>
+                        <TableColumn Text="Nome" @bind-Field="@context.User.Name"  Sortable="true" Filterable="true"
+                                        />
+                        <TableColumn Text="Email" @bind-Field="@context.User.Email"  Sortable="true" Filterable="true"  />
+                        <TableColumn Text="Tipo" @bind-Field="@context.CustomerType.Description"  Sortable="true" Filterable="true"  />
+                        <TableColumn Text="Unidade" @bind-Field="@context.User.PartnerUnit.Name"  Sortable="true" Filterable="true"  />
+                        <TableColumn Text="Ações" @bind-Field="@context.Id" Align="Alignment.Center" Width="150">
+                            <Template Context="value">
+
+                                <div class="w-100 d-flex justify-content-center">
+                                    <a class="btn btn-action" title="Aprovar" @onclick=@(() => EditRowTemplate<AddEditCustomer>("Editar Cliente", value.Row)) @onclick:stopPropagation="true">
+                                        <i class="fa-regular fa-pen-to-square text-warning"></i>
+                                    </a>
+                                    <button class="btn btn-action" title="Bloquear" @onclick=@(() => GridDeleteButtonClick(value.Row)) @onclick:stopPropagation="true">
+                                        <i class="fa-duotone fa-solid fa-trash-can text-danger"></i>
+                                    </button>
+                                </div>
+
+                            </Template>
+                        </TableColumn>
+                    </TableColumns>
+                </Table>
+            </DisplayTable>
+        </TabItem>
+        <TabItem Text="Tipo de Cliente">
+            <ListCustomerType></ListCustomerType>
+        </TabItem>
+    </Tab>
+
+</AppAuthorizeView>
+
+@code
+{
+
+}

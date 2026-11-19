@@ -1,0 +1,57 @@
+@page "/product-area"
+@namespace Sindvamb.Web.Shared.Pages.Sistema.ProductAreas
+@using Sindvamb.Web.Shared.Pages.Sistema.ProductCategories
+@inherits ListComponentBase<ProductAreaDTO, IProductAreaService>
+@inject IProductAreaService ProductAreaService
+@attribute [Authorize]
+@using BootstrapBlazor.Components
+<AppAuthorizeView Roles="@AuthRole.ADMIN_MASTER_SUPPORT">
+
+    <Tab IsCard="true">
+        <TabItem Text="Área do Produto">
+            <DisplayTable TItem="ProductAreaDTO" ShowTable="ShowTable" IsLoading="IsLoading" OnAdd="() => AddRowType(ProductAreaService.Create)">
+                <Table ShowLoading="false" TItem="ProductAreaDTO"
+                       RenderMode="TableRenderMode.Table"
+                       IsPagination="true"
+                       TableSize="TableSize.Normal"
+                       OnQueryAsync="@OnQueryAsync"
+                       PageItemsSource="PageItemsSource"
+                       IsStriped="true"
+                       IsBordered="true">
+                    <TableColumns>
+                        <TableColumn Text="Código" @bind-Field="@context.Code" Width="100" Align="Alignment.Left"  Sortable="true" Filterable="true"
+                                       DefaultSortOrder="SortOrder.Asc" />
+                        <TableColumn Text="Descrição" @bind-Field="@context.Description" Width="180" Align="Alignment.Left"  Sortable="true" Filterable="true"
+                                      />
+                        <TableColumn @bind-Field="@context.Id" Align="Alignment.Center" Text="Ações" Width="150">
+                            <Template Context="value">
+
+                                <div class="w-100">
+                                    <a class="btn btn-action" title="Aprovar"
+                                       @onclick=@(() => EditRowType(value.Row, ProductAreaService.Update))
+                                       @onclick:stopPropagation="true">
+                                        <i class="fa-regular fa-pen-to-square text-warning"></i>
+                                    </a>
+                                    <button class="btn btn-action" title="Bloquear"
+                                            @onclick=@(() => GridDeleteButtonClick(value.Row))
+                                            @onclick:stopPropagation="true">
+                                        <i class="fa-duotone fa-solid fa-trash-can text-danger"></i>
+                                    </button>
+                                </div>
+
+                            </Template>
+                        </TableColumn>
+                    </TableColumns>
+                </Table>
+            </DisplayTable>
+        </TabItem>
+        <TabItem Text="Categoria do Produto">
+            <ListProductCategory></ListProductCategory>
+        </TabItem>
+    </Tab>
+
+</AppAuthorizeView>
+
+@code {
+
+}

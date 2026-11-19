@@ -1,0 +1,143 @@
+﻿@page "/contato"
+@layout SiteLayout
+@inherits AppComponentBase
+@using BootstrapBlazor.Components
+@* <p>
+    Para se cadastrar, é necessário ter pelo menos 18 anos e aceitar os Termos de Uso, a Política de Privacidade e outras diretrizes. Caso não concorde com esses termos, é recomendado não prosseguir com o cadastramento. A aceitação ocorre ao clicar no botão "Eu li e concordo".
+</p> *@
+
+<div class="container pt-5">
+    <Card>
+        <HeaderTemplate>
+            <h5 class="pt-2">Informações de contato</h5>
+        </HeaderTemplate>
+
+        <BodyTemplate>
+            <div class="pb-3" style="font-size: 16px;">
+
+                <div class="w-100 d-flex mb-3">
+                    <div style="width: 100px;">Telefone:</div>
+                    <div>
+                        <b>(61) 99943-2019</b>
+                    </div>
+                </div>
+                
+                <div class="w-100 d-flex mb-3">
+                    <div style="width: 100px;">Email:</div>
+                    <div>
+                        <b>contato@sindvamb.com.br</b>
+                    </div>
+                </div>
+                
+                <div class="w-100 d-flex mb-3">
+                    <div style="width: 100px;">Endereço:</div>
+                    <div>
+                        <b>SGAN 712/912 Térreo Parte K <br> Brasília-DF CEP: 70790-125</b>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="pb-3">
+                <ValidateForm @ref="Form" Model="@Model">
+                    <DataAnnotationsValidator/>
+
+                    <div class="d-flex row flex-wrap">
+
+                        <div class="form-group mt-2 col-md-6 col-sm-12 px-2">
+                            <BootstrapInput TValue="string" @bind-Value="Model.Contact.Name"
+                                            RequiredErrorMessage="Por favor insira seu Nome Completo"
+                                            Color="Color.Secondary" DisplayText="Nome completo" ShowRequired="true"/>
+                        </div>
+
+                        <div class="form-group mt-2 col-md-6 col-sm-12 px-2">
+                            <BootstrapInput type="email" TValue="string" @bind-Value="Model.Contact.Email"
+                                            RequiredErrorMessage="Por favor insira seu Email"
+                                            Color="Color.Secondary" DisplayText="Email" ShowRequired="true"/>
+                        </div>
+
+                        <div class="form-group mt-2 col-md-6 col-sm-12 px-2">
+                            <BootstrapInput TValue="string" @bind-Value="Model.Contact.CellPhone"
+                                            RequiredErrorMessage="Por favor insira seu Telefone celular"
+                                            Color="Color.Secondary" DisplayText="Telefone celular" ShowRequired="true"
+                                            Formatter="Formaters.FormatCellPhone"/>
+                        </div>
+
+                        <div class="form-group mt-2 col-md-6 col-sm-12 px-2">
+                            <Select ShowSearch="true" TValue="string" Items="ProfilesContact" @bind-Value="Model.Profile"
+                                    DisplayText="Qual é o seu perfil?" RequiredErrorMessage="Selecione uma opção"
+                                    ShowRequired="true"></Select>
+                        </div>
+
+                        <div class="form-group mt-2 col-md-6 col-sm-12 px-2">
+                            <Select ShowSearch="true" TValue="string" Items="SubjectsContact" @bind-Value="Model.Subject"
+                                    DisplayText="Assunto" RequiredErrorMessage="Selecione uma opção"
+                                    ShowRequired="true"></Select>
+                        </div>
+
+                        <div class="form-group mt-2 col-md-6 col-sm-12 px-2">
+                    <Textarea PlaceHolder="Por favor insria sua mensagem..." rows="4"
+                              DisplayText="Sua mensagem"
+                              ShowRequired="true"
+                              @bind-Value="@Model.Message"></Textarea>
+                        </div>
+
+                        <div class="d-flex  w-100 justify-content-end px-3 mt-5">
+
+                            <ButtonLoading OnClick="OnValidSubmit"
+                                           IsLoading="IsLoading"
+                                           IsDisabled="@(IsLoading)"
+                                           Text="Confirmar">
+                            </ButtonLoading>
+
+                        </div>
+
+                    </div>
+
+                </ValidateForm>
+            </div>
+        </BodyTemplate>
+    </Card>
+</div>
+
+
+@code {
+    [Inject] public IContactRequestService ContactRequest { get; set; }
+    [Inject] public SwalService SwalService { get; set; }
+
+    public ValidateForm Form { get; set; }
+    public ContactRequestDTO Model { get; set; } = new();
+
+    private List<SelectedItem> ProfilesContact => SiteConstants.ProfilesContact.Select(item => new SelectedItem(item, item)).ToList();
+    private List<SelectedItem> SubjectsContact => SiteConstants.SubjectsContact.Select(item => new SelectedItem(item, item)).ToList();
+
+    private async Task OnValidSubmit()
+    {
+        if (Form.Validate())
+        {
+            var hasSend = await ContactRequest.Create(Model);
+            if (hasSend.IsNotNull())
+            {
+                await SwalService.Show(new SwalOption()
+                {
+                    Category = SwalCategory.Success,
+                    Title = "Obrigado pelo contato!",
+                    Content = "Sua solicitação foi enviada com sucesso, em breve retornaremos o contato.",
+                });
+                
+                Model = new();
+            }
+            else
+            {
+                await SwalService.Show(new SwalOption()
+                {
+                    Category = SwalCategory.Error,
+                    Title = "Atenção!",
+                    Content = "Não foi possível processar su solicitação nesse momento, por favor utilize nossos outros canais de comunicação para solucionar suas dúvidas.",
+                });
+            }
+            
+        }
+    }
+
+}

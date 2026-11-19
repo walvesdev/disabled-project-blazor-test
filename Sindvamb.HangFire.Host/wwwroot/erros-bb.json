@@ -1,0 +1,952 @@
+﻿{
+  "erros": [
+    {
+      "codigo": 1,
+      "descricao": "Agência de crédito igual a zero. Informe o nº da Agência de Crédito."
+    },
+    {
+      "codigo": 2,
+      "descricao": "Conta de crédito não é numérica. Informe apenas números."
+    },
+    {
+      "codigo": 3,
+      "descricao": "Dígito conta de crédito igual a espaços. Informe o DV da conta de crédito."
+    },
+    {
+      "codigo": 4,
+      "descricao": "CPF não é numérico. Informe apenas números."
+    },
+    {
+      "codigo": 5,
+      "descricao": "CNPJ não é numérico. Informe apenas números."
+    },
+    {
+      "codigo": 6,
+      "descricao": "Data do pagamento igual a zeros. Informe a data do pagamento."
+    },
+    {
+      "codigo": 7,
+      "descricao": "Data do pagamento inválida. Informe uma data de pagamento válida."
+    },
+    {
+      "codigo": 8,
+      "descricao": "Valor do pagamento não é númerico. Informe apenas números."
+    },
+    {
+      "codigo": 9,
+      "descricao": "Valor do pagamento igual a zeros. Informe o valor do pagamento."
+    },
+    {
+      "codigo": 10,
+      "descricao": "Ambos os campos Número Compensação e Número ISPB estão zerados. Informe um dos campos."
+    },
+    {
+      "codigo": 11,
+      "descricao": "Ambos os campos Número Compensação e Número ISPB foram informados. Informe apenas um dos\r\ncampos."
+    },
+    {
+      "codigo": 12,
+      "descricao": "Ambos os campos Finalidade DOC e Finalidade TED estão zerados. Informe um dos campos."
+    },
+    {
+      "codigo": 13,
+      "descricao": "Ambos os campos Finalidade DOC e Finalidade TED foram informados. Informe apenas um dos campos."
+    },
+    {
+      "codigo": 14,
+      "descricao": "Número depósito judicial igual a espaços."
+    },
+    {
+      "codigo": 15,
+      "descricao": "Digito da conta de crédito inválido."
+    },
+    {
+      "codigo": 16,
+      "descricao": "Ambos os campos CPF e CNPJ foram informados. Informe apenas um dos campos.\r\nCaso informado os 2 campos, nas consultas será exibido apenas os dados do CPF."
+    },
+    {
+      "codigo": 17,
+      "descricao": "Ambos os campos CPF e CNPJ estão zerados. Informe um dos campos."
+    },
+    {
+      "codigo": 18,
+      "descricao": "Digito do CPF inválido. Verifique o dado informado."
+    },
+    {
+      "codigo": 19,
+      "descricao": "Dígito do CNPJ inválido. Verifique o dado informado."
+    },
+    {
+      "codigo": 20,
+      "descricao": "Agência e conta de crédito estão iguais a de débito. Opção não permitida."
+    },
+    {
+      "codigo": 21,
+      "descricao": "Número Compensação inválido. Verifique o dado informado."
+    },
+    {
+      "codigo": 22,
+      "descricao": "Número ISPB diferente de zeros. Não informe o nº ISPB."
+    },
+    {
+      "codigo": 23,
+      "descricao": "Conta de crédito igual a zeros. Informe o número da conta de crédito."
+    },
+    {
+      "codigo": 24,
+      "descricao": "CPF igual a Zeros. Obrigatório informar o nº do CPF."
+    },
+    {
+      "codigo": 25,
+      "descricao": "CNPJ diferente de zeros. Não permitido informar CNPJ."
+    },
+    {
+      "codigo": 26,
+      "descricao": "Conta de crédito diferente de zeros. Não permitido informar Conta de crédito."
+    },
+    {
+      "codigo": 27,
+      "descricao": "Dígito conta de crédito diferente de espaços. Não informar dígito da conta de crédito."
+    },
+    {
+      "codigo": 28,
+      "descricao": "Finalidade DOC diferente de zeros. Não informar finalidade DOC."
+    },
+    {
+      "codigo": 29,
+      "descricao": "Finalidade TED diferente de zeros. Não informar finalidade TED."
+    },
+    {
+      "codigo": 30,
+      "descricao": "Número Depósito Judicial diferente de espaços. Não informar finalidade Depósito Judicial."
+    },
+    {
+      "codigo": 31,
+      "descricao": "Número do documento de crédito não é numérico. Informar números."
+    },
+    {
+      "codigo": 32,
+      "descricao": "Número do documento de débito não é numérico. Informar números."
+    },
+    {
+      "codigo": 33,
+      "descricao": "CPF não encontrado na base da receita federal"
+    },
+    {
+      "codigo": 34,
+      "descricao": "CNPJ não encontrado na base da receita federal"
+    },
+    {
+      "codigo": 35,
+      "descricao": "Conta de poupança não permitido. Para creditar poupança utilize Código Produto igual a 128 -\r\nPagamentos Diversos."
+    },
+    {
+      "codigo": 36,
+      "descricao": "Código COMPE deve ser igual a 1"
+    },
+    {
+      "codigo": 37,
+      "descricao": "Código ISPB deve ser igual a 0"
+    },
+    {
+      "codigo": 38,
+      "descricao": "Código de barras não é numérico. Informar números."
+    },
+    {
+      "codigo": 39,
+      "descricao": "Código de barras igual a zeros. Informar números."
+    },
+    {
+      "codigo": 40,
+      "descricao": "Número de inscrição do pagador não é numérico. Informar números."
+    },
+    {
+      "codigo": 41,
+      "descricao": "Número de inscrição do beneficiário não é numérico. Informar números."
+    },
+    {
+      "codigo": 42,
+      "descricao": "Número de inscrição do avalista não é numérico. Informar números."
+    },
+    {
+      "codigo": 43,
+      "descricao": "Digito do CPF para o pagador inválido. Verifique o nº correto."
+    },
+    {
+      "codigo": 44,
+      "descricao": "Digito do CPF para o beneficiário inválido. Verifique o nº correto."
+    },
+    {
+      "codigo": 45,
+      "descricao": "Digito do CPF para o avalista inválido. Verifique o nº correto."
+    },
+    {
+      "codigo": 46,
+      "descricao": "Digito do CNPJ para o pagador inválido. Verifique o nº correto."
+    },
+    {
+      "codigo": 47,
+      "descricao": "Digito do CNPJ para o beneficiário inválido. Verifique o nº correto."
+    },
+    {
+      "codigo": 48,
+      "descricao": "Digito do CNPJ para o avalista inválido. Verifique o nº correto."
+    },
+    {
+      "codigo": 49,
+      "descricao": "Data do vencimento inválida.  Informar data válida."
+    },
+    {
+      "codigo": 50,
+      "descricao": "Valor nominal não é numérico. Informar números."
+    },
+    {
+      "codigo": 51,
+      "descricao": "Valor de desconto não é numérico. Informar números."
+    },
+    {
+      "codigo": 52,
+      "descricao": "Valor de mora não é numérico. Informar números."
+    },
+    {
+      "codigo": 53,
+      "descricao": "Data do pagamento deve ser maior ou igual ao dia atual."
+    },
+    {
+      "codigo": 54,
+      "descricao": "Número do documento de débito igual a zeros"
+    },
+    {
+      "codigo": 55,
+      "descricao": "Data do vencimento igual a zeros. Informar data de vencimento."
+    },
+    {
+      "codigo": 56,
+      "descricao": "Nome do beneficiário não informado"
+    },
+    {
+      "codigo": 57,
+      "descricao": "Número de inscrição do beneficiário não informado. Obrigatório informar o CPF ou CNPJ do beneficiário"
+    },
+    {
+      "codigo": 58,
+      "descricao": "Conta pagamento diferente de espaços. Não informar conta pagamento."
+    },
+    {
+      "codigo": 59,
+      "descricao": "Ambos os campos conta de crédito e conta pagamento foram informados. Informar apenas um dos\r\ncampos."
+    },
+    {
+      "codigo": 60,
+      "descricao": "Transação cancelada pelo cliente"
+    },
+    {
+      "codigo": 61,
+      "descricao": "Código da Receita do Tributo não informado"
+    },
+    {
+      "codigo": 62,
+      "descricao": "Tipo de Identificação do Contribuinte não informado"
+    },
+    {
+      "codigo": 63,
+      "descricao": "Nº de Identificação do Contribuinte não informado"
+    },
+    {
+      "codigo": 64,
+      "descricao": "Nº de Identificação do Contribuinte não numérico"
+    },
+    {
+      "codigo": 65,
+      "descricao": "Código de Identificação do Tributo não informado"
+    },
+    {
+      "codigo": 66,
+      "descricao": "Período de apuração não informado"
+    },
+    {
+      "codigo": 67,
+      "descricao": "Numero de Referência não informado"
+    },
+    {
+      "codigo": 68,
+      "descricao": "Valor Principal não é numérico"
+    },
+    {
+      "codigo": 69,
+      "descricao": "Valor Principal não informado"
+    },
+    {
+      "codigo": 70,
+      "descricao": "Valor da Multa não é numérico"
+    },
+    {
+      "codigo": 71,
+      "descricao": "Valor dos Juros/Encargos não é numérico"
+    },
+    {
+      "codigo": 72,
+      "descricao": "Data de Vencimento não informada"
+    },
+    {
+      "codigo": 73,
+      "descricao": "Mês e ano de competência não informados"
+    },
+    {
+      "codigo": 74,
+      "descricao": "Valor previsto do pagamento do INSS não é numérico"
+    },
+    {
+      "codigo": 75,
+      "descricao": "Valor previsto do pagamento do INSS não informado"
+    },
+    {
+      "codigo": 76,
+      "descricao": "Valor de Outras Entidades não é numérico"
+    },
+    {
+      "codigo": 77,
+      "descricao": "Valor de Atualização Monetária não é numérico"
+    },
+    {
+      "codigo": 78,
+      "descricao": "Valor de Atualização Monetária não é numérico"
+    },
+    {
+      "codigo": 79,
+      "descricao": "Período de apuração inválido"
+    },
+    {
+      "codigo": 80,
+      "descricao": "Conta de crédito inválida. Informe o numero  sem o 45 do início."
+    },
+    {
+      "codigo": 81,
+      "descricao": "A conta informada não pertence ao funcionário."
+    },
+    {
+      "codigo": 82,
+      "descricao": "Pagamento permitido apenas para pessoas físicas."
+    },
+    {
+      "codigo": 83,
+      "descricao": "Agência e Conta incorretos."
+    },
+    {
+      "codigo": 84,
+      "descricao": "A conta informada não está ativa."
+    },
+    {
+      "codigo": 85,
+      "descricao": "Conta não permite crédito de salário. Informe outra conta."
+    },
+    {
+      "codigo": 86,
+      "descricao": "Ambos os campos agência de crédito e conta pagamento foram informados"
+    },
+    {
+      "codigo": 90,
+      "descricao": "Mês de competência inválido"
+    },
+    {
+      "codigo": 91,
+      "descricao": "Valor de outras deduções inválido"
+    },
+    {
+      "codigo": 92,
+      "descricao": "Valor de outros acréscimos inválido"
+    },
+    {
+      "codigo": 93,
+      "descricao": "Código da forma de identificação do cliente não foi informado"
+    },
+    {
+      "codigo": 94,
+      "descricao": "DDD do cliente do Pix não foi informado"
+    },
+    {
+      "codigo": 95,
+      "descricao": "Telefone do Cliente do Pix não foi informado"
+    },
+    {
+      "codigo": 96,
+      "descricao": "Email do cliente do Pix não foi informado"
+    },
+    {
+      "codigo": 97,
+      "descricao": "Chave Aleatória do Cliente do Pix não foi informado"
+    },
+    {
+      "codigo": 98,
+      "descricao": "Código de tipo de conta do Cliente do Pix não foi informado"
+    },
+    {
+      "codigo": 99,
+      "descricao": "Consultar o Banco para detalhar o erro"
+    },
+    {
+      "codigo": 100,
+      "descricao": "E-mail do cliente do PIX inválido"
+    },
+    {
+      "codigo": 101,
+      "descricao": "Email do cliente do PIX não deve conter caractere especial"
+    },
+    {
+      "codigo": 102,
+      "descricao": "Telefone Inválido"
+    },
+    {
+      "codigo": 103,
+      "descricao": "DDD inválido"
+    },
+    {
+      "codigo": 104,
+      "descricao": "E-mail do cliente do PIX com tamanho maior que 77 caracteres"
+    },
+    {
+      "codigo": 200,
+      "descricao": "Insuficiência de Fundos - Débito Não Efetuado"
+    },
+    {
+      "codigo": 201,
+      "descricao": "Crédito ou Débito Cancelado pelo Pagador"
+    },
+    {
+      "codigo": 202,
+      "descricao": "Débito Autorizado pela Agência - Efetuado"
+    },
+    {
+      "codigo": 203,
+      "descricao": "Controle Inválido. Verificar campos 01, 02 e 03 do header ou segmento A, B, C, J, J52, N, O ou W do\r\nArquivo CNAB240."
+    },
+    {
+      "codigo": 204,
+      "descricao": "Tipo de Operação Inválido"
+    },
+    {
+      "codigo": 205,
+      "descricao": "Tipo de Serviço Inválido.\r\nUtilize 20 para Pagamento a Fornecedores, 30 Pagamento de Salários ou 98 Pagamentos Diversos"
+    },
+    {
+      "codigo": 206,
+      "descricao": "Forma de Lançamento Inválida.\r\nPara crédito em Poupança utilize Pagamentos Diversos.\r\nPara crédito em Conta Pagamento utilize Pagamentos Diversos ou Pagamento a Fornecedores. Para Pagamento de salário a conta de crédito deve ser do BB."
+    },
+    {
+      "codigo": 207,
+      "descricao": "Tipo/Número de Inscrição Inválido.\r\nCPF ou CNPJ inválido."
+    },
+    {
+      "codigo": 208,
+      "descricao": "Código de Convênio Inválido"
+    },
+    {
+      "codigo": 209,
+      "descricao": "Agência/Conta Corrente/DV Inválido"
+    },
+    {
+      "codigo": 210,
+      "descricao": "Nº Seqüencial do Registro no Lote Inválido"
+    },
+    {
+      "codigo": 211,
+      "descricao": "Código de Segmento de Detalhe Inválido"
+    },
+    {
+      "codigo": 212,
+      "descricao": "Lançamento inconsistente, rejeitado na prévia.\r\nCorrigir os dados do lançamento e enviar novo pagamento."
+    },
+    {
+      "codigo": 213,
+      "descricao": "Nº Compe do Banco para crédito Inválido"
+    },
+    {
+      "codigo": 214,
+      "descricao": "Nº do ISPB Banco, Instituição de Pagamento para crédito Inválido"
+    },
+    {
+      "codigo": 215,
+      "descricao": "Agência Mantenedora da Conta Corrente do Favorecido Inválida"
+    },
+    {
+      "codigo": 216,
+      "descricao": "Conta Corrente/DV/Conta de Pagamento do Favorecido Inválido"
+    },
+    {
+      "codigo": 217,
+      "descricao": "Nome do Favorecido Não Informado"
+    },
+    {
+      "codigo": 218,
+      "descricao": "Data Lançamento Inválido"
+    },
+    {
+      "codigo": 219,
+      "descricao": "Tipo/Quantidade da Moeda Inválido"
+    },
+    {
+      "codigo": 220,
+      "descricao": "Valor do Lançamento Inválido"
+    },
+    {
+      "codigo": 221,
+      "descricao": "Aviso ao Favorecido - Identificação Inválida"
+    },
+    {
+      "codigo": 222,
+      "descricao": "Tipo/Número de Inscrição do Favorecido Inválido\r\nCPF ou CNPJ do favorecido inválido."
+    },
+    {
+      "codigo": 223,
+      "descricao": "Logradouro do Favorecido Não Informado"
+    },
+    {
+      "codigo": 224,
+      "descricao": "Nº do Local do Favorecido Não Informado"
+    },
+    {
+      "codigo": 225,
+      "descricao": "Cidade do Favorecido Não Informada"
+    },
+    {
+      "codigo": 226,
+      "descricao": "CEP/Complemento do Favorecido Inválido"
+    },
+    {
+      "codigo": 227,
+      "descricao": "Sigla do Estado do Favorecido Inválida"
+    },
+    {
+      "codigo": 228,
+      "descricao": "Nº do Banco para crédito Inválido"
+    },
+    {
+      "codigo": 229,
+      "descricao": "Código/Nome da Agência Depositária Não Informado"
+    },
+    {
+      "codigo": 230,
+      "descricao": "Seu Número Inválido"
+    },
+    {
+      "codigo": 231,
+      "descricao": "Nosso Número Inválido"
+    },
+    {
+      "codigo": 232,
+      "descricao": "Inclusão Efetuada com Sucesso"
+    },
+    {
+      "codigo": 233,
+      "descricao": "Alteração Efetuada com Sucesso"
+    },
+    {
+      "codigo": 234,
+      "descricao": "Exclusão Efetuada com Sucesso"
+    },
+    {
+      "codigo": 235,
+      "descricao": "Agência/Conta Impedida Legalmente"
+    },
+    {
+      "codigo": 236,
+      "descricao": "Empresa não pagou salário\r\nConta de crédito só aceita pagamento de salário"
+    },
+    {
+      "codigo": 237,
+      "descricao": "Falecimento do mutuário"
+    },
+    {
+      "codigo": 238,
+      "descricao": "Empresa não enviou remessa do mutuário"
+    },
+    {
+      "codigo": 239,
+      "descricao": "Empresa não enviou remessa no vencimento"
+    },
+    {
+      "codigo": 240,
+      "descricao": "Valor da parcela inválida"
+    },
+    {
+      "codigo": 241,
+      "descricao": "Identificação do contrato inválida"
+    },
+    {
+      "codigo": 242,
+      "descricao": "Operação de Consignação Incluída com Sucesso"
+    },
+    {
+      "codigo": 243,
+      "descricao": "Operação de Consignação Alterada com Sucesso"
+    },
+    {
+      "codigo": 244,
+      "descricao": "Operação de Consignação Excluída com Sucesso"
+    },
+    {
+      "codigo": 245,
+      "descricao": "Operação de Consignação Liquidada com Sucesso"
+    },
+    {
+      "codigo": 246,
+      "descricao": "Reativação Efetuada com Sucesso"
+    },
+    {
+      "codigo": 247,
+      "descricao": "Suspensão Efetuada com Sucesso"
+    },
+    {
+      "codigo": 248,
+      "descricao": "Código de Barras - Código do Banco Inválido"
+    },
+    {
+      "codigo": 249,
+      "descricao": "Código de Barras - Código da Moeda Inválido"
+    },
+    {
+      "codigo": 250,
+      "descricao": "Código de Barras - Dígito Verificador Geral Inválido"
+    },
+    {
+      "codigo": 251,
+      "descricao": "Código de Barras - Valor do Título Inválido"
+    },
+    {
+      "codigo": 252,
+      "descricao": "Código de Barras - Campo Livre Inválido"
+    },
+    {
+      "codigo": 253,
+      "descricao": "Valor do Documento Inválido"
+    },
+    {
+      "codigo": 254,
+      "descricao": "Valor do Abatimento Inválido"
+    },
+    {
+      "codigo": 255,
+      "descricao": "Valor do Desconto Inválido"
+    },
+    {
+      "codigo": 256,
+      "descricao": "Valor de Mora Inválido"
+    },
+    {
+      "codigo": 257,
+      "descricao": "Valor da Multa Inválido"
+    },
+    {
+      "codigo": 258,
+      "descricao": "Valor do IR Inválido"
+    },
+    {
+      "codigo": 259,
+      "descricao": "Valor do ISS Inválido"
+    },
+    {
+      "codigo": 260,
+      "descricao": "Valor do IOF Inválido"
+    },
+    {
+      "codigo": 261,
+      "descricao": "Valor de Outras Deduções Inválido"
+    },
+    {
+      "codigo": 262,
+      "descricao": "Valor de Outros Acréscimos Inválido"
+    },
+    {
+      "codigo": 263,
+      "descricao": "Valor do INSS Inválido"
+    },
+    {
+      "codigo": 264,
+      "descricao": "Lote Não Aceito"
+    },
+    {
+      "codigo": 265,
+      "descricao": "Inscrição da Empresa Inválida para o Contrato"
+    },
+    {
+      "codigo": 266,
+      "descricao": "Convênio com a Empresa Inexistente/Inválido para o Contrato"
+    },
+    {
+      "codigo": 267,
+      "descricao": "Agência/Conta Corrente da Empresa Inexistente/Inválido para o Contrato"
+    },
+    {
+      "codigo": 268,
+      "descricao": "Tipo de Serviço Inválido para o Contrato"
+    },
+    {
+      "codigo": 269,
+      "descricao": "Conta Corrente da Empresa com Saldo Insuficiente"
+    },
+    {
+      "codigo": 270,
+      "descricao": "Lote de Serviço Fora de Seqüência"
+    },
+    {
+      "codigo": 271,
+      "descricao": "Lote de Serviço Inválido"
+    },
+    {
+      "codigo": 272,
+      "descricao": "Arquivo não aceito"
+    },
+    {
+      "codigo": 273,
+      "descricao": "Tipo de Registro Inválido"
+    },
+    {
+      "codigo": 274,
+      "descricao": "Código Remessa / Retorno Inválido"
+    },
+    {
+      "codigo": 275,
+      "descricao": "Versão de layout inválida"
+    },
+    {
+      "codigo": 276,
+      "descricao": "Mutuário não identificado"
+    },
+    {
+      "codigo": 277,
+      "descricao": "Tipo do beneficio não permite empréstimo"
+    },
+    {
+      "codigo": 278,
+      "descricao": "Beneficio cessado/suspenso"
+    },
+    {
+      "codigo": 279,
+      "descricao": "Beneficio possui representante legal"
+    },
+    {
+      "codigo": 280,
+      "descricao": "Beneficio é do tipo PA (Pensão alimentícia)"
+    },
+    {
+      "codigo": 281,
+      "descricao": "Quantidade de contratos permitida excedida"
+    },
+    {
+      "codigo": 282,
+      "descricao": "Beneficio não pertence ao Banco informado"
+    },
+    {
+      "codigo": 283,
+      "descricao": "Início do desconto informado já ultrapassado"
+    },
+    {
+      "codigo": 284,
+      "descricao": "Número da parcela inválida"
+    },
+    {
+      "codigo": 285,
+      "descricao": "Quantidade de parcela inválida"
+    },
+    {
+      "codigo": 286,
+      "descricao": "Margem consignável excedida para o mutuário dentro do prazo do contrato"
+    },
+    {
+      "codigo": 287,
+      "descricao": "Empréstimo já cadastrado"
+    },
+    {
+      "codigo": 288,
+      "descricao": "Empréstimo inexistente"
+    },
+    {
+      "codigo": 289,
+      "descricao": "Empréstimo já encerrado"
+    },
+    {
+      "codigo": 290,
+      "descricao": "Arquivo sem trailer"
+    },
+    {
+      "codigo": 291,
+      "descricao": "Mutuário sem crédito na competência"
+    },
+    {
+      "codigo": 292,
+      "descricao": "Não descontado – outros motivos"
+    },
+    {
+      "codigo": 293,
+      "descricao": "Retorno de Crédito não pago"
+    },
+    {
+      "codigo": 294,
+      "descricao": "Cancelamento de empréstimo retroativo"
+    },
+    {
+      "codigo": 295,
+      "descricao": "Outros Motivos de Glosa"
+    },
+    {
+      "codigo": 296,
+      "descricao": "Margem consignável excedida para o mutuário acima do prazo do contrato"
+    },
+    {
+      "codigo": 297,
+      "descricao": "Mutuário desligado do empregador"
+    },
+    {
+      "codigo": 298,
+      "descricao": "Mutuário afastado por licença"
+    },
+    {
+      "codigo": 299,
+      "descricao": "Primeiro nome do mutuário diferente do primeiro nome do movimento do censo ou diferente da base\r\nde Titular do Benefício"
+    },
+    {
+      "codigo": 300,
+      "descricao": "Benefício suspenso/cessado pela APS ou Sisobi"
+    },
+    {
+      "codigo": 301,
+      "descricao": "Benefício suspenso por dependência de cálculo"
+    },
+    {
+      "codigo": 302,
+      "descricao": "Benefício suspenso/cessado pela inspetoria/auditoria"
+    },
+    {
+      "codigo": 303,
+      "descricao": "Benefício bloqueado para empréstimo pelo beneficiário"
+    },
+    {
+      "codigo": 304,
+      "descricao": "Benefício bloqueado para empréstimo por TBM"
+    },
+    {
+      "codigo": 305,
+      "descricao": "Benefício está em fase de concessão de PA ou desdobramento"
+    },
+    {
+      "codigo": 306,
+      "descricao": "Benefício cessado por óbito"
+    },
+    {
+      "codigo": 307,
+      "descricao": "Benefício cessado por fraude"
+    },
+    {
+      "codigo": 308,
+      "descricao": "Benefício cessado por concessão de outro benefício"
+    },
+    {
+      "codigo": 309,
+      "descricao": "Benefício cessado: estatutário transferido para órgão de origem"
+    },
+    {
+      "codigo": 310,
+      "descricao": "Empréstimo suspenso pela APS"
+    },
+    {
+      "codigo": 311,
+      "descricao": "Empréstimo cancelado pelo banco"
+    },
+    {
+      "codigo": 312,
+      "descricao": "Crédito transformado em PAB"
+    },
+    {
+      "codigo": 313,
+      "descricao": "Término da consignação foi alterado"
+    },
+    {
+      "codigo": 314,
+      "descricao": "Fim do empréstimo ocorreu durante período de suspensão ou concessão"
+    },
+    {
+      "codigo": 315,
+      "descricao": "Empréstimo suspenso pelo banco"
+    },
+    {
+      "codigo": 316,
+      "descricao": "Não averbação de contrato – quantidade de parcelas/competências informadas ultrapassou a data\r\nlimite da extinção de cota do dependente titular de benefícios"
+    },
+    {
+      "codigo": 317,
+      "descricao": "Lote Não Aceito - Totais do Lote com Diferença"
+    },
+    {
+      "codigo": 318,
+      "descricao": "Título Não Encontrado"
+    },
+    {
+      "codigo": 319,
+      "descricao": "Identificador Registro Opcional Inválido"
+    },
+    {
+      "codigo": 320,
+      "descricao": "Código Padrão Inválido"
+    },
+    {
+      "codigo": 321,
+      "descricao": "Código de Ocorrência Inválido"
+    },
+    {
+      "codigo": 322,
+      "descricao": "Complemento de Ocorrência Inválido"
+    },
+    {
+      "codigo": 323,
+      "descricao": "Alegação já Informada"
+    },
+    {
+      "codigo": 324,
+      "descricao": "Agência / Conta do Favorecido Substituída"
+    },
+    {
+      "codigo": 325,
+      "descricao": "Divergência entre o primeiro e último nome do beneficiário versus primeiro e último nome na Receita\r\nFederal"
+    },
+    {
+      "codigo": 326,
+      "descricao": "Confirmação de Antecipação de Valor"
+    },
+    {
+      "codigo": 327,
+      "descricao": "Antecipação parcial de valor"
+    },
+    {
+      "codigo": 328,
+      "descricao": "Boleto bloqueado na base. Não passível de pagamento."
+    },
+    {
+      "codigo": 329,
+      "descricao": "Sistema em contingência – Boleto valor maior que referência"
+    },
+    {
+      "codigo": 330,
+      "descricao": "Sistema em contingência – Boleto vencido"
+    },
+    {
+      "codigo": 331,
+      "descricao": "Sistema em contingência – Boleto indexado"
+    },
+    {
+      "codigo": 332,
+      "descricao": "Beneficiário divergente."
+    },
+    {
+      "codigo": 333,
+      "descricao": "Limite de pagamentos parciais do boleto excedido. Consulte o Beneficiário do boleto."
+    },
+    {
+      "codigo": 334,
+      "descricao": "Boleto já liquidado. Não passível de pagamento."
+    },
+    {
+      "codigo": 999,
+      "descricao": "Consultar o Banco para detalhar o erro"
+    }
+  ]
+}

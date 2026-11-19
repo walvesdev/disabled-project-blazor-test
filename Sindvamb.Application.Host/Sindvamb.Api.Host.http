@@ -1,0 +1,6 @@
+@Sindvamb.Application.Host_HostAddress = http://localhost:5081
+
+GET {{Sindvamb.Application.Host_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

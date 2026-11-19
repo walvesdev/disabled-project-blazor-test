@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Sindvamb.Domain.Entities.Address" Collapsed="true">
+    <Position X="7" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAIBEAAAAAIAAAAAAABAAAAAAAQAAA=</HashCode>
+      <FileName>Entities\Address.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.ApplicationConfig" Collapsed="true">
+    <Position X="8.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAQAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Entities\ApplicationConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.Attachment" Collapsed="true">
+    <Position X="10.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAgAAggAIAAAAAAAQAACAAAAAAAAEQAAAAAAA=</HashCode>
+      <FileName>Entities\Attachment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.Audit" Collapsed="true">
+    <Position X="12.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBAAAAAAACAAAAAACAEAgAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Entities\Audit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.City" Collapsed="true">
+    <Position X="14" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAIAAAAAAAAQAAAAAAAACEAAgAAAAAAA=</HashCode>
+      <FileName>Entities\City.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.Customer" Collapsed="true">
+    <Position X="15.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgABEAAAAAAAAIAAAAAAAAgAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Customer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.CustomerOrder" Collapsed="true">
+    <Position X="7" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAEAAAAAAAAgAAAAAAAAAAAAABAAABAwAAAAACAAAAA=</HashCode>
+      <FileName>Entities\CustomerOrder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.CustomerType" Collapsed="true">
+    <Position X="8.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\CustomerType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.District" Collapsed="true">
+    <Position X="10.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAIAAAgAAQAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Entities\District.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.EmailHistory" Collapsed="true">
+    <Position X="12.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAACAAAAIAAACAAAgAAAAAABAEAQAAAAAAAAA=</HashCode>
+      <FileName>Entities\EmailHistory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.FileControl" Collapsed="true">
+    <Position X="14" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABBAAAAAAAAAAAAAIAIAAAAAABAAAA=</HashCode>
+      <FileName>Entities\FileControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.FileLayout" Collapsed="true">
+    <Position X="15.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\FileLayout.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.LoginHistory" Collapsed="true">
+    <Position X="7" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABBAAAAAAAAAIAAACAAAgAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\LoginHistory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.Order">
+    <Position X="8.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gARAAAAIAAAiAKAAAgAAQABAAAgaAAQAAAASAAAAEgA=</HashCode>
+      <FileName>Entities\Order.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.OrderEmail" Collapsed="true">
+    <Position X="10.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAEAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\OrderEmail.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.OrderFileControl" Collapsed="true">
+    <Position X="12.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAEAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Entities\OrderFileControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.OrderProperty" Collapsed="true">
+    <Position X="14" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAEAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Entities\OrderProperty.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.OrderStatus" Collapsed="true">
+    <Position X="15.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAgAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\OrderStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.OrderTracking" Collapsed="true">
+    <Position X="7" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAEAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>Entities\OrderTracking.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.OrderType" Collapsed="true">
+    <Position X="8.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\OrderType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.Partner" Collapsed="true">
+    <Position X="10.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAIAAAAAAAAQAQAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Entities\Partner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.PartnerUnit" Collapsed="true">
+    <Position X="12.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAACAAACAEAIAAAAAAAAQAQAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Entities\PartnerUnit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.PasswordHistory" Collapsed="true">
+    <Position X="14" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAIBAAAAgAAEAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Entities\PasswordHistory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.Product" Collapsed="true">
+    <Position X="15.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAYAQAgAAAAAAAiAAQAAAAAAAAgAABAgAAAAgA=</HashCode>
+      <FileName>Entities\Product.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.ProductArea" Collapsed="true">
+    <Position X="7" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\ProductArea.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.ProductCategory" Collapsed="true">
+    <Position X="8.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\ProductCategory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.ProductType" Collapsed="true">
+    <Position X="10.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAgAAAAAAAgAAQAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Entities\ProductType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.RegistrationRequest" Collapsed="true">
+    <Position X="12.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAACAAAAAAIAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\RegistrationRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.Role" Collapsed="true">
+    <Position X="14" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAgAAQAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Entities\Role.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.Ticket" Collapsed="true">
+    <Position X="15.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAEAABAAAAAAACEAAAAAAAQAAAAAABAgAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Ticket.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.TicketProperty" Collapsed="true">
+    <Position X="7" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQCAAAAAAAAAAAAABAAAAAgAAAAAAA=</HashCode>
+      <FileName>Entities\TicketProperty.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.TicketStatus" Collapsed="true">
+    <Position X="8.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAgAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\TicketStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.User" Collapsed="true">
+    <Position X="10.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAQAAMJEKEAAIADEAAAAAQAQAARgAACAgAACAAAggA=</HashCode>
+      <FileName>Entities\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.UserRole" Collapsed="true">
+    <Position X="12.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAIAAAAAAAAAEAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\UserRole.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sindvamb.Domain.Entities.UserStatus" Collapsed="true">
+    <Position X="14" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAgAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\UserStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Sindvamb.Domain.Entities.ILoginReason" Collapsed="true">
+    <Position X="7" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQCAAAAAABAAAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Entities\LoginHistory.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

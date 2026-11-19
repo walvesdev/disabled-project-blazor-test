@@ -1,0 +1,13 @@
+﻿@if (AppServices.IsInRole(Roles))
+{
+    @ChildContent
+}
+else
+{
+    <NotAuthorizedPage />
+}
+
+@code{
+    [Parameter] [NotNull] public string Roles { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+}

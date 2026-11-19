@@ -1,0 +1,121 @@
+﻿@page "/cadastro-credencial"
+@layout SiteLayout
+@using BootstrapBlazor.Components
+
+<div class="container d-flex justify-content-center align-items-center ">
+    <div class="card p-4 rounded my-5">
+        <h1 class="text-center">Formulário de Cadastro</h1>
+        <form>
+            <div class="form-group mt-2">
+                <label class="mt-2" for="nomeCompleto">Nome completo</label>
+                <BootstrapInput TValue="string" Color="Color.Secondary" PlaceHolder="Nome completo" DisplayText="Nome completo" />
+            </div>
+            <div class="form-group mt-2">
+                <label class="mt-2" for="telefone">Telefone</label>
+                <BootstrapInput TValue="string" Color="Color.Secondary" PlaceHolder="Telefone" />
+            </div>
+            <div class="form-group mt-2">
+                <label class="mt-2" for="email">E-mail</label>
+                <BootstrapInput TValue="string" Color="Color.Secondary" PlaceHolder="Digite seu email" />
+            </div>
+            <div class="mt-2">
+                <RadioList TValue="string" Items="@TipoEmailValues" ShowLabel="true" DisplayText="O e-mail descrito é seu ou de outra pessoa?"></RadioList>
+            </div>
+            <div class="form-group mt-2">
+                <label class="mt-2" for="dataNascimento">Data de nascimento</label>
+                <DateTimePicker DateFormat="dd/MM/yyyy" @bind-Value="@DataNascimento" />
+            </div>
+            <div class="form-group mt-2">
+                <RadioList TValue="string" Items="@TipoSexoValues" ShowLabel="true" DisplayText="Sexo"></RadioList>
+            </div>
+            <div class="form-group mt-2">
+                <RadioList TValue="string" Items="@TipoRacaValues" ShowLabel="true" DisplayText="Raça"></RadioList>
+            </div>
+            <div class="form-group mt-2">
+                <label class="mt-2" for="cep">CEP</label>
+                <BootstrapInput TValue="string" Color="Color.Secondary" PlaceHolder="CEP" />
+            </div>
+            <div class="form-group mt-2">
+                <label class="mt-2" for="bairro">Bairro</label>
+                <BootstrapInput TValue="string" Color="Color.Secondary" PlaceHolder="Bairro" />
+            </div>
+            <div class="form-group mt-2">
+                <label class="mt-2" for="cidade">Cidade</label>
+                <input type="text" class="form-control" id="cidade" required>
+                <BootstrapInput TValue="string" Color="Color.Secondary" PlaceHolder="Digite seu email" />
+            </div>
+            <div class="form-group mt-2">
+                <label class="mt-2" for="estado">Estado</label>
+                <BootstrapInput TValue="string" Color="Color.Secondary" PlaceHolder="Estado" />
+            </div>
+            <div class="form-group mt-2">
+                <label class="mt-2" for="endereco">Endereço</label>
+                <BootstrapInput TValue="string" Color="Color.Secondary" PlaceHolder="Endereço" />
+            </div>
+            <div class="form-group mt-2">
+                <label class="mt-2" for="complemento">Complemento</label>
+                <BootstrapInput TValue="string" Color="Color.Secondary" PlaceHolder="Complemento" />
+            </div>
+            <div class="form-group mt-2">
+                <label class="mt-2" for="sesc">Unidade do SESC que deseja frequentar</label>
+                <BootstrapInput TValue="string" Color="Color.Secondary" PlaceHolder="Unidade do SESC" />
+            </div>
+            <div class="form-group mt-2">
+                <label class="mt-2" for="senac">Unidade do SENAC que deseja estudar</label>
+                <BootstrapInput TValue="string" Color="Color.Secondary" PlaceHolder="Unidade do SENAC" />
+            </div>
+            <div class="form-group mt-2">
+                <label class="mt-2" for="senha">Senha</label>
+                <BootstrapPassword TValue="string" Color="Color.Secondary" PlaceHolder="Senha" />
+            </div>
+            <div class="form-group mt-2">
+                <label class="mt-2" for="confirmarSenha">Confirmar senha</label>
+                <BootstrapPassword TValue="string" Color="Color.Secondary" PlaceHolder="Confirmar senha" />
+            </div>
+            <div class="form-check">
+                <Checkbox TValue="string" name="password" State="CheckboxState.Indeterminate" ShowLabel="true" Color="@Color.Secondary" />
+                <label class="form-check-label" for="termos">Li e aceito os termos de uso (termos de uso do SINDVAMB)</label>
+            </div>
+            <Button ButtonType="ButtonType.Submit" Size="Size.Large" IsBlock="true" Color="@Color.Secondary" ButtonStyle="ButtonStyle.Round">Cadastre-se</Button>
+        </form>
+    </div>
+</div>
+
+
+@code {
+
+    public IEnumerable<SelectedItem>? TipoEmailValues { get; set; }
+    public IEnumerable<SelectedItem>? TipoSexoValues { get; set; }
+    public IEnumerable<SelectedItem>? TipoRacaValues { get; set; }
+    public DateTime DataNascimento { get; set; }
+
+    protected override void OnInitialized()
+    {
+
+        TipoEmailValues = new List<SelectedItem>(2)
+        {
+            new ("1", "É meu"),
+            new ("2", "É de outra pessoa")
+        };
+
+        TipoSexoValues = new List<SelectedItem>(2)
+        {
+            new ("1", "Feminino"),
+            new ("2", "Masculino"),
+            new ("3", "Outro")
+        };
+
+        TipoRacaValues = new List<SelectedItem>(2)
+        {
+            new ("1", "Branco"),
+            new ("2", "Pardo"),
+            new ("3", "Preto"),
+            new ("4", "Amarelo"),
+            new ("5", "Indigena"),
+            new ("6", "Não Sei")
+        };
+
+        base.OnInitialized();
+    }
+
+}

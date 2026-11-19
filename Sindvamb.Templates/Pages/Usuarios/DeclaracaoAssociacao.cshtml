@@ -1,0 +1,171 @@
+﻿@using System.Security.Cryptography
+@using System.Text
+@using Sindvamb.Templates
+@using Sindvamb.Templates.Pages.Shared
+@using RazorLight
+
+@inherits TemplatePage<Sindvamb.Templates.Pages.Usuarios.DeclaracaoAssociacao>
+
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Documento Timbrado</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: 'Arial', Times, serif;
+			background-color: #fff;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			min-height: 100vh;
+		}
+
+		.a4-container {
+			/* width: 265mm;
+					height: 374mm; */
+			width: 275mm;
+			height: 387mm;
+			position: relative;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+			background-color: white;
+			overflow: hidden;
+		}
+
+		.a4-paper {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			padding: 20mm;
+			box-sizing: border-box;
+			/* background-image: url(@Model.BG); */
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+
+		.content {
+			position: relative;
+			z-index: 1;
+			height: 100%;
+			margin-top: 100px;
+		}
+
+		.logo {
+			max-width: 150px;
+			height: auto;
+		}
+
+		.company-name {
+			font-size: 24px;
+			font-weight: bold;
+			margin: 10px 0;
+		}
+
+		.document-header {
+			text-align: center;
+			margin:150px 0 150px 0;
+			font-size: 10px;
+		}
+
+		.document-date {
+			text-align: right;
+			margin-bottom: 30px;
+			font-size: 10px;
+		}
+
+		.document-title {
+			font-weight: bold;
+			margin: 20px 0;
+		}
+
+		.recipient {
+			margin: 15px 0;
+		}
+
+		.main-content {
+			margin: 40px 0;
+			text-align: justify;
+		}
+
+		.signature {
+			margin-top: 250px;
+			text-align: center;
+		}
+
+		.footer-note {
+			font-size: 16px;
+			margin-top: 180px;
+			text-align: justify;
+			font-style: italic;
+		}
+
+		.highlight {
+			font-weight: bold;
+		}
+
+		.center {
+			text-align: center;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="a4-container">
+		<div class="a4-paper" style="background-image: url(@Model.BG);">
+			<div class="content">
+
+				<div class="document-header">
+					<h1>DECLARAÇÃO</h1>
+				</div>
+				<div class="main-content">
+
+					<p style="margin-bottom: 50px; text-align: justify;">
+						O Sindicato do Comércio de Vendedores Ambulantes do Distrito Federal - SINDVAMB/DF, regularmente registrado MTE, Processo Nº 002.193.09032 1, com CNPJ Nº 03.656.287.0001-09, através do seu Presidente, declara para todos os fins
+						de direito, que @Model.Name @Model.CpfCnpj e RG Nº @Model.RG, residente e domiciliado(a) no endereço: @Model.Endereco, é associado(a) a esta entidade sindical, que representa no Distrito Federal a categoria de
+						ambulantes (trabalhadores autônomos), integrantes do 2º grupo - Comércio varejista do Plano da Confederação Nacional do Comércio da CNC, estando apta a usufruir dos serviços e descontos decorrentes de convênios e parcerias, firmados pelo SINDVAMB/DF disponibilizadas no
+						ano de @DateTime.Now.ToString("yyyy").
+					</p>
+
+					<p style="margin-bottom: 50px; text-align: right;">
+						Por ser verdade firmo a presente para que surta os seus efeitos jurídicos e legais.
+					</p>
+				</div>
+
+				<div class="document-date">
+					<h1>Brasília, @DateTime.Now.ToString("dd") de @DateTime.Now.ToString("MMMM") de @DateTime.Now.ToString("yyyy").</h1>
+				</div>
+
+				<div class="signature">
+					<b>
+						<p><span class="highlight">Bartolomeu Gonçalves Martins</span></p>
+						<p>Presidente</p>
+					</b>
+				</div>
+
+				<div class="footer-note">
+					<p>
+						<em>
+							Esta declaração tem validade até 31/12/@DateTime.Now.ToString("yyyy") de acordo com o
+							convênio do Sesc e o estatuto
+							social do Supivamo-Dr.Capítulo I. Parágrafo único. O exercício social do Sindicato
+							coincide com o ano civil, tendo início em 01 de janeiro a término em 31 de dezembro de
+							cada ano.
+						</em>
+					</p>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>

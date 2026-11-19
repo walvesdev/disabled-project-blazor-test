@@ -1,0 +1,217 @@
+@page "/Account/Login"
+@layout EmptyLayout
+@inherits AppComponentBase
+@attribute [AllowAnonymous]
+@using BootstrapBlazor.Components
+
+ @if (ShowLogin)
+{
+    <PageTitle>Credencial Associado</PageTitle>
+
+    <div class="login-form d-flex justify-content-center align-items-center ">
+        <div class="card p-4 rounded my-5">
+
+            <h1 class="card-title text-center">Credencial Associado</h1>
+            <p class="text-center">Seu passaporte para o sucesso!</p>
+
+            <ValidateForm @ref="Form" Model="@Model" OnValidSubmit="@OnValidSubmit">
+                <DataAnnotationsValidator />
+
+                <div class="form-group mb-3">
+                    <BootstrapInput @bind-Value="Model.CpfCnpj"
+                                    TValue="string" Color="Color.Secondary"
+                                    ShowRequired="true"
+                                    Formatter="Formaters.FormatCpfCnpj"
+                                    DisplayText="CPF ou CNPJ"
+                                    PlaceHolder="Digite seu CPF ou CNPJ" />
+                </div>
+
+                <InputPassword @bind-Value="@Model.Password" DisplayText="Senha" ErrorFor="() => Model.Password" />
+
+                <div class="form-check d-flex justify-content-end mt-3 ">
+                    <Checkbox @bind-Value="Model.Remember"
+                              TValue="bool"
+                              State="CheckboxState.Checked"
+                              ShowLabel="true"
+                              Color="@Color.Primary"
+                              DisplayText="Lembre de mim" />
+
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <p class="text-primary cursor-pointer" @onclick="RecoveryPassword">Esqueceu a senha?</p>
+                </div>
+
+                <div class="btn-login">
+                    <Button Text="Entrar"
+                            LoadingIcon="fa-solid fa-spinner fa-spin fa-fw"
+                            IsBlock="true"
+                            IsAsync="true"
+                            IsDisabled="IsLoading"
+                            Size="Size.Large"
+                            ButtonType="ButtonType.Submit"
+                            ButtonStyle="ButtonStyle.Round"
+                            Color="@Color.Primary" />
+                </div>
+
+            </ValidateForm>
+
+            <p class="text-center mt-3">Não tem conta? <a class="text-primary" href="/credenciamento">Cadastre-se</a>.</p>
+
+        </div>
+    </div>
+}
+else
+{
+    <AppSpinner />
+}
+
+
+@code {
+
+    public void ChangePassword(string value)
+    {
+
+    }
+
+    [CascadingParameter] private Task<AuthenticationState>? authenticationState { get; set; }
+
+    [Inject] public IAccountService AccountService { get; set; }
+
+    [Inject] public IUserService UserService { get; set; }
+
+    [Inject] public NavigationManager NavigationManager { get; set; }
+
+    [Inject] public SwalService SwalService { get; set; }
+
+
+    public ValidateForm Form { get; set; }
+
+    public LoginDTO Model { get; set; } = new LoginDTO();
+
+    public bool ShowLogin { get; set; } = false;
+
+    public PasswordRecoveryEditType PasswordRecoveryEditType { get; set; } = new();
+
+    public async Task RecoveryPassword()
+    {
+        var option = new EditDialogOption<PasswordRecoveryEditType>()
+            {
+                Title = "Insira seu CPF ou CNPJ",
+                Model = PasswordRecoveryEditType,
+                CloseButtonText = "Fechar",
+                SaveButtonText = "Confirmar",
+                IsBackdrop = true,
+                IsScrolling = true,
+                ItemsPerRow = 1,
+                ShowLoading = true,
+                Size = Size.ExtraSmall,
+                RowType = RowType.Normal,
+                OnCloseAsync = () => Task.CompletedTask,
+                OnEditAsync = async context =>
+                {
+                    if (context.Validate())
+                    {
+                        var isSuccess = await UserService.RequestLinkUpdatePasswordCommand(((PasswordRecoveryEditType)context.Model).CpfCnpj);
+
+                        if (isSuccess)
+                        {
+                            PasswordRecoveryEditType = (PasswordRecoveryEditType)context.Model;
+
+                            await SwalService.Show(new SwalOption()
+                            {
+                                Category = SwalCategory.Success,
+                                Content = "Solicitação enviada com sucesso, acesse seu email para prosseguir a alteração de sua senha.",
+                            });
+
+                            return true;
+                        }
+                        else
+                        {
+                            await SwalService.Show(new SwalOption()
+                            {
+                                Category = SwalCategory.Warning,
+                                Content = "Usuário não encontrado!",
+                            });
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        await SwalService.Show(new SwalOption()
+                        {
+                            Category = SwalCategory.Error,
+                            Content = "Erro ao solicitar alteração de senha!",
+                        });
+                        return false;
+                    }
+
+                }
+            };
+
+        await DialogService.ShowEditDialog(option);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Redirect();
+        }
+    }
+
+    public async Task OnValidSubmit(EditContext ctx)
+    {
+        ToggleLoading();
+
+        Model = ctx.Model.MapTo<LoginDTO>();
+
+        if (!Model.CpfCnpj.IsNullOrWhiteSpace() && !Model.Password.IsNullOrWhiteSpace())
+        {
+            await AccountService.Login(Model);
+            await Redirect();
+        }
+
+        ToggleLoading();
+    }
+
+    private async Task Redirect()
+    {
+
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var authStateUser = authState?.User;
+            var isAuthenticated = authStateUser?.Identity is not null && authStateUser?.Identity?.IsAuthenticated == true;
+
+            var returnUrl = (WebUtility.UrlEncode(new Uri(NavigationManager.Uri).PathAndQuery))?.Replace("%2F", "/");
+
+
+            if (returnUrl!.Equals("/Account/Login"))
+            {
+                returnUrl = "/home";
+
+                if (isAuthenticated)
+                {
+                    if (AppServices.IsAdmin() || AppServices.IsMaster())
+                    {
+                        returnUrl = "/home";
+                    }
+                }
+            }
+
+            if (isAuthenticated)
+            {
+                AppServices.User = authStateUser!;
+                NavigationManager.NavigateTo(returnUrl);
+            }
+            else
+            {
+                ShowLogin = true;
+                StateHasChanged();
+            }
+        }
+
+    }
+
+}

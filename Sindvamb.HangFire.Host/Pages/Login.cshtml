@@ -1,0 +1,12 @@
+﻿@page
+@model Sindvamb.HangFire.Host.Pages.LoginModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<p>Entre com suas credenciais:</p>
+
+<form method="post">
+    Protocol:    <input asp-for="Usuario!.Matricula" />
+    Senha:    <input type="password" asp-for="Usuario!.Password" />
+    <button type="submit">Entrar</button>
+</form>

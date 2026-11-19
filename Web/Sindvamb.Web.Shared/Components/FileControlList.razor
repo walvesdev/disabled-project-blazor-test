@@ -1,0 +1,526 @@
+﻿@implements IDisposable
+@inject ILocalStorageService LocalStorageService
+@inject IFileControlService FileControlService
+@inject DialogService DialogService
+@inject SwalService SwalService
+@inject NavigationManagerService NavigationManager
+@inject IJSRuntime JS
+@using BootstrapBlazor.Components
+
+
+<div class="w-100 d-flex justify-content-end">
+    <ButtonUpload TValue="string" 
+                  BrowserButtonClass="btn btn-primary"
+                  title="Atualizar Arquivo"
+                  IsMultiple="false"
+                  ShowProgress="true"
+                  ShowLabel="false"
+                  BrowserButtonText=""
+                  ShowDownloadButton="false"
+                  ShowUploadFileList="false"
+                  OnChange="@(file => OnFileAdd(file))">
+        Adicionar
+    </ButtonUpload>
+
+</div>
+
+@if (Files.Any())
+{
+    <DisplayTable TItem="FileControlDTO" ShowTable="true" IsLoading="false" ShowButtomAdd="false">
+        <Table ShowLoading="false" TItem="FileControlDTO"
+               RenderMode="TableRenderMode.Table"
+               TableSize="TableSize.Normal"
+               Items="@Files"
+               IsStriped="true"
+               IsBordered="true">
+            <TableColumns>
+
+                <TableColumn Text="Nome" @bind-Field="@context.FileName" Align="Alignment.Left"  Sortable="true" Filterable="true"
+                              />
+
+                @if (AppServices.IsAdmin() || AppServices.IsMaster() || AppServices.IsSupport())
+                {
+
+                    <TableColumn @bind-Field="@context.Id" Align="Alignment.Center" Text="Status" Width="180">
+                        <Template Context="value">
+
+                            <div class="w-100" style="background-color:@GetApprovedColor(value.Row.Approved);border: 3px solid @GetApprovedColor(value.Row.Approved); border-radius: 10px;">
+
+                                @* <Select @ref=SelectApproved Items="GetStatus()" 
+                                         ShowLabel="false" DisplayText="" 
+                                         OnValueChanged="ev => OnApprovedChange(value.Row)" @bind-Value="value.Row.Approved"></Select> *@
+
+                                <Blazorise.Select @bind-SelectedValue="@value.Row.Approved">
+                                    @foreach (var item in GetStatus())
+                                    {
+                                        <Blazorise.SelectItem Value="@item.Value">@item.Text</Blazorise.SelectItem>
+                                    }
+                                </Blazorise.Select>
+                            </div>
+
+                        </Template>
+                    </TableColumn>
+
+                }
+                else
+                {
+
+                    <TableColumn @bind-Field="@context.Id" Align="Alignment.Center" Text="Status" Width="150" Sortable="true" Filterable="true">
+                        <Template Context="value">
+
+                            <div class="w-100">
+                                @if (value.Row.Approved.HasValue && value.Row.Approved == true)
+                                {
+                                    <p style="font-weight: 900;color: green;">Aprovado</p>
+                                }
+                                @if (value.Row.Approved.HasValue && value.Row.Approved == false)
+                                {
+                                    <p style="font-weight: 900;color: red;">Reprovado</p>
+                                }
+                                @if (!value.Row.Approved.HasValue)
+                                {
+                                    <p style="font-weight: 900;color: orange;">Aguardando Análise</p>
+                                }
+                            </div>
+
+                        </Template>
+                    </TableColumn>
+                    
+                }
+
+                <TableColumn @bind-Field="@context.Id" Align="Alignment.Center" Text="Ações" Width="150" Sortable="true" Filterable="true">
+                    <Template Context="value">
+
+                        <div class="w-100 d-flex gap-3 justify-content-center">
+
+                            <Button title="Abrir Arquivo"
+                                    IsDisabled=@((!value.Row.ContentType.Contains("pdf") && !value.Row.ContentType.Contains("image")) || IsLoading || (AppServices.IsCustomer() && value.Row.FileName.Contains("Declaração") && value.Row.Approved != true) )
+                                    IsAsync="true"
+                                    Icon="fa-solid fa-eye"
+                                    Text=""
+                                    @onclick="@(() => ViewlFile(value.Row))">
+                            </Button>
+
+                            <Button title="Baixar Arquivo"
+                                    IsAsync="true"
+                                    IsDisabled=@(IsLoading || (AppServices.IsCustomer() && value.Row.Approved != true))
+                                    Icon="fa-solid fa-download"
+                                    Text=""
+                                    @onclick="@(() => DownloadFile(value.Row))">
+                            </Button>
+
+                            <ButtonUpload TValue="string"
+                                          title="Atualizar Arquivo"
+                                          IsMultiple="false"
+                                          ShowProgress="true"
+                                          ShowLabel="false"
+                                          BrowserButtonText=""
+                                          ShowDownloadButton="false"
+                                          ShowUploadFileList="false"
+                                          IsDisabled=@((IsLoading ||
+                                      (!AppServices.IsAuthenticated ||
+                                      AppServices.IsCustomer()) &&
+                                      value.Row.Approved == true) ||
+                                      (AppServices.IsCustomer() && value.Row.FileName.Contains("Declaração")) ||
+                                      ((!AppServices.IsAuthenticated || AppServices.IsCustomer()) && !value.Row.Approved.HasValue))
+                                          OnChange="@(file => OnFileChange(file, value.Row))">
+                            </ButtonUpload>
+
+                            @if (AppServices.IsAdmin() || AppServices.IsMaster())
+                            {
+                                <Button title="Excluir Arquivo"
+                                        IsAsync="true"
+                                        Color="Color.Danger"
+                                        Icon="fa-duotone fa-solid fa-trash-can"
+                                        Text=""
+                                        @onclick="@(() => OnFileDelete(value.Row))">
+                                </Button>
+                            }
+
+                            @* <a class="btn btn-action" title="Deletar"
+							   @onclick="@(() => OnFileDelete(value.Row))">
+								<i class="fa-duotone fa-solid fa-trash-can text-danger"></i>
+							</a> *@
+
+                        </div>
+
+                    </Template>
+                </TableColumn>
+            </TableColumns>
+        </Table>
+    </DisplayTable>
+}
+else
+{
+    <div class="d-flex justify-content-center my-5 w-100">
+        <Empty Image="img/empty.svg" Width="133" Text="Não há documentos para exibição" />
+    </div>
+}
+
+
+
+
+
+
+@code {
+    [Parameter] public Guid UserId { get; set; }
+
+    [Parameter] public bool IsDependent { get; set; }
+
+    public Select<bool?> SelectApproved { get; set; }
+
+    public List<FileControlDTO> Files { get; set; } = new();
+
+    private bool IsLoading { get; set; } = true;
+
+    private IEnumerable<SelectedItem> GetStatus()
+    {
+        List<SelectedItem> items = new(){
+                new SelectedItem() { Text="Aguardando Análise", Value=null},
+                new SelectedItem() { Text="Aprovado", Value="True"},
+                new SelectedItem() { Text="Reprovado", Value="False"},
+        };
+
+        return items;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Files = await FileControlService.GetUserFiles(UserId, IsDependent);
+
+        IsLoading = false;
+    }
+
+    private string GetApprovedColor(bool? value)
+    {
+        try
+        {
+            if (value.HasValue && value == true)
+            {
+                return "green";
+            }
+            if (value.HasValue && value == false)
+            {
+                return "red";
+            }
+            if (!value.HasValue)
+            {
+                return "orange";
+            }
+
+
+        }
+        catch
+        {
+            // ignore
+        }
+
+        return "";
+    }
+
+    public async Task OnApprovedChange(FileControlDTO dto)
+    {
+        IsLoading = false;
+
+        var success = await FileControlService.ApprovedChange(dto);
+
+        if (success)
+        {
+            await SwalService.Show(new SwalOption()
+                {
+                    Category = SwalCategory.Success,
+                    Content = "Arquivo atualizado com sucesso!",
+                    CloseButtonText = "Fechar",
+                });
+        }
+        else
+        {
+            await SwalService.Show(new SwalOption()
+                {
+                    Category = SwalCategory.Warning,
+                    Content = "Arquivo não atualizado, se o erro persistir por favor contate o suporte!",
+                    CloseButtonText = "Fechar",
+                });
+        }
+
+        IsLoading = false;
+    }
+
+    private async Task ViewlFile(FileControlDTO doc)
+    {
+        IsLoading = true;
+
+        var file = await FileControlService.Get<FileControlDTO>(doc.Id);
+
+        if (file.IsNull())
+        {
+            IsLoading = true;
+
+            await SwalService.Show(new SwalOption()
+                {
+                    Category = SwalCategory.Error,
+                    Content = "Arquivo não encontrado!",
+                });
+
+            return;
+        }
+
+        var fileStream = new MemoryStream(file.FileArray);
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+
+        var url = await JS.InvokeAsync<string>("urlFileFromStream", doc.FileName, streamRef);
+
+        try
+        {
+            var option = new DialogOption
+                {
+                    Title = doc.FileName,
+                    Size = Size.ExtraExtraLarge,
+                    ShowMaximizeButton = true,
+                    IsBackdrop = true,
+                    IsScrolling = true,
+                    ShowFooter = true,
+                    CloseButtonText = "Fechar",
+                    PrintButtonText = "Imprimir",
+                    ShowPrintButton = !doc.ContentType.Contains("pdf"),
+                };
+
+            option.BodyTemplate = BootstrapDynamicComponent.CreateComponent<FileControlReader>(
+            new Dictionary<string, object?>
+                {
+                    ["Filename"] = url,
+                    ["FileContentType"] = doc.ContentType,
+                }).Render();
+
+            await DialogService.Show(option);
+
+        }
+        catch (Exception e)
+        {
+            await SwalService.Show(new SwalOption()
+                {
+                    Category = SwalCategory.Error,
+                    Content = "Erro ao atualizar senha!",
+                });
+        }
+
+        IsLoading = false;
+    }
+
+    private async Task DownloadFile(FileControlDTO doc)
+    {
+        IsLoading = true;
+
+        var file = await FileControlService.Get<FileControlDTO>(doc.Id);
+
+        var fileStream = new MemoryStream(file.FileArray);
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+
+        await JS.InvokeVoidAsync("downloadFileFromStream", doc.FileName, streamRef);
+
+        IsLoading = false;
+    }
+
+    private async Task OnFileAdd(UploadFile arg)
+    {
+
+        long maxFileSize = 2L * 1024L * 1024L * 1024L;
+        await using var fs = arg.File.OpenReadStream(maxAllowedSize: maxFileSize); 
+        await using var ms = new MemoryStream();
+        await fs.CopyToAsync(ms);
+
+        var extension = arg.File.Name.Split(".");
+        var filename = $"{extension.First()}-{UserId.ToString().GetDigits()}.{extension.Last()}";
+
+        var targetPathName = IsDependent ? "Dependent" : "User";
+
+        var file = new FileControlDTO
+            {
+                Id = Guid.NewGuid(),
+                FileName = filename,
+                FileSize = arg.File.Size,
+                FileArray = ms.ToArray(),
+                ContentType = arg.File.ContentType,
+                TargetPath = $"/{targetPathName}/{UserId}/{filename}",
+            };
+
+        if (IsDependent)
+        {
+            file.DependentId = UserId;
+        }
+        else
+        {
+            file.UserId = UserId;
+        }
+
+        var result = await FileControlService.Update(file);
+
+        if (!result)
+        {
+            await SwalService.Show(new SwalOption()
+                {
+                    Category = SwalCategory.Error,
+                    Title = "Falha ao adicionar arquivo",
+                    Content = "Caso o erro persista contate o suporte!",
+                });
+        }
+        else
+        {
+            Files.Add(file);
+            await InvokeAsync(StateHasChanged);
+        }
+
+    }
+
+    private async Task OnFileChange(UploadFile arg, FileControlDTO dto)
+    {
+        IsLoading = true;
+
+        try
+        {
+            if (!AppServices.IsAuthenticated || AppServices.IsCustomer())
+            {
+                dto.Approved = null;
+            }
+
+            if (AppServices.IsCustomer() && dto.Approved == true)
+            {
+                await SwalService.Show(new SwalOption()
+                    {
+                        Category = SwalCategory.Warning,
+                        Content = "O aquivo já foi aprovado, não pode ser atualizado nesse momento!",
+                        CloseButtonText = "Fechar",
+                    });
+
+                return;
+            }
+
+            // if (AppServices.IsCustomer() && !dto.Approved.HasValue)
+            // {
+            //     await SwalService.Show(new SwalOption()
+            //         {
+            //             Category = SwalCategory.Warning,
+            //             Content = "O aquivo está aguardando análise, não pode ser atualizado nesse momento!",
+            //             CloseButtonText = "Fechar",
+            //         });
+
+            //     return;
+            // }
+
+            var file = await FileControlService.Get<FileControlDTO>(dto.Id);
+
+            var extension = arg.File.Name.Split(".");
+            var filename = $"{dto.Description}-{dto.UserId.ToString().GetDigits()}.{extension.Last()}";
+
+            if (file.IsNotNull())
+            {
+                long maxFileSize = 2L * 1024L * 1024L * 1024L;
+                await using var fs = arg.File.OpenReadStream(maxAllowedSize: maxFileSize);
+                await using var ms = new MemoryStream();
+                await fs.CopyToAsync(ms);
+
+                dto.FileName = filename;
+                dto.FileSize = arg.File.Size;
+                dto.FileArray = ms.ToArray();
+                dto.ContentType = arg.File.ContentType;
+
+                if (IsDependent)
+                {
+                    dto.TargetPath = $"/Dependent/{UserId}/{filename}";
+                }
+                else
+                {
+                    dto.TargetPath = $"/User/{UserId}/{filename}";
+                }
+
+                var success = await FileControlService.Update(dto);
+
+                if (success)
+                {
+                    await SwalService.Show(new SwalOption()
+                        {
+                            Category = SwalCategory.Success,
+                            Content = "Arquivo atualizado com sucesso!",
+                            CloseButtonText = "Fechar",
+                        });
+                }
+                else
+                {
+                    await SwalService.Show(new SwalOption()
+                        {
+                            Category = SwalCategory.Warning,
+                            Content = "Arquivo não atualizado, se o erro persistir por favor contate o suporte!",
+                            CloseButtonText = "Fechar",
+                        });
+                }
+            }
+            else
+            {
+                await SwalService.Show(new SwalOption()
+                    {
+                        Category = SwalCategory.Warning,
+                        Content = "Arquivo não encontrado!",
+                        CloseButtonText = "Fechar",
+                    });
+            }
+
+        }
+        catch (Exception e)
+        {
+            await SwalService.Show(new SwalOption()
+                {
+                    Category = SwalCategory.Error,
+                    Content = "Erro ao atualizar arquivo!",
+                    CloseButtonText = "Fechar",
+                });
+        }
+
+        IsLoading = false;
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task OnFileDelete(FileControlDTO dto)
+    {
+
+        var approveOperation = await SwalService.ShowModal(new SwalOption()
+            {
+                Category = SwalCategory.Warning,
+                Title = "Atenção!",
+                Content = $"Gostaria de excluir esse arquivo do banco de dados?",
+            });
+
+        if (approveOperation)
+        {
+
+            var result = await FileControlService.Delete(dto.Id);
+
+            if (!result)
+            {
+                await SwalService.Show(new SwalOption()
+                    {
+                        Category = SwalCategory.Error,
+                        Title = "Falha ao remover arquivo",
+                        Content = "Caso o erro persista contate o suporte!",
+                    });
+            }
+            else
+            {
+                await SwalService.Show(new SwalOption()
+                    {
+                        Category = SwalCategory.Success,
+                        Title = "Feito",
+                        Content = "Operação efetuada com sucesso!",
+                    });
+            }
+
+            Files.Remove(dto);
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+    }
+}

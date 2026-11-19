@@ -1,0 +1,55 @@
+﻿@typeparam TItem
+
+@using BootstrapBlazor.Components
+
+@if (!IsLoading)
+{
+    <div class="app-container">
+
+        <div class="header d-flex justify-content-between m-2">
+
+            <p>@Title</p>
+
+            @if (ShowButtomAdd)
+            {
+                <Button @onclick="Add">Adicionar</Button>
+            }
+
+        </div>
+        
+        @if (ShowTable)
+        {
+            @ChildContent
+        }
+        else
+        {
+            <div style="height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-weight: 300;padding-bottom: 50px;">
+                @* <img src="img/empty.png" width="184"/>
+                <p style="position:relative; top: -40px;">Não há dados para exibição.</p> *@
+                <Empty Image="img/empty.svg" Width="133" Text="Não há dados para exibição" />
+            </div>
+        }
+
+    </div>
+}
+
+@if (IsLoading)
+{
+    <AppSpinner></AppSpinner>
+}
+
+@code {
+
+    [Parameter] public bool IsLoading { get; set; }
+    [Parameter] public bool ShowTable { get; set; }
+    [Parameter] public bool ShowButtomAdd { get; set; } = true;
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public EventCallback<Task> OnAdd { get; set; }
+
+    protected async Task Add()
+    {
+        await OnAdd.InvokeAsync();
+    }
+
+}

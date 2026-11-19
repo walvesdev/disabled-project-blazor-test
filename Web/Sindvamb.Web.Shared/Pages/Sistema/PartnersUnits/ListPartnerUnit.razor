@@ -1,0 +1,61 @@
+@page "/partner-unit"
+@namespace Sindvamb.Web.Shared.Pages.Sistema.PartnersUnits
+@inherits ListComponentBase<PartnerUnitDTO, IPartnerUnitService>
+@attribute [Authorize]
+@using BootstrapBlazor.Components
+<AppAuthorizeView Roles="@AuthRole.ADMIN_MASTER_SUPPORT">
+
+    <DisplayTable TItem="PartnerUnitDTO" Title="" ShowTable="ShowTable" IsLoading="IsLoading" OnAdd=@(() => AddRowTemplate<AddEditPartnerUnit>("Adicionar Unidade"))>
+        <Table ShowLoading="false" TItem="PartnerUnitDTO"
+               RenderMode="TableRenderMode.Table"
+               TableSize="TableSize.Normal"
+               OnQueryAsync="@OnQueryAsync"
+               PageItemsSource="PageItemsSource"
+               IsPagination="true"
+               IsStriped="true"
+               IsBordered="true">
+            <TableColumns>
+                <TableColumn Text="Nome" @bind-Field="@context.Name" Width="100" Align="Alignment.Left"  Sortable="true" Filterable="true"
+                               DefaultSortOrder="SortOrder.Asc" />
+                <TableColumn Text="CPF" @bind-Field="@context.CpfCnpj" Width="180" Align="Alignment.Left"  Sortable="true" Filterable="true"
+                             >
+                    <Template Context="value">
+                        @Formaters.FormatCpfCnpj(value.Row.CpfCnpj)
+                    </Template>
+                </TableColumn>
+                <TableColumn Text="Email" @bind-Field="@context.Email" Width="180" Align="Alignment.Left"  Sortable="true" Filterable="true"
+                              />
+                <TableColumn Text="Parceiro" @bind-Field="@context.Partner.Name" Width="180" Align="Alignment.Left"  Sortable="true" Filterable="true"
+                              />
+                <TableColumn @bind-Field="@context.Enabled" Align="Alignment.Center" Text="Status">
+                    <Template Context="value">
+                        @(value.Row.Enabled ? "ATIVO" : "INATIVO")
+                    </Template>
+                </TableColumn>
+                <TableColumn @bind-Field="@context.Id" Align="Alignment.Center" Text="Ações" Width="150">
+                    <Template Context="value">
+
+                        <div class="w-100">
+                            <a class="btn btn-action" title="Aprovar"
+                               @onclick=@(() => EditRowTemplate<AddEditPartnerUnit>("Editar Unidade", value.Row)) @onclick:stopPropagation="true">
+                                <i class="fa-regular fa-pen-to-square text-warning"></i>
+                            </a>
+                            <button class="btn btn-action" title="Bloquear"
+                                    @onclick=@(() => GridDeleteButtonClick(value.Row))
+                                    @onclick:stopPropagation="true">
+                                <i class="fa-duotone fa-solid fa-trash-can text-danger"></i>
+                            </button>
+                        </div>
+
+                    </Template>
+                </TableColumn>
+            </TableColumns>
+        </Table>
+    </DisplayTable>
+
+</AppAuthorizeView>
+
+
+@code {
+
+}

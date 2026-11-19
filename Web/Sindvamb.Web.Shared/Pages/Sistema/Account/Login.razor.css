@@ -1,0 +1,10 @@
+﻿.login-form {
+    height: 100vh;
+    background-color: #004A8D;
+}
+
+::deep input[type="checkbox"] {
+    margin-left: 15px;
+    top: -7px;
+    position: relative;
+}

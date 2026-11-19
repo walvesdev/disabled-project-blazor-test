@@ -1,0 +1,30 @@
+@page "/edit-partner-unit"
+@page "/edit-partner-unit/{Id:guid}"
+@namespace Sindvamb.Web.Shared.Pages.Sistema.PartnersUnits
+@inherits EditComponentBase<PartnerUnitDTO, IPartnerUnitService, Guid>
+@attribute [Authorize]
+@using BootstrapBlazor.Components
+<AppAuthorizeView Roles="@AuthRole.ADMIN_MASTER_SUPPORT">
+
+    <ValidateForm Model="@Item" OnValidSubmit="@(ev => FormSubmit(ev, "partner"))">
+        <Row>
+
+            <Switch DisplayText="Unidade Ativa?" @bind-Value="@Item.Enabled" />
+
+            <BootstrapInput Type DisplayText="Nome" @bind-Value="@Item.Name" placeholder="Insira o nome" />
+
+            <BootstrapInput DisplayText="CPF" @bind-Value="@Item.CpfCnpj" id="CpfCnpj" placeholder="Insira o CPF ou CNPJ" Formatter="Formaters.FormatCpfCnpj" />
+
+            <BootstrapInput DisplayText="Email" @bind-Value="@Item.Email" id="Email" placeholder="Insira o Email" />
+
+            <Select ShowSearch="true" TValue="Guid?" @bind-Value=@Item.PartnerId DisplayText="Parceiro" OnSelectedItemChanged="OnPartnerChanged"
+                    Items="Partners.Select(item => new SelectedItem(item.Id.ToString()!, item.Name!))" />
+
+        </Row>
+        <Stack IsRow="true" Justify="StackJustifyContent.End" class="gap-3 mt-3">
+            <Button Color="Color.Secondary" ButtonStyle="ButtonStyle.None" Text="Cancelar" OnClick="CloseDialg" />
+            <Button Color="Color.Primary" ButtonStyle="ButtonStyle.None" ButtonType="ButtonType.Submit" Icon="save" Text="Confirmar" />
+        </Stack>
+    </ValidateForm>
+
+</AppAuthorizeView>

@@ -1,0 +1,461 @@
+﻿@page "/acompanhar-solicitacao"
+@page "/acompanhar-solicitacao/{CpfCnpj}"
+@page "/acompanhar-solicitacao/{CpfCnpj}/{IsModal}"
+@layout SiteLayout
+@inherits AppComponentBase
+@using BootstrapBlazor.Components
+
+@if (IsLoading)
+{
+    if (IsModal)
+    {
+        <div class="d-flex justify-content-center align-items-center">
+            <Spinner Color="Color.Primary" Size="Size.Large" />
+        </div>
+    }
+    else
+    {
+        <AppSpinner></AppSpinner>
+    }
+}
+else
+{
+    @if (!ShowCardStatus)
+    {
+        <div class="container d-flex align-items-center justify-content-center w-100 my-5 h-100">
+            <ValidateForm Model="@Model" OnValidSubmit="@OnValidSubmit" OnInvalidSubmit="@OnInvalidSubmit" style="width: 100%">
+                <DataAnnotationsValidator />
+
+                <Card style="width: 100%">
+
+                    <HeaderTemplate>
+                        <h5 class="pt-2">Acompanhe sua Solicitação de Cadastro</h5>
+                    </HeaderTemplate>
+
+                    <BodyTemplate>
+
+
+                        <div class="d-flex row flex-wrap">
+
+                            <div class="form-group mt-2 col-md-6">
+                                <BootstrapInput TValue="string" @bind-Value="Model.CpfCnpj" RequiredErrorMessage="Por favor insira seu CPF" Color="Color.Secondary" DisplayText="CPF" ShowRequired="true" Formatter="Formaters.FormatCpfCnpj" />
+                            </div>
+
+                        </div>
+
+
+                    </BodyTemplate>
+
+                    <FooterTemplate>
+
+                        <div class="form-group mt-2 col-md-6 w-100  d-flex justify-content-end">
+                            <Button ButtonStyle="ButtonStyle.Round" ButtonType="ButtonType.Submit" Color="Color.Secondary" Icon="plus" Text="Pesquisar"></Button>
+                        </div>
+                    </FooterTemplate>
+
+                </Card>
+            </ValidateForm>
+
+
+        </div>
+    }
+
+    @if (RegistrationRequest.IsNotNull() && ShowCardStatus)
+    {
+        var bgAnalise = RegistrationRequest.Approved.IsNull() ? "bg-warning" : "bg-success";
+        var bgFinalizar = RegistrationRequest.Approved.Equals(false) ? "bg-danger" : RegistrationRequest.Approved.Equals(true) ? "bg-success" : "bg-gray-100";
+
+        var classe = IsModal ? "" : "container my-5";
+
+        <div class="@classe">
+            <ValidateForm Model="@Model" OnValidSubmit="@OnValidSubmit" OnInvalidSubmit="@OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <Card>
+                    <HeaderTemplate>
+                        @* <h5 class="pt-2">@($"Cadastro")</h5> *@
+                    </HeaderTemplate>
+
+                    <BodyTemplate>
+                        <ul class="timeline my-3" style=" display: flex; width: 100%;">
+                            <li class="time-line-item" style="width: 100%;">
+                                <div class="timeline-item-node-normal timeline-item-node bg-success"></div>
+                                <div class="timeline-item-wrapper">
+                                    <div class="timeline-item-content">Envio de Solicitação</div>
+                                    <div class="timeline-item-timestamp"></div>
+                                </div>
+                            </li>
+
+
+                            <li class="time-line-item" style="width: 100%;">
+                                <div class="timeline-item-node-normal timeline-item-node @bgAnalise"></div>
+                                <div class="timeline-item-wrapper">
+                                    @if (RegistrationRequest.Approved.IsNull())
+                                    {
+                                        <div class="timeline-item-content">
+                                            <u>
+                                                <b>Em Análise</b>
+                                            </u>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="timeline-item-content">Em Análise</div>
+                                    }
+                                    <div class="timeline-item-timestamp"></div>
+                                </div>
+                            </li>
+                            <li class="time-line-item">
+                                <div class="timeline-item-node-normal timeline-item-node @bgFinalizar"></div>
+                                <div class="timeline-item-wrapper">
+                                    @if (RegistrationRequest.Approved.Equals(false))
+                                    {
+                                        <div class="timeline-item-content">
+                                            <u>
+                                                <b>Concluído</b>
+                                            </u>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="timeline-item-content">Concluído</div>
+                                    }
+                                    <div class="timeline-item-timestamp"></div>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <Divider />
+
+                        <div class="ml-2 my-5">
+                            <div class="w-100 d-flex">
+                                <div style="width: 150px;">Tipo de credencial:</div>
+                                <div>
+                                    <b>Titular</b>
+                                </div>
+                            </div>
+                            <div class="w-100 d-flex">
+                                <div style="width: 150px;">Nome:</div>
+                                <div>
+                                    <b>@RegistrationRequest.User.Name</b>
+                                </div>
+                            </div>
+                            <div class="w-100 d-flex">
+                                <div style="width: 150px;">Protocolo:</div>
+                                <div>
+                                    <b>@RegistrationRequest.Protocol</b>
+                                </div>
+                            </div>
+                            <div class="w-100 d-flex">
+                                <div style="width: 150px;">Datal:</div>
+                                <div>
+                                    <b>@RegistrationRequest.Date.ToString("dd/MM/yyyy")</b>
+                                </div>
+                            </div>
+                            <div class="w-100 d-flex">
+                                <div style="width: 150px;">Status:</div>
+                                <div>
+                                    @if (RegistrationRequest.Approved == true)
+                                    {
+                                        <b>Aprovado</b>
+                                    }
+                                    else if (RegistrationRequest.Approved == false)
+                                    {
+                                        <b>Reprovado</b>
+                                    }
+                                    else
+                                    {
+                                        <b>Aguardando Análise</b>
+                                    }
+                                </div>
+                            </div>
+
+                            @if (!RegistrationRequest.Reason!.IsNullOrWhiteSpace())
+                            {
+                                <div class="w-100 d-flex">
+                                    <div style="width: 150px;">Motivo:</div>
+                                    <div>
+                                        <b>@((MarkupString)RegistrationRequest.Reason!)</b>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+
+                        <Divider />
+
+                        <div class="mt-5">
+                            <Collapse>
+                                <CollapseItems>
+                                    <CollapseItem Text="Dados Pessoais" IsCollapsed="false">
+
+                                        <div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Nome Completo:</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.Name</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Nome Afetivo:</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.SocialName</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">CPF:</div>
+                                                <div>
+                                                    <b>@Formaters.FormatCpfCnpj(@RegistrationRequest.User.CpfCnpj)</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">RG:</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.RG</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">UF:</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.UFIssuingBody</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Naturalidade:</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.Birthplace</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Nacionaliade:</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.Nationality</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Sexo:</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.Gender</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Data Nascimento:</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.Birthdate!.Value.ToString("dd/MM/yyyy")</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Estado Civil:</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.CivilStatus</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Celular:</div>
+                                                <div>
+                                                    <b>@Formaters.FormatCellPhone(RegistrationRequest.User.CellPhone)</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Telefone Residencial:</div>
+                                                <div>
+                                                    <b>@Formaters.FormatHomePhone(RegistrationRequest.User.HomePhone)</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Estado Civil:</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.Email</b>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </CollapseItem>
+                                    <CollapseItem Text="Endereço">
+
+                                        <div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">CEP</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.Address.ZipCode</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Cidade</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.Address.City</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Estado</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.Address.District</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Endereço</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.Address.AddressLine1</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Bairro</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.Address.Neighborhood</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Número</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.Address.Number</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Complemento</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.Address.Complement</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Tipo de Habitação</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.Address.Housing</b>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </CollapseItem>
+
+                                    @if (RegistrationRequest.User.SpecialNeeds.Any())
+                                    {
+                                        <CollapseItem Text="Necessidades Especiais">
+                                            @foreach (var specialNeed in RegistrationRequest.User.SpecialNeeds)
+                                            {
+                                                <div>
+                                                    <b>@specialNeed.Description</b>
+                                                </div>
+                                            }
+
+                                            @if (!RegistrationRequest.User.SpecialNeedsOther!.IsNullOrWhiteSpace())
+                                            {
+                                                <div>
+                                                    <b>@RegistrationRequest.User.SpecialNeedsOther</b>
+                                                </div>
+                                            }
+
+                                        </CollapseItem>
+                                    }
+
+                                    <CollapseItem Text="Demais Informações">
+
+                                        <div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Profisão:</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.Profession</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Grau de Instrução:</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.EducationDegree.Description</b>
+                                                </div>
+                                            </div>
+                                            <div class="w-100 d-flex">
+                                                <div style="width: 150px;">Nome da Mãe:</div>
+                                                <div>
+                                                    <b>@RegistrationRequest.User.MotherName</b>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </CollapseItem>
+
+                                    <CollapseItem Text="Documentos">                                        
+
+                                        <div>
+
+                                            <FileControlList UserId="RegistrationRequest.User.Id" IsDependent="false" />
+
+                                        </div>
+
+                                    </CollapseItem>
+
+                                    @if (@RegistrationRequest.Dependents.Any())
+                                    {
+
+                                        @foreach (var dependente in @RegistrationRequest.Dependents)
+                                        {
+
+                                            <CollapseItem Text=@($"Dependente: {dependente.Name}")>
+
+                                                <div>
+                                                    <div class="w-100 d-flex">
+                                                        <div style="width: 150px;">Nome:</div>
+                                                        <div>
+                                                            <b>@dependente.Name</b>
+                                                        </div>
+                                                    </div>
+                                                    <div class="w-100 d-flex">
+                                                        <div style="width: 150px;">CPF:</div>
+                                                        <div>
+                                                            <b>@Formaters.FormatCpfCnpj(@dependente.CpfCnpj)</b>
+                                                        </div>
+                                                    </div>
+                                                    <div class="w-100 d-flex">
+                                                        <div style="width: 150px;">Email:</div>
+                                                        <div>
+                                                            <b>@dependente.Email</b>
+                                                        </div>
+                                                    </div>
+                                                    <div class="w-100 d-flex">
+                                                        <div style="width: 150px;">Celular:</div>
+                                                        <div>
+                                                            <b>@Formaters.FormatCellPhone(@dependente.CellPhone)</b>
+                                                        </div>
+                                                    </div>
+                                                    <div class="w-100 d-flex">
+                                                        <div style="width: 150px;">Tipo:</div>
+                                                        <div>
+                                                            <b>@dependente.Type</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <h5 class="my-5">Documentos:</h5>
+
+                                                <div>
+
+                                                    <FileControlList UserId="dependente.Id" IsDependent="true" />
+
+                                                </div>
+
+                                            </CollapseItem>
+                                        }
+                                    }
+
+
+                                </CollapseItems>
+                            </Collapse>
+                        </div>
+
+                    </BodyTemplate>
+
+                    <FooterTemplate>
+                        @if (!IsModal)
+                        {
+                            <div class="form-group mt-2 col-md-6 w-100 px-2 d-flex justify-content-end">
+                                <Button ButtonStyle="ButtonStyle.Round" OnClick="RedirectToHome" ButtonType="ButtonType.Button" Color="Color.Secondary" Icon="plus" Text="Sair"></Button>
+                            </div>
+                        }
+                    </FooterTemplate>
+                </Card>
+            </ValidateForm>
+
+
+        </div>
+    }
+}
+
+
+
+

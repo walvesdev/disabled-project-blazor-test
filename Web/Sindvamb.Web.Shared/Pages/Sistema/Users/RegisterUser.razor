@@ -1,0 +1,140 @@
+﻿@page "/register-user"
+@layout EmptyLayout
+@inject IUserService UserService
+@inject NavigationManagerService NavManager
+@inject DialogService DialogService
+@attribute [Authorize]
+@using BootstrapBlazor.Components
+<AppAuthorizeView Roles="@AuthRole.ADMIN_MASTER_SUPPORT">
+
+    <div class="body">
+        <div class="wrapper">
+            <div class="">
+                <div class="col-sm">
+                    <div class="card fadeIn" style="@CardHeight">
+                        <div style="margin-left: 30px; margin-right: 30px; height: 250px;">
+                            <h5>Preencha os dados a baixo</h5>
+                            <EditForm Model="@Model" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                                <DataAnnotationsValidator />
+                                <div class="mb-3">
+                                    <InputText @bind-Value="@Model.Matricula" id="Matricula" placeholder="Protocol" class="form-control " />
+                                    <ValidationMessage For="@(() => Model.Matricula)" />
+                                    <label class="mx-2" for="Matricula">Protocol</label>
+                                </div>
+                                <div class="mb-3">
+                                    <InputText @bind-Value="@Model.Name" placeholder="Nome" class="form-control " />
+                                    <ValidationMessage For="@(() => Model.Name)" />
+                                    <label class="mx-2" for="Name">Nome</label>
+                                </div>
+                                <div class="mb-3">
+                                    <InputText @bind-Value="@Model.CpfCnpj" id="CpfCnpj" placeholder="CpfCnpj" class="form-control " />
+                                    <ValidationMessage For="@(() => Model.CpfCnpj)" />
+                                    <label class="mx-2" for="CpfCnpj">CPF</label>
+                                </div>
+                                <div class="mb-3">
+                                    <InputText @bind-Value="@Model.Password" id="Password" type="password" placeholder="Senha" class="form-control " />
+                                    <ValidationMessage For="@(() => Model.Password)" />
+                                    <label class="mx-2" for="Password">Senha</label>
+                                </div>
+                                <div class="mb-3">
+                                    <InputText @bind-Value="@Model.Email" id="Email" placeholder="Email" class="form-control " />
+                                    <ValidationMessage For="@(() => Model.Email)" />
+                                    <label class="mx-2" for="Email">Email</label>
+                                </div>
+                                <div class="mb-3">
+                                    <InputSelect @bind-Value="@Model.PartnerUnitId" placeholder="Selecione uma Unidade" id="UserStatus" class="form-select">
+                                        @foreach (var status in PartnerUnitList)
+                                        {
+                                            <option value="@status.Id">@status.Name</option>
+                                        }
+                                    </InputSelect>
+                                    <label class="mx-2" for="UserStatus">Unidade</label>
+                                </div>
+                                <div class="row text-center">
+                                    <div class="form-group col-md-12">
+                                        <button class="btn btn-primary botao-eln">
+                                            @if (Loading)
+                                            {
+                                                <span class="spinner-border spinner-border-sm" role="status"></span>
+                                            }
+                                            Cadastrar
+                                            <i style="position: relative; top: 2px; margin: 2px;" class="fi fi-br-sign-in-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="card-footer text-center">
+            <div class="copyright">
+                <a class="page-layout-demo-footer-link text-black">@DateTime.UtcNow.Year - Automação BP - Versão @AppSettings.Version</a>
+            </div>
+        </div>
+
+    </div>
+
+</AppAuthorizeView>
+
+@code {
+
+
+    public string CardHeight { get; set; } = "height: 630px;";
+
+    private readonly RegisterUserDTO Model = new();
+    public List<PartnerUnitDTO> PartnerUnitList { get; set; } = new();
+
+    private bool Loading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        base.OnInitializedAsync();
+        await GetAllPartnerUnit();
+
+        if (PartnerUnitList.Any())
+        {
+            Model.PartnerUnitId = PartnerUnitList.FirstOrDefault().Id.Value;
+        }
+    }
+
+    public async Task GetAllPartnerUnit()
+    {
+        PartnerUnitList = await UserService.GetAllPartnerUnit();
+    }
+
+    public async Task OnValidSubmit(EditContext editContext)
+    {
+        ToggleLoading();
+
+        var resgisted = await UserService.Register(Model);
+
+        if (resgisted)
+        {
+            // await DialogService.Alert($"Usuário cadastrado com sucesso! seu cadastro precisar ser aprovado, aguarde que entraremos em contato!", "Feito!", new AlertOptions() { OkButtonText = "Confirmar" });
+            await OnCloseModalAsync();
+        }
+
+        ToggleLoading();
+    }
+
+    public async Task OnInvalidSubmit(EditContext editContext)
+    {
+        CardHeight = "height: 730px;";
+        
+    }
+
+    public async Task OnCloseModalAsync()
+    {
+        await NavManager.NavigateTo("/Account/Login");
+    }
+
+    public void ToggleLoading()
+    {
+        Loading = !Loading;
+        
+    }
+
+}

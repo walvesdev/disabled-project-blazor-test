@@ -1,0 +1,39 @@
+﻿@using RazorLight
+@inherits TemplatePage<Sindvamb.Templates.Pages.QrCodePDFPages.QrCodePDFPage>
+
+
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body style="height: 100vh  !important; font-family: 'Poppins', sans-serif !important; margin: auto">
+
+<div style="display: flex;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            align-items: center;
+            align-content: center;
+            width: 100%;">
+
+    <div style="display: flex;
+                justify-content: center;
+                text-align: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;">
+
+        <img style="height: 250px; width: auto; border: solid #ccc;" src="data:image/jpg;base64,@Model.FullQrcode" alt="">
+
+    </div>
+
+    <h4>@Model.RefQrcode</h4>
+
+</div>
+</body>
+</html>

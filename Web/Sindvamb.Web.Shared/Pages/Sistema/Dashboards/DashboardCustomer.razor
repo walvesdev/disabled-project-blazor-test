@@ -1,0 +1,45 @@
+﻿@page "/dashboard-customer"
+@attribute [TabItemOption(Text = "Dashboard")]
+@using BootstrapBlazor.Components
+@if (UserDto.IsNotNull())
+{
+    <div class="container">
+        <AcompanharCadastro IsModal="true" CpfCnpj="@UserDto.CpfCnpj"></AcompanharCadastro>
+    </div>
+}
+else
+{
+    <AppSpinner></AppSpinner>
+}
+
+@code {
+
+    [CascadingParameter] private Task<AuthenticationState>? authenticationState { get; set; }
+
+    [Inject] public NavigationManager NavigationManager { get; set; }
+    [Inject] public IUserService UserService { get; set; }
+
+    public string CpfCnpj { get; set; }
+
+    public UserDTO UserDto { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+
+    protected override async void OnParametersSet()
+    {
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User!;
+
+            if (user?.Identity is not null && user.Identity.IsAuthenticated)
+            {
+                UserDto = await UserService.Get<UserDTO>(AppServices.UserId);
+                
+            }
+        }
+    }
+
+}

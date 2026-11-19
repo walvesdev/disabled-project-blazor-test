@@ -1,0 +1,44 @@
+﻿  <!-- Topbar Start -->
+<div class="container-fluid topbar px-0 px-lg-4 bg-light py-2 d-none d-lg-block">
+    <div class="container">
+        <div class="row gx-0 align-items-center">
+            <div class="col-lg-8 text-center text-lg-start mb-lg-0">
+                <div class="d-flex flex-wrap">
+                    <div class="ps-3 d-flex justify-content-center">                        
+                        <a href="https://wa.me/5561999432019?text=Tenho%20interesse%20em%20saber%20como%20me%20credenciar" target="_blank"><span class="text-muted small d-flex justify-content-center mx-2"><img src="./img/whatsapp.png" style="width: 18px;" />61999432019</span></a>
+                    </div>
+                    <div class="ps-3">
+                        <a href="mailto:contato@sindvamb.com.br" class="text-muted "><i class="fas fa-envelope text-primary me-2"></i>contato@sindvamb.com.br</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center text-lg-end">
+                <div class="d-flex justify-content-end">
+                    <div class="d-flex border-end border-primary pe-3 align-items-center">
+                        <a class="btn p-0 text-primary me-3"  target="_blank" href="https://www.facebook.com/sindvambdf"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn p-0 text-primary me-3"  target="_blank" href="@youtube"><i class="fab fa-youtube"></i></a>
+                        <a class="btn p-0 text-primary me-3"  target="_blank" href="https://www.instagram.com/sindvambdf"><i class="fab fa-instagram"></i></a>
+                        <a class="btn p-0 text-primary me-0"  target="_blank" href="https://www.flickr.com/photos/194473358@N02/"><i class="fab fa-flickr"></i></a>
+                    </div>
+                    <div class="dropdown ms-3 pt-1">
+                        <a  class="dropdown-toggle text-dark" data-bs-toggle="dropdown"><small><i class="fas fa-globe-europe text-primary me-2"></i> Português</small></a>
+                        <div class="dropdown-menu rounded">
+                            <a  class="dropdown-item">Português</a>
+                            <a disabled  class="dropdown-item">Inglês</a>
+                            <a disabled  class="dropdown-item">Espanhol</a>
+                        </div>
+                    </div>
+                    <div>
+                        <a class="btn btn-primary ml-2" href="/Account/Login">Entrar</a>                        
+                    </div>
+                </div>
+               
+            </div>
+            
+        </div>
+    </div>
+</div>
+<!-- Topbar End -->
+@code {
+    public string youtube { get; set; } = "https://www.youtube.com/@sindvamb-df";
+}

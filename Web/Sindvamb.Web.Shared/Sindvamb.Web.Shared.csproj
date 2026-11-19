@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+        <OutputType>Library</OutputType>
+        <IsPackable>true</IsPackable>
+        <NoWarn>
+<!--            IDE0058; CS8602; CS8618; CS8603; CS8618; CS1591; IDE0130; IDE0290; CS8604; CS8601; CS8609; CS8608; CS8609; CS8610; CS8611; CS8612;-->
+<!--            CS8613; CS8614; CS8615; CS8616; CS8617; CS8619; CS8620; CS8621; CS8622; CS8624; CS8631; CS8633; CS8634; CS8643; CS8644; CS8645; CS8667;-->
+<!--            CS8714; CS8764; CS8765; CS8766; CS8767; CS8768; CS8769; CS8819; CS8607; CS8763; CS8770; CS8774; CS8775; CS8776; CS8777; CS8824; CS8825;-->
+<!--            CS8655; CS8847;CS1998;CS1999;CS8981;CS8982;CS8983;CS8984;CS8985;CS8986;CS8987;CS8988;CS8989;CS8990;CS8991;CS8992;CS8993;CS8994;CS0108;-->
+<!--            CS0114; CS0108; CS0114-->
+            CS0168; CS0169; CS0219; CS0414; CS0649; CS0659; CS0660; CS0661; CS0675; CS0693; CS0702; CS0703; CS0729; CS0731; CS0734; CS0809; CS0819; CS0824; 
+            CS0834; CS0837; CS0840; CS0854; CS0868; CS1009; CS1010; CS1012; CS1013; CS1014; CS1020; CS1029; CS1030; CS1062; CS1069; CS1073; CS1105; CS1106; 
+            CS1112; CS1113; CS1501; CS1502; CS1503; CS1513; CS1515; CS1519; CS1522; CS1525; CS1570; CS1572; CS1580; CS1581; CS1584; CS1587; CS1589; CS1591; 
+            CS1592; CS1598; CS1607; CS1610; CS1616; CS1617; CS1626; CS1644; CS1658; CS1668; CS1674; CS1682; CS1685; CS1690; CS1691; CS1692; CS1696; CS1701; 
+            CS1702; CS1710; CS1711; CS1712; CS1717; CS1718; CS1720; CS1723; CS1726; CS1730; CS1734; CS1735; CS1740; CS1750; CS1751; CS1762; CS1770; CS1772; 
+            CS1955; CS1956; CS1957; CS1963; CS1988; CS1998; CS2002; CS2008; CS2011; CS2012; CS2021; CS2029; CS3000; CS3001; CS3003; CS3005; CS3007; CS3008; 
+            CS3009; CS3016; CS3022; CS3027; CS4014; CS4024; CS4033; CS7003; CS7012; CS7069; CS7090; CS7092; CS7162; CS7168; CS7173; CS7181; CS8001; CS8002; 
+            CS8009; CS8019; CS8021; CS8600; CS8601; CS8602; CS8603; CS8604; CS8605; CS8607; CS8608; CS8609; CS8610; CS8611; CS8612; CS8614; CS8616; CS8618; 
+            CS8619; CS8620; CS8622; CS8625; CS8629; CS8631; CS8632; CS8633; CS8634; CS8643; CS8644; CS8645; CS8655; CS8667; CS8669; CS8670; CS8714; CS8762; 
+            CS8765; CS8767; CS8768; CS8770; CS8776; CS8848; CS8849; CS8851; CS8892; CS8954; CS8974; CS8981; CS9001; CS9113; CS9114; CS9143;
+        </NoWarn>
+		<BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <SupportedPlatform Include="browser" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Blazorise.Bootstrap5" Version="1.7.6" />
+        <PackageReference Include="BootstrapBlazor.PdfReader" Version="9.0.0" />
+        <PackageReference Include="FluentValidation" Version="11.11.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="9.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.4" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
+        <PackageReference Include="BootstrapBlazor" Version="9.5.10" />
+        <PackageReference Include="BootstrapBlazor.FontAwesome" Version="9.0.2" />
+        <PackageReference Include="BootstrapBlazor.SummerNote" Version="9.0.3" />
+        <PackageReference Include="BootstrapBlazor.Chart" Version="9.0.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Blazor.SubtleCrypto" Version="6.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Areas\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Sindvamb.Domain\Sindvamb.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="Components\AppSpinner.razor">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </Content>
+        <Content Update="Components\ButtonLoading.razor">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </Content>
+        <Content Update="Components\DisplayTable.razor">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </Content>
+    </ItemGroup>
+
+
+</Project>

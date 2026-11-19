@@ -1,0 +1,41 @@
+name: sindvamb
+
+x-extra_hosts:
+  &default-extra_hosts
+  - "host.docker.internal:host-gateway"
+
+services:
+  Sindvamb.Application.host:
+    image: ${DOCKER_REGISTRY-}sindvamb-api-host
+    build:
+      context: .
+      dockerfile: Sindvamb.Application.Host/Dockerfile
+    networks:
+      - sindvamb-network
+    ports:
+      - "5000:8080"
+    container_name: sindvamb-api-prd
+    restart: always    
+    extra_hosts:
+      *default-extra_hosts
+
+  Sindvamb.Web:
+    image: ${DOCKER_REGISTRY-}sindvamb-web
+    build:
+      context: .
+      dockerfile: Sindvamb.Web/Dockerfile 
+    ports:
+      - 80:8080
+      - 443:8443
+    container_name: sindvamb-web-prd
+    restart: always    
+    extra_hosts:
+      *default-extra_hosts
+
+networks:
+  sindvamb-network: 
+    name: sindvamb-network
+    external: false
+
+
+  

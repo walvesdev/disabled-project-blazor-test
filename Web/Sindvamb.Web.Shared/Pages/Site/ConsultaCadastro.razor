@@ -1,0 +1,27 @@
+﻿@page "/consulta-cadastro"
+@layout SiteLayout
+@using BootstrapBlazor.Components
+
+@* <Title>CREDENCIAL ASSOCIADO</Title> *@
+
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="card p-4 rounded my-5">
+        <h1 class="card-title text-center mb-2">Credencial Associado</h1>
+        <h5 class="text-center mb-3"><b>Seu passaporte para o sucesso!</b></h5>
+        <p class="text-center">Crie sua conta no site para conseguir a sua credencial.</p>
+
+        <p class="">Entre com seu <b>CPF</b> OU <b>CNPJ</b>, <b>CPF</b> para quem ganha ATÉ <b>R$2.500,00</b> e <b>CNPJ</b> para quem ganha acima do valor mensal do MEI entre <b>R$6.000,00 e R$ 8.000,00</b></p>
+
+        <form>
+            <div class="d-flex">
+                <div class="form-group w-100">
+                    @* <label for="email">CPF / CNPJ</label> *@
+                    <BootstrapInput TValue="string" Color="Color.Secondary" PlaceHolder="Digite seu CPF/CNPJ" />
+                </div>
+                <div class="btn-login">
+                    <Button ButtonType="ButtonType.Submit"  IsBlock="false" Color="@Color.Secondary" ButtonStyle="ButtonStyle.Round">Pesquisar</Button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

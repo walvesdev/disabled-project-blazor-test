@@ -1,0 +1,26 @@
+﻿using Sindvamb.Web.Shared.Models;
+using Sindvamb.Web.Shared;
+
+namespace Sindvamb.Web.Shared.Models;
+
+public class GridSettings
+{
+    #region Properties, Indexers
+
+    /// <summary>
+    /// Current filters.
+    /// </summary>
+    public IEnumerable<FilterItem>? Filters { get; set; }
+
+    /// <summary>
+    /// Page number.
+    /// </summary>
+    public int PageNumber { get; set; }
+
+    /// <summary>
+    /// Size of the page.
+    /// </summary>
+    public int PageSize { get; set; }
+
+    #endregion
+}

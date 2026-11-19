@@ -1,0 +1,125 @@
+﻿.card-dashboard-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+}
+
+
+.card-registro-title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.card-registro-body {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.card-registro {
+    width: 280px;
+    border: #ccc solid 1px;
+    border-radius: 20px;
+    padding-top: 30px;
+    border-bottom: green 20px solid;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+
+.card-tratamento-title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.card-tratamento-body {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.card-tratamento {
+    width: 280px;
+    border: #ccc solid 1px;
+    border-radius: 20px;
+    padding-top: 30px;
+    border-bottom: royalblue 20px solid;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+
+.card-resposta-title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.card-resposta-body {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.card-resposta {
+    width: 280px;
+    border: #ccc solid 1px;
+    border-radius: 20px;
+    padding-top: 30px;
+    border-bottom: yellowgreen 20px solid;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+
+.card-registro-top {
+    width: 280px;
+    border: #ccc solid 1px;
+    border-radius: 20px;
+    padding: 25px;
+    border-top: green 10px solid;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+    .card-registro-top p {
+        margin: 0;
+        padding: 0;
+    }
+
+.card-tratamento-top p {
+    margin: 0;
+    padding: 0;
+}
+
+.card-resposta-top p {
+    margin: 0;
+    padding: 0;
+}
+
+.card-tratamento-top {
+    width: 280px;
+    border: #ccc solid 1px;
+    border-radius: 20px;
+    padding: 25px;
+    border-top: royalblue 10px solid;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.card-resposta-top {
+    width: 280px;
+    border: #ccc solid 1px;
+    border-radius: 20px;
+    padding: 25px;
+    border-top: yellowgreen 10px solid;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.card-dropzone {
+    width: 330px !important;
+}
+
+.b-drop-zone {
+    width: 330px !important;
+}

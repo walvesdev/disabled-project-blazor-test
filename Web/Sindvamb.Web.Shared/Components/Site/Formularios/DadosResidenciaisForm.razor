@@ -1,0 +1,187 @@
+﻿@using BootstrapBlazor.Components
+
+<Card>
+    <HeaderTemplate>
+        <h5 class="pt-2">Dados Residenciais</h5>
+    </HeaderTemplate>
+
+    <BodyTemplate>
+        <ValidateForm @ref="Form" Model="@Model" OnValidSubmit="@OnValidSubmit" OnInvalidSubmit="@OnInvalidSubmit">
+            <DataAnnotationsValidator />
+
+            <div class="d-flex row flex-wrap">
+
+                <div class="form-group mt-2 col-md-6 px-2">
+
+                    <BootstrapInput TValue="string" @bind-Value="Model.User.Address.ZipCode"
+                    OnValueChanged="OnZipCodeChanged"
+                    RequiredErrorMessage="Por favor insira o CEP"
+                    Color="Color.Secondary"
+                    DisplayText="CEP"
+                    ShowRequired="true"
+                    Formatter="Formaters.FormatCEP" />
+                </div>
+
+                <div class="form-group mt-2 col-md-6 px-2">
+                    <BootstrapInput TValue="string" @bind-Value="Model.User.Address.District" RequiredErrorMessage="Por favor insira o estado"
+                    Color="Color.Secondary" DisplayText="Estado" ShowRequired="true" />
+                </div>
+
+                <div class="form-group mt-2 col-md-6 px-2">
+                    <BootstrapInput TValue="string" @bind-Value="Model.User.Address.City" RequiredErrorMessage="Por favor insira a cidade!"
+                    Color="Color.Secondary" DisplayText="Cidade" ShowRequired="true" />
+                </div>
+
+                <div class="form-group mt-2 col-md-6 px-2">
+                    <BootstrapInput TValue="string" @bind-Value="Model.User.Address.Neighborhood" RequiredErrorMessage="Por favor insira o Bairro"
+                    Color="Color.Secondary" DisplayText="Bairro" ShowRequired="true" />
+                </div>
+
+                <div class="form-group mt-2 col-md-6 px-2">
+                    <BootstrapInput TValue="string" @bind-Value="Model.User.Address.AddressLine1" RequiredErrorMessage="Por favor insira o endereço"
+                    Color="Color.Secondary" DisplayText="Endereço" ShowRequired="true" />
+                </div>
+
+                <div class="form-group mt-2 col-md-6 px-2">
+                    <BootstrapInput TValue="long?" @bind-Value="Model.User.Address.Number" Color="Color.Secondary" DisplayText="Número" />
+                </div>
+
+                <div class="form-group mt-2 col-md-6 px-2">
+                    <BootstrapInput TValue="string" @bind-Value="Model.User.Address.Complement" Color="Color.Secondary" DisplayText="Complemento" />
+                </div>
+
+                <div class="form-group mt-2 col-md-6 px-2">
+                    <Select ShowSearch="true" TValue="string" Items="HousingToselectedItem" @bind-Value="Model.User.Address.Housing"
+                    DisplayText="Habitação"
+                    RequiredErrorMessage="Por favor insira seu tipo de habitação!" ShowRequired="true"></Select>
+                </div>
+
+            </div>
+
+        </ValidateForm>
+    </BodyTemplate>
+</Card>
+
+
+@code {
+    [Parameter]
+    public CustomerModel Model { get; set; }
+
+    [Parameter]
+    public EventCallback<OnChangeValidateFormModel> OnChangeNextStepState { get; set; }
+
+    [Inject] public ICustomerService CustomerService { get; set; }
+
+    [NotNull]
+    public ValidateForm Form { get; set; }
+
+    [Inject] private SwalService? SwalService { get; set; }
+
+    private List<SelectedItem> HousingToselectedItem => SiteConstants.Housing.Select(item => new SelectedItem(item, item)).ToList();
+
+
+    public async Task EnableNextStep()
+    {
+        var validation = new OnChangeValidateFormModel()
+            {
+                Form = Form,
+                HasValidation = true
+            };
+
+        try
+        {
+            ToggShowSteps();
+
+            if (Form.Validate() && Model.Id == Guid.Empty)
+            {
+                Model.UserId = Model.User.Id;
+
+                var customer = await CustomerService.Create(Model);
+
+                if (customer.IsNotNull())
+                {
+                    Model = customer;
+                    Model.IsRegistrationRequest = true;
+                    AppServices.CredenciamentoCustomerId = customer.Id;
+                    AppServices.CredenciamentoUserId = customer.UserId;
+                }
+                else
+                {
+                    await SwalService.Show(new SwalOption()
+                        {
+                            Category = SwalCategory.Error,
+                            Title = "Erro ao processar requisição",
+                            Content = "Por favor verifique os dados e tente novamente, caso o erro persista contate o suporte!",
+                        });
+
+                    ToggShowSteps();
+
+                    return;
+                }
+
+            }
+
+
+            //ToggShowSteps();
+        }
+        catch (Exception e)
+        {
+            await SwalService.Show(new SwalOption()
+                {
+                    Category = SwalCategory.Error,
+                    Title = "Erro ao processar requisição",
+                    Content = "Por favor verifique os dados e tente novamente, caso o erro persista contate o suporte!",
+                });
+
+            ToggShowSteps();
+
+        }
+
+        await OnChangeNextStepState.InvokeAsync(validation);
+    }
+
+    public async Task OnInvalidSubmit(EditContext ctx)
+    {
+
+    }
+
+    public async Task OnValidSubmit(EditContext ctx)
+    {
+
+
+    }
+
+    public async Task OnZipCodeChanged(string value)
+    {
+        if (value.Length == 8)
+        {
+
+            var clientEstado = new HttpClientService<dynamic, EnderecoViaCep, dynamic> { };
+            clientEstado.Init($"https://viacep.com.br/ws/{Model.User.Address.ZipCode}/json/", new GenericTokentService());
+
+            var resultEstado = await clientEstado.Get();
+
+            if (resultEstado.IsSuccessStatus)
+            {
+
+                Model.User.Address.ZipCode = resultEstado.Data.Cep;
+                Model.User.Address.UF = resultEstado.Data.Uf;
+                Model.User.Address.District = resultEstado.Data.Estado;
+                Model.User.Address.City = resultEstado.Data.Localidade;
+                Model.User.Address.Neighborhood = resultEstado.Data.Bairro;
+                Model.User.Address.AddressLine1 = resultEstado.Data.Logradouro;
+                Model.User.Address.Complement = resultEstado.Data.Complemento;
+
+                await InvokeAsync(StateHasChanged);
+
+            }
+            
+        }
+    }
+
+    public void ToggShowSteps()
+    {
+        AppServices.ShowSteps = !AppServices.ShowSteps;
+        
+    }
+}

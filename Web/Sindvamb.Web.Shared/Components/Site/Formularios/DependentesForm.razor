@@ -1,0 +1,338 @@
+﻿@using BootstrapBlazor.Components
+
+<div class="d-flex row justify-content-end mb-3 flex-wrap">
+	<div class="form-group mt-2 col-md-6 px-2">
+		<Select ShowSearch="true" TValue="string" Items="TipoDependente" @bind-Value="TipoDependenteSelecionado" DisplayText="Raça"></Select>
+	</div>
+	<div class="form-group mt-2 col-md-6 px-2">
+		<Button ButtonStyle="ButtonStyle.Round" OnClick="AddDependente" ButtonType="ButtonType.Button" Color="Color.Secondary" Icon="plus" Text="Adicionar Dependente"></Button>
+	</div>
+</div>
+
+
+@if (Model.Dependents.Any())
+{
+	@foreach (var dependente in Model.Dependents)
+	{
+		<div class="mb-3">
+			<Card>
+				<HeaderTemplate>
+					<div class="d-flex justify-content-between px-2 w-100">
+						<h5 class="pt-2 mt-1">@dependente.Type</h5>
+						<button class="button-card-header" @onclick="() => DeleteDependent(dependente)">
+							<i class="fas fa-trash-can"></i>
+						</button>
+					</div>
+				</HeaderTemplate>
+
+				<BodyTemplate>
+
+					<ValidateForm class="d-flex row flex-wrap" @ref="Form" Model="@dependente" OnValidSubmit="@OnValidSubmitTitular" OnInvalidSubmit="@OnInvalidSubmitTitular">
+						<DataAnnotationsValidator />
+
+						<div class="d-flex row flex-wrap">
+
+
+							<div class="form-group mt-2 col-md-6 px-2">
+								<BootstrapInput TValue="string" @bind-Value="@dependente.Name" RequiredErrorMessage="Por favor insira seu Nome Completo" Color="Color.Secondary" DisplayText="Nome completo" ShowRequired="true" />
+							</div>
+
+							<div class="form-group mt-2 col-md-6 px-2">
+								<BootstrapInput TValue="string" @bind-Value="@dependente.CpfCnpj" Color="Color.Secondary" DisplayText="CPF (Para maiores de 8 anos)" Formatter="Formaters.FormatCpfCnpj" />
+							</div>
+
+							<div class="form-group mt-2 col-md-6 px-2">
+								<BootstrapInput TValue="string" @bind-Value="@dependente.CellPhone" Color="Color.Secondary" DisplayText="Telefone" Formatter="Formaters.FormatCellPhone" />
+							</div>
+
+							<div class="form-group mt-2 col-md-6 px-2">
+								<BootstrapInput type="email" TValue="string" @bind-Value="@dependente.Email" Color="Color.Secondary" DisplayText="Email" />
+							</div>
+
+							<div class="form-group mt-2 col-md-6 px-2">
+
+								<InputUpload TValue="IBrowserFile" @bind-Value="@dependente.Foto" DisplayText="Foto de identificação 3X4 recente e colorida"
+											 ShowDeleteButton="true" BrowserButtonText="Selecione"
+											 ShowRequired="true"
+											 RequiredErrorMessage="Selecione sua foto 3X4"
+											 OnChange=@(file => OnFileChange(file, dependente, "Foto de identificação 3X4 recente e colorida"))
+											 OnDelete=@(file => OnFileDelete(file, dependente, "Foto de identificação 3X4 recente e colorida"))>
+
+								</InputUpload>
+
+							</div>
+
+							<div class="form-group mt-2 col-md-6 px-2">
+
+								<InputUpload TValue="IBrowserFile" @bind-Value="@dependente.Rg" DisplayText="RG"
+											 ShowDeleteButton="true" BrowserButtonText="Selecione"
+											 ShowRequired="true"
+											 RequiredErrorMessage="Selecione sua foto do RG"
+											 OnChange=@(file => OnFileChange(file, dependente, "RG"))
+											 OnDelete=@(file => OnFileDelete(file, dependente, "RG"))>
+
+								</InputUpload>
+
+							</div>
+
+							<div class="form-group mt-2 col-md-6 px-2">
+
+								<InputUpload TValue="IBrowserFile" @bind-Value="@dependente.Residencia" DisplayText="Comprovante de residência"
+											 ShowDeleteButton="true" BrowserButtonText="Selecione"
+											 ShowRequired="true"
+											 RequiredErrorMessage="Selecione seu Comprovante de residência"
+											 OnChange=@(file => OnFileChange(file, dependente, "Comprovante de residência"))
+											 OnDelete=@(file => OnFileDelete(file, dependente, "Comprovante de residência"))>
+
+								</InputUpload>
+
+							</div>
+
+							<div class="form-group mt-2 col-md-6 px-2">
+
+								<InputUpload TValue="IBrowserFile" @bind-Value="@dependente.CpfCnpjFile" DisplayText="CPF (Para maiores de 8 anos)"
+											 ShowDeleteButton="true" BrowserButtonText="Selecione"
+											 OnChange=@(file => OnFileChange(file, dependente, "CPF"))
+											 OnDelete=@(file => OnFileDelete(file, dependente, "CPF"))>
+
+								</InputUpload>
+
+							</div>
+
+							<div class="form-group mt-2 col-md-6 px-2">
+
+								<InputUpload TValue="IBrowserFile" @bind-Value="@dependente.Certidao" DisplayText="Certidão de casamento ou declaração de união estável"
+											 ShowDeleteButton="true" BrowserButtonText="Selecione"
+											 OnChange=@(file => OnFileChange(file, dependente, "Certidão de casamento ou declaração de união estável"))
+											 OnDelete=@(file => OnFileDelete(file, dependente, "Certidão de casamento ou declaração de união estável"))>
+
+								</InputUpload>
+
+							</div>
+
+							<div class="form-group mt-2 col-md-6 px-2">
+
+								<InputUpload TValue="IBrowserFile" @bind-Value="@dependente.Parentesco" DisplayText="Documento que comprove o parentesco (Netos)"
+											 ShowDeleteButton="true" BrowserButtonText="Selecione"
+											 OnChange=@(file => OnFileChange(file, dependente, "Documento que comprove o parentesco (Netos)"))
+											 OnDelete=@(file => OnFileDelete(file, dependente, "Documento que comprove o parentesco (Netos)"))>
+
+								</InputUpload>
+
+							</div>
+
+							<div class="form-group mt-2 col-md-6 px-2">
+
+								<InputUpload TValue="IBrowserFile" @bind-Value="@dependente.Juizado" DisplayText="Documento emitido pelo Juizado da Infância e Juventude (Pessoa sob guarda)"
+											 ShowDeleteButton="true" BrowserButtonText="Selecione"
+											 OnChange=@(file => OnFileChange(file, dependente, "Documento emitido pelo Juizado da Infância e Juventude (Pessoa sob guarda)"))
+											 OnDelete=@(file => OnFileDelete(file, dependente, "Documento emitido pelo Juizado da Infância e Juventude (Pessoa sob guarda)"))>
+
+								</InputUpload>
+
+							</div>
+
+							<div class="form-group mt-2 col-md-6 px-2">
+
+								<InputUpload TValue="IBrowserFile" @bind-Value="@dependente.Escolaridade" DisplayText="Comprovante de escolaridade  (Para maiores de 21 anos)"
+											 ShowDeleteButton="true" BrowserButtonText="Selecione"
+											 OnChange=@(file => OnFileChange(file, dependente, "Comprovante de escolaridade"))
+											 OnDelete=@(file => OnFileDelete(file, dependente, "Comprovante de escolaridade"))>
+
+								</InputUpload>
+
+							</div>
+
+						</div>
+					</ValidateForm>
+				</BodyTemplate>
+			</Card>
+		</div>
+
+	}
+}
+
+
+
+
+
+@code {
+	[Inject][NotNull] private DialogService? DialogService { get; set; }
+
+	[Parameter] public CustomerModel Model { get; set; }
+
+	[Parameter] public EventCallback<OnChangeValidateFormModel> OnChangeNextStepState { get; set; }
+
+	[NotNull] public ValidateForm Form { get; set; } = new();
+
+	public List<ValidateForm> FormList { get; set; } = new();
+
+	[Inject][NotNull] public ICustomerService CustomerService { get; set; }
+
+	[Inject] public IFileControlService FileControlService { get; set; }
+
+	[Inject] public SwalService SwalService { get; set; }
+
+	private List<SelectedItem> HousingToselectedItem => SiteConstants.Housing.Select(item => new SelectedItem(item, item)).ToList();
+
+	public List<SelectedItem> TipoDependente => SiteConstants.TipoDependente.Select(item => new SelectedItem(item, item)).ToList();
+
+	public string TipoDependenteSelecionado { get; set; }
+
+	public async Task EnableNextStep()
+	{
+		var validation = new OnChangeValidateFormModel()
+			{
+				Form = Form,
+				HasValidation = Model.Dependents.Any() ? true : false
+			};
+
+		await OnChangeNextStepState.InvokeAsync(validation);
+	}
+
+	public async Task OnInvalidSubmitTitular(EditContext ctx)
+	{
+	}
+
+	public async Task OnValidSubmitTitular(EditContext ctx)
+	{
+	}
+
+	private async Task OnFileChange(UploadFile arg, DependentDocumentModel dependente, string description)
+	{
+		ToggShowSteps();
+
+		long maxFileSize = 2L * 1024L * 1024L * 1024L;
+		await using var fs = arg.File.OpenReadStream(maxAllowedSize: maxFileSize);
+		await using var ms = new MemoryStream();
+		await fs.CopyToAsync(ms);
+
+		var extension = arg.File.Name.Split(".");
+		var filename = $"{description}-{dependente.Id.ToString().GetDigits()}.{extension.Last()}";
+
+		var result = await FileControlService.Update(new FileControlDTO
+			{
+				DependentId = dependente.Id,
+				Description = description,
+				FileName = filename,
+				FileSize = arg.File.Size,
+				FileArray = ms.ToArray(),
+				ContentType = arg.File.ContentType,
+				TargetPath = $"/Dependent/{dependente.Id}/{filename}",
+			});
+
+		if (!result)
+		{
+			await SwalService.Show(new SwalOption()
+				{
+					Category = SwalCategory.Error,
+					Title = "Falha ao adiciona arquivo",
+					Content = "Caso o erro persista contate o suporte!",
+				});
+		}
+
+		ToggShowSteps();
+
+	}
+
+	private async Task<bool> OnFileDelete(UploadFile arg, DependentDocumentModel dependente, string description)
+	{
+		ToggShowSteps();
+
+		var extension = arg.File.Name.Split(".");
+		var filename = $"{description}-{dependente.Id.ToString().GetDigits()}.{extension.Last()}";
+
+		var file = dependente.FileControl.FirstOrDefault(file => file.FileName.Equals(filename));
+
+		if (file.Id != Guid.Empty)
+		{
+			var result = await FileControlService.Delete(file.Id);
+
+			if (!result)
+			{
+				await SwalService.Show(new SwalOption()
+					{
+						Category = SwalCategory.Error,
+						Title = "Falha ao remover arquivo",
+						Content = "Caso o erro persista contate o suporte!",
+					});
+			}
+		}
+
+		dependente.FileControl.Remove(file);
+
+		ToggShowSteps();
+
+		return await Task.FromResult(true);
+	}
+
+	private async void AddDependente()
+	{
+		ToggShowSteps();
+
+		var dependent = new DependentDTO
+			{
+				Id = Guid.NewGuid(),
+				CustomerId = AppServices.CredenciamentoCustomerId,
+				UserId = AppServices.CredenciamentoUserId,
+				Name = TipoDependenteSelecionado,
+				Type = TipoDependenteSelecionado
+			};
+
+		var result = await CustomerService.CreateDependent(dependent);
+
+		if (!result)
+		{
+			await SwalService.Show(new SwalOption()
+				{
+					Category = SwalCategory.Error,
+					Title = "Falha ao adiciona dependente",
+					Content = "Caso o erro persista contate o suporte!",
+				});
+
+			return;
+		}
+
+		Model.Dependents.Add(new()
+			{
+				Id = dependent.Id,
+				CustomerId = AppServices.CredenciamentoCustomerId,
+				UserId = AppServices.CredenciamentoUserId,
+				Type = TipoDependenteSelecionado,
+			});
+
+		ToggShowSteps();
+
+		await InvokeAsync(StateHasChanged);
+	}
+
+	private async Task DeleteDependent(DependentDocumentModel dependente)
+	{
+		ToggShowSteps();
+
+		var result = await CustomerService.DeleteDependent(dependente.Id);
+
+		if (!result)
+		{
+			await SwalService.Show(new SwalOption()
+				{
+					Category = SwalCategory.Error,
+					Title = "Falha ao deletar dependente",
+					Content = "Caso o erro persista contate o suporte!",
+				});
+
+			return;
+		}
+
+		Model.Dependents.Remove(dependente);
+
+		ToggShowSteps();
+	}
+
+	public void ToggShowSteps()
+	{
+		AppServices.ShowSteps = !AppServices.ShowSteps;
+
+	}
+
+}
